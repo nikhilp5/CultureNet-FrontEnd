@@ -1,0 +1,28 @@
+{
+  "users": [
+    {
+      "id": 1,
+      "email": "abc@xyz.com",
+      "password": "abc",
+      "bio": "Why do we use it?\nIt is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout.",
+      "fname": "mario1",
+      "lname": "what1",
+      "nsfw": true
+    },
+    {
+      "id": 2,
+      "email": "xyz@abc.com",
+      "password": "xyz",
+      "bio": "Why do we use it?\nIt is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout.",
+      "fname": "mario2",
+      "lname": "what2",
+      "nsfw": false
+    },
+    {
+      "email": "wef@fw.fe",
+      "password": "Mummy@17",
+      "confirmPassword": "Mummy@17",
+      "id": 3
+    }
+  ]
+}
