@@ -1,6 +1,6 @@
 import { forwardRef, useState } from "react";
 import TextField from '@mui/material/TextField';
-import { Card, Snackbar, Typography } from "@mui/material";
+import { Button, Card, Checkbox, FormControlLabel, Snackbar, Typography } from "@mui/material";
 import LoadingButton from '@mui/lab/LoadingButton';
 import MuiAlert from '@mui/material/Alert';
 import Grid from '@mui/material/Grid';
@@ -9,9 +9,9 @@ import Grid from '@mui/material/Grid';
 const data = require("../data/db.json");
 
 
-const Registration = () => {
+const UserProfile = () => {
   const defaultForm = {
-    email: '',
+    email: data.users[0].email,
     password: '',
     confirmPassword: ''
   };
@@ -83,73 +83,94 @@ const Registration = () => {
 
   return (
     <Grid container sx={{ margin: 5 }}>
+      {/* <form onSubmit={handleSubmit}> */}
       <Grid item xs={1} md={4}></Grid>
       <Grid item xs={10} md={4}>
         <Card sx={{ padding: 2 }}>
           <Grid container direction="column" spacing={2}>
             <Grid item>
               <Typography variant="h2" align="center" gutterBottom>
-                Register
+                User Profile
               </Typography>
+            </Grid>
+            <Grid item container spacing={2}>
+              <Grid item xs={12} md={6}>
+                <TextField
+                  id="fname"
+                  name="fname"
+                  label="First Name"
+                  error={error.fname}
+                  onChange={validate}
+                  helperText={error.fname ? "Invalid first name format." : ""}
+                  value={form.fname}
+                  fullWidth
+                />
+              </Grid>
+              <Grid item xs={12} md={6}>
+                <TextField
+                  id="lname"
+                  name="lname"
+                  label="Last Name"
+                  error={error.lname}
+                  onChange={validate}
+                  helperText={error.lname ? "Invalid last name format." : ""}
+                  value={form.lname}
+                  fullWidth
+                />
+              </Grid>
             </Grid>
             <Grid item>
               <TextField
                 required
                 id="email"
-                name="email"
                 label="Email"
-                error={error.email}
-                onChange={validate}
-                helperText={error.email ? "Invalid email format." : ""}
+                InputProps={{
+                  readOnly: true,
+                }}
+                variant="filled"
                 value={form.email}
                 fullWidth
               />
             </Grid>
             <Grid item>
               <TextField
-                required
-                id="password"
-                name="password"
-                label="Password"
-                type="password"
-                error={error.password}
+                multiline
+                rows={4}
+                id="bio"
+                name="bio"
+                label="Bio"
+                error={error.bio}
                 onChange={validate}
-                helperText={error.password ? "Invalid password." : ""}
-                value={form.password}
+                helperText={error.bio ? "Invalid bio format." : ""}
+                value={form.bio}
                 fullWidth
               />
             </Grid>
             <Grid item>
-              <TextField
-                required
-                id="confirmPassword"
-                name="confirmPassword"
-                label="Confirm Password"
-                type="password"
-                error={error.confirmPassword}
-                onChange={validate}
-                helperText={error.confirmPassword ? "Passwords do not match." : ""}
-                value={form.confirmPassword}
-                fullWidth
-              />
+              <FormControlLabel control={<Checkbox checked={form.nsfwFilter} />} label="Adult Content" />
             </Grid>
             <Grid item>
               <LoadingButton
                 type="submit"
                 onClick={handleSubmit}
                 loading={isPending}
-                disabled={Object.keys(error).some(k => error[k]) || Object.keys(form).some(k => !form[k])}
+                disabled={Object.keys(error).some(k => error[k]) || !form.email}
                 variant="contained"
                 fullWidth
               >
                 Submit
               </LoadingButton>
             </Grid>
+            <Grid item>
+              <Button variant="text" href="#contained-buttons" fullWidth>
+                Change Password?
+              </Button>
+            </Grid>
           </Grid>
         </Card>
         <Snackbar open={open} autoHideDuration={6000} onClose={handleClose}>
           <Alert onClose={handleClose} severity="success" sx={{ width: '100%' }}>
-            User registration successful.
+            Update successful.
           </Alert>
         </Snackbar>
       </Grid>
@@ -158,4 +179,4 @@ const Registration = () => {
   );
 };
 
-export default Registration;
+export default UserProfile;

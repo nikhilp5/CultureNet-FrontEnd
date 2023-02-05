@@ -1,14 +1,14 @@
-// import './App.css';
 import DrawerAppBar from './components/Navbar';
 import Registration from './pages/Registration';
-// import Form from './components/Form';
+import UserProfile from './pages/UserProfile';
 
 function App() {
   return (
     <div className='App'>
       <header className='App-header'></header>
       <DrawerAppBar />
-      <Registration />
+      {/* <Registration /> */}
+      <UserProfile />
     </div>
   );
 }
