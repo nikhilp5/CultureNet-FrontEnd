@@ -1,10 +1,9 @@
 import { forwardRef, useState } from "react";
 import TextField from '@mui/material/TextField';
-import { Box, Snackbar, Typography } from "@mui/material";
-import { styled } from '@mui/material/styles';
-import Paper from '@mui/material/Paper';
+import { Card, Snackbar, Typography } from "@mui/material";
 import LoadingButton from '@mui/lab/LoadingButton';
 import MuiAlert from '@mui/material/Alert';
+import Grid from '@mui/material/Grid';
 
 
 const users = require("../data/db.json");
@@ -32,25 +31,18 @@ const Registration = () => {
     return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
   });
 
-  const Item = styled(Paper)(({ theme }) => ({
-    backgroundColor: theme.palette.mode === 'dark' ? '#1A2027' : '#fff',
-    ...theme.typography.body2,
-    padding: theme.spacing(1),
-    textAlign: 'center',
-    color: theme.palette.text.secondary,
-  }));
-
   const emailRegex = /^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/g;
   const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/g;
 
   const handleSubmit = (e) => {
     console.log(form);
 
+
     setIsPending(true);
 
     if (!Object.values(users).includes(form.email)) {
+      let data = { email: form.email, password: form.password };
       setIsPending(false);
-      console.log('new user added');
       setForm({ ...defaultForm });
       setOpen(true);
     }
@@ -90,76 +82,81 @@ const Registration = () => {
 
 
   return (
-    <Box sx={{ width: '100%' }}>
-      <Typography variant="h2" gutterBottom>
-        Register
-      </Typography>
-      {/* <Stack> */}
-      <form onSubmit={handleSubmit}>
-        {/* <Item > */}
-        <TextField
-          required
-          id="email"
-          name="email"
-          label="Email"
-          error={error.email}
-          onChange={validate}
-          helperText={error.email ? "Invalid email format." : ""}
-          value={form.email}
-        />
-        {/* </Item>
-          <Item> */}
-        <TextField
-          required
-          id="password"
-          name="password"
-          label="Password"
-          type="password"
-          error={error.password}
-          onChange={validate}
-          helperText={error.password ? "Invalid password." : ""}
-          value={form.password}
-        />
-        {/* </Item>
-          <Item> */}
-        <TextField
-          required
-          id="confirmPassword"
-          name="confirmPassword"
-          label="Confirm Password"
-          type="password"
-          error={error.confirmPassword}
-          onChange={validate}
-          helperText={error.confirmPassword ? "Passwords do not match." : ""}
-          value={form.confirmPassword}
-        />
-        {/* </Item>
-          <Item> */}
-        {/* <Button
-          variant="contained"
-          onClick={handleSubmit}
-          disabled={Object.keys(error).some(k => error[k])}>Submit</Button> */}
+    <Grid container sx={{ margin: 5 }}>
+      {/* <form onSubmit={handleSubmit}> */}
+      <Grid item xs={1} md={4}></Grid>
+      <Grid item xs={10} md={4}>
+        <Card sx={{ padding: 2 }}>
+          <Grid container direction="column" spacing={2}>
+            <Grid item>
+              <Typography variant="h2" align="center" gutterBottom>
+                Register
+              </Typography>
+            </Grid>
 
-        <LoadingButton
-          loading={isPending}
-          // loadingPosition="start"
-          onClick={handleSubmit}
-          disabled={Object.keys(error).some(k => error[k]) || Object.keys(form).some(k => !form[k])}
-          // startIcon={<SaveIcon />}
-          variant="contained"
-        >
-          Submit
-        </LoadingButton>
-        {/* </Item> */}
-      </form>
-      {/* </Stack> */}
-      <Snackbar open={open} autoHideDuration={6000} onClose={handleClose}>
-        <Alert onClose={handleClose} severity="success" sx={{ width: '100%' }}>
-          This is a success message!
-        </Alert>
-      </Snackbar>
-      {/* <Alert severity="success">This is a success message!</Alert> */}
-    </Box >
+            <Grid item>
+              <TextField
+                required
+                id="email"
+                name="email"
+                label="Email"
+                error={error.email}
+                onChange={validate}
+                helperText={error.email ? "Invalid email format." : ""}
+                value={form.email}
+                fullWidth
+              />
+            </Grid>
+            <Grid item>
+              <TextField
+                required
+                id="password"
+                name="password"
+                label="Password"
+                type="password"
+                error={error.password}
+                onChange={validate}
+                helperText={error.password ? "Invalid password." : ""}
+                value={form.password}
+                fullWidth
+              />
+            </Grid>
+            <Grid item>
+              <TextField
+                required
+                id="confirmPassword"
+                name="confirmPassword"
+                label="Confirm Password"
+                type="password"
+                error={error.confirmPassword}
+                onChange={validate}
+                helperText={error.confirmPassword ? "Passwords do not match." : ""}
+                value={form.confirmPassword}
+                fullWidth
+              />
+            </Grid>
+            <Grid item>
+              <LoadingButton
+                type="submit"
+                onClick={handleSubmit}
+                loading={isPending}
+                disabled={Object.keys(error).some(k => error[k]) || Object.keys(form).some(k => !form[k])}
+                variant="contained"
+                fullWidth
+              >
+                Submit
+              </LoadingButton>
+            </Grid>
+          </Grid>
+        </Card>
+        <Snackbar open={open} autoHideDuration={6000} onClose={handleClose}>
+          <Alert onClose={handleClose} severity="success" sx={{ width: '100%' }}>
+            User registration successful.
+          </Alert>
+        </Snackbar>
+      </Grid>
+    </Grid >
+
   );
 };
 
