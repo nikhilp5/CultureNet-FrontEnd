@@ -1,13 +1,16 @@
-import { useState } from "react";
+import { forwardRef, useState } from "react";
 import TextField from '@mui/material/TextField';
-import { Box, Typography } from "@mui/material";
+import { Box, Snackbar, Typography } from "@mui/material";
 import { styled } from '@mui/material/styles';
 import Paper from '@mui/material/Paper';
 import LoadingButton from '@mui/lab/LoadingButton';
+import MuiAlert from '@mui/material/Alert';
+
+
+const users = require("../data/db.json");
 
 
 const Registration = () => {
-
   const defaultForm = {
     email: '',
     password: '',
@@ -17,11 +20,16 @@ const Registration = () => {
   const [form, setForm] = useState(defaultForm);
 
   const [isPending, setIsPending] = useState(false);
+  const [open, setOpen] = useState(false);
 
   const [error, setError] = useState({
     email: false,
     password: false,
     confirmPassword: false
+  });
+
+  const Alert = forwardRef(function Alert(props, ref) {
+    return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
   });
 
   const Item = styled(Paper)(({ theme }) => ({
@@ -40,19 +48,12 @@ const Registration = () => {
 
     setIsPending(true);
 
-    fetch('http://localhost:8000/users/', {
-      method: 'POST',
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(form)
-    }).then(() => {
+    if (!Object.values(users).includes(form.email)) {
       setIsPending(false);
       console.log('new user added');
-      setForm(defaultForm);
-    }).catch((err) => {
-      setIsPending(false);
-      console.error(err);
-    });
-
+      setForm({ ...defaultForm });
+      setOpen(true);
+    }
   };
 
   const validate = (event) => {
@@ -62,25 +63,29 @@ const Registration = () => {
     let errorNew = error;
     switch (event.target.name) {
       case "email":
-        errorNew[event.target.name] = !event.target.value.match(emailRegex);
+        errorNew["email"] = !event.target.value.match(emailRegex);
         break;
       case "password":
-        errorNew[event.target.name] = !event.target.value.match(passwordRegex);
+        errorNew["password"] = !event.target.value.match(passwordRegex);
+        if (form.confirmPassword !== '') {
+          errorNew["confirmPassword"] = event.target.value !== formNew.confirmPassword;
+        }
         break;
       case "confirmPassword":
-        errorNew[event.target.name] = event.target.value !== formNew.password;
+        errorNew["confirmPassword"] = event.target.value !== formNew.password;
         break;
     }
     setError({ ...errorNew });
 
   };
 
-  const abc = () => {
-    console.log(error);
-    console.log(Object.keys(error).some(k => error[k]));
-    console.log(form);
-    console.log(Object.keys(form).some(k => !form[k]));
-    return Object.keys(error).some(k => error[k]) || Object.keys(form).some(k => !form[k]);
+
+  const handleClose = (event, reason) => {
+    if (reason === 'clickaway') {
+      return;
+    }
+
+    setOpen(false);
   };
 
 
@@ -100,6 +105,7 @@ const Registration = () => {
           error={error.email}
           onChange={validate}
           helperText={error.email ? "Invalid email format." : ""}
+          value={form.email}
         />
         {/* </Item>
           <Item> */}
@@ -112,6 +118,7 @@ const Registration = () => {
           error={error.password}
           onChange={validate}
           helperText={error.password ? "Invalid password." : ""}
+          value={form.password}
         />
         {/* </Item>
           <Item> */}
@@ -124,6 +131,7 @@ const Registration = () => {
           error={error.confirmPassword}
           onChange={validate}
           helperText={error.confirmPassword ? "Passwords do not match." : ""}
+          value={form.confirmPassword}
         />
         {/* </Item>
           <Item> */}
@@ -136,7 +144,7 @@ const Registration = () => {
           loading={isPending}
           // loadingPosition="start"
           onClick={handleSubmit}
-          disabled={abc()}
+          disabled={Object.keys(error).some(k => error[k]) || Object.keys(form).some(k => !form[k])}
           // startIcon={<SaveIcon />}
           variant="contained"
         >
@@ -145,6 +153,12 @@ const Registration = () => {
         {/* </Item> */}
       </form>
       {/* </Stack> */}
+      <Snackbar open={open} autoHideDuration={6000} onClose={handleClose}>
+        <Alert onClose={handleClose} severity="success" sx={{ width: '100%' }}>
+          This is a success message!
+        </Alert>
+      </Snackbar>
+      {/* <Alert severity="success">This is a success message!</Alert> */}
     </Box >
   );
 };

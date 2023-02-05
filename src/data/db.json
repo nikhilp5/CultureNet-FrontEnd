@@ -17,12 +17,6 @@
       "fname": "mario2",
       "lname": "what2",
       "nsfw": false
-    },
-    {
-      "email": "wef@fw.fe",
-      "password": "Mummy@17",
-      "confirmPassword": "Mummy@17",
-      "id": 3
     }
   ]
 }
