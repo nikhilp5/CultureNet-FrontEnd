@@ -20,6 +20,8 @@ const Registration = () => {
 
   const [isPending, setIsPending] = useState(false);
   const [open, setOpen] = useState(false);
+  const [snackbarSeverity, setSnackbarSeverity] = useState("success");
+  const [snackbarMessage, setSnackbarMessage] = useState("User login successful.");
 
   const [error, setError] = useState({
     email: false,
@@ -35,17 +37,25 @@ const Registration = () => {
   const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/g;
 
   const handleSubmit = (e) => {
-    console.log(form);
+    let finalForm = form;
+    finalForm.email = form.email.toLowerCase();
 
 
     setIsPending(true);
 
-    if (!Object.values(data).includes(form.email)) {
-      let data = { email: form.email, password: form.password };
-      setIsPending(false);
+    if (!data.users.find(user => user.email === finalForm.email)) {
+      let data = { email: finalForm.email, password: finalForm.password };
       setForm({ ...defaultForm });
-      setOpen(true);
+      setSnackbarSeverity("success");
+      setSnackbarMessage("User registration successful.");
     }
+    else {
+      setSnackbarSeverity("error");
+      setSnackbarMessage("User already exists!");
+    }
+    setOpen(true);
+    setIsPending(false);
+
   };
 
   const validate = (event) => {
@@ -148,8 +158,8 @@ const Registration = () => {
           </Grid>
         </Card>
         <Snackbar open={open} autoHideDuration={6000} onClose={handleClose}>
-          <Alert onClose={handleClose} severity="success" sx={{ width: '100%' }}>
-            User registration successful.
+          <Alert onClose={handleClose} severity={snackbarSeverity} sx={{ width: '100%' }}>
+            {snackbarMessage}
           </Alert>
         </Snackbar>
       </Grid>

@@ -14,11 +14,13 @@ import MenuIcon from '@mui/icons-material/Menu';
 import Toolbar from '@mui/material/Toolbar';
 import Typography from '@mui/material/Typography';
 import Button from '@mui/material/Button';
+import { useNavigate } from 'react-router';
 
 const drawerWidth = 240;
-const navItems = ['Login', 'Register'];
+const navItems = ['Login', 'Register', 'Profile'];
 
 function Navbar(props) {
+  const navigate = useNavigate();
   const { window } = props;
   const [responsive, setResponsive] = React.useState(false);
 
@@ -35,7 +37,7 @@ function Navbar(props) {
       <List>
         {navItems.map((item) => (
           <ListItem key={item} disablePadding>
-            <ListItemButton sx={{ textAlign: 'center' }}>
+            <ListItemButton onClick={() => navigator(item)} sx={{ textAlign: 'center' }}>
               <ListItemText primary={item} />
             </ListItemButton>
           </ListItem>
@@ -43,6 +45,11 @@ function Navbar(props) {
       </List>
     </Box>
   );
+
+  const navigator = (page) => {
+    console.log(page);
+    navigate("/" + page);
+  };
 
   const container = window !== undefined ? () => window().document.body : undefined;
 
@@ -64,12 +71,13 @@ function Navbar(props) {
             variant="h6"
             component="div"
             sx={{ flexGrow: 1, display: { xs: 'none', sm: 'block' } }}
+            onClick={() => navigator('')}
           >
             App Name
           </Typography>
           <Box sx={{ display: { xs: 'none', sm: 'block' } }}>
             {navItems.map((item) => (
-              <Button key={item} sx={{ color: '#fff' }}>
+              <Button key={item} sx={{ color: '#fff' }} onClick={() => navigator(item)}>
                 {item}
               </Button>
             ))}

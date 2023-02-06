@@ -60,7 +60,7 @@ const UserProfile = () => {
 
   const emailRegex = /^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/g;
   const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/g;
-  const nameRegex = /\b([A-ZÀ-ÿ][-,a-z. ']+[ ]*)+/g;
+  const nameRegex = /\b([A-Za-zÀ-ÿ][-,a-z. ']+[ ]*)+/g;
 
 
   const validate = (event) => {

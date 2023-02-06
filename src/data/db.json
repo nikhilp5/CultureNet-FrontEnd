@@ -3,10 +3,10 @@
     {
       "id": 1,
       "email": "abc@xyz.com",
-      "password": "abc",
+      "password": "Abcd@1234",
       "bio": "Why do we use it?\nIt is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout.",
-      "fname": "mario1",
-      "lname": "what1",
+      "fname": "mario",
+      "lname": "what",
       "nsfw": true
     },
     {
@@ -14,8 +14,8 @@
       "email": "xyz@abc.com",
       "password": "xyz",
       "bio": "Why do we use it?\nIt is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout.",
-      "fname": "mario2",
-      "lname": "what2",
+      "fname": "mario",
+      "lname": "what",
       "nsfw": false
     }
   ]
