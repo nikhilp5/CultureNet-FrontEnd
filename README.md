@@ -68,6 +68,46 @@ See the following section for detailed step-by-step instructions on how to insta
 
 ## Sources Used
 
+### Login.jsx
+
+_Line 34_
+
+```
+const emailRegex = /^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/g;
+```
+
+The code was adapted from [Regexr](https://regexr.com/3e48o)
+
+_Line 35_
+
+```
+const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/g;
+```
+
+The code was adapted from [Stack Overflow](https://stackoverflow.com/questions/19605150/regex-for-password-must-contain-at-least-eight-characters-at-least-one-number-a)
+
+### Registration.jsx
+
+_Lines 32-34_
+
+```
+const Alert = forwardRef(function Alert(props, ref) {
+return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
+});
+```
+
+_Lines 160-164_
+
+```
+<Snackbar open={open} autoHideDuration={6000} onClose={handleClose}>
+    <Alert onClose={handleClose} severity={snackbarSeverity} sx={{ width: '100%' }}>
+    {snackbarMessage}
+    </Alert>
+</Snackbar>
+```
+
+The code was adapted from [MUI official documentation](https://mui.com/material-ui/react-snackbar/)
+
 ## Acknowledgments
 
 - [Gitlab docs](https://docs.gitlab.com/ee/ci/examples/deployment/index.html#storing-api-keys) for providing _yml_ to deploy code to Heroku

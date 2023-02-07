@@ -47,14 +47,6 @@ const ForgotPassword = () => {
   const codeRegex = /^[0-9]{6}$/g;
   const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/g;
 
-  // useEffect(() => {
-  //   console.log(Object.keys(error).some(k => error[k]));
-  //   console.log(Object.keys(form).some(k => !form[k]));
-  //   console.log(!emailTextboxVisible);
-  //   console.log("*******");
-  // }, []);
-
-
   const validate = (event) => {
     let formNew = form;
     formNew[event.target.name] = event.target.value;
