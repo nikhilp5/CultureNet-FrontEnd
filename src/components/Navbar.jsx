@@ -12,8 +12,9 @@ import Button from '@mui/material/Button';
 import Tooltip from '@mui/material/Tooltip';
 import MenuItem from '@mui/material/MenuItem';
 import AdbIcon from '@mui/icons-material/Adb';
+import { Javascript } from '@mui/icons-material';
 
-const pages = ['Books', 'Movies', 'Music'];
+const pages = ['Home', 'Books', 'Movies', 'Music', 'Notifications'];
 const settings = ['Profile', 'Preferences', 'Dashboard', 'Logout'];
 
 function ResponsiveAppBar() {
@@ -89,7 +90,7 @@ function ResponsiveAppBar() {
             >
               {pages.map((page) => (
                 <MenuItem key={page} onClick={handleCloseNavMenu}>
-                  <Typography textAlign="center">{page === "Books" ? (<b>page</b>):(page) }</Typography>
+                  <Typography textAlign="center">{page.valueOf === "Books" ? (<b>Books</b>):(page) }</Typography>
                 </MenuItem>
               ))}
             </Menu>

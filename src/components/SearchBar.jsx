@@ -8,6 +8,7 @@ import SearchIcon from '@mui/icons-material/Search';
 
 const Search = styled('div')(({ theme }) => ({
   position: 'relative',
+  justifyContent: 'center',
   borderRadius: theme.shape.borderRadius,
   // backgroundColor: alpha(theme.palette.common.white, 0.15),
   '&:hover': {
@@ -51,14 +52,23 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
 export default function SearchAppBar() {
   return (
     <Box sx={{ flexGrow: 1 }}>
-      <AppBar position="static">
-        <Toolbar position="center">
+      <AppBar position="static" sx={{
+          width: "100%",
+          maxWidth: 500,
+          mx: "auto"
+        }}>
+        <Toolbar position="center" sx={{
+          width: "100%",
+          maxWidth: 280,
+          mx: "auto"
+        }}
+        >
           <Search>
             <SearchIconWrapper>
               <SearchIcon />
             </SearchIconWrapper>
             <StyledInputBase
-              placeholder="Select the radio option by which you want the book to be searched..."
+              placeholder="Search any Book.."
               inputProps={{ 'aria-label': 'search' }}
             />
           </Search>
