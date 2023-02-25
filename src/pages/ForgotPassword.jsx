@@ -31,6 +31,7 @@ const ForgotPassword = () => {
 
   const [openSnackbar, setOpenSnackbar] = useState(false);
   const [snackbarMessage, setSnackbarMessage] = useState('');
+  const [snackbarSeverity, setSnackbarSeverity] = useState('success');
 
   const [error, setError] = useState({
     email: false,
@@ -83,9 +84,17 @@ const ForgotPassword = () => {
   };
 
   const handleClick = (event) => {
+    let finalForm = form;
     switch (event.target.name) {
       case "sendCode":
-        setEmailTextboxVisible(false);
+        if (!data.users.find(user => user.email === finalForm.email)) {
+          setSnackbarSeverity("error");
+          setSnackbarMessage("Invalid user details. (Try 'abc@xyz.com' for demo)");
+          setOpenSnackbar(true);
+        }
+        else {
+          setEmailTextboxVisible(false);
+        }
         break;
       case "btnOpenDialog":
         break;
@@ -95,14 +104,21 @@ const ForgotPassword = () => {
         setOpenDialog(false);
         break;
       case "updatePassword":
-        if (!Object.values(data).includes(form.email)) {
+        if (data.users.find(user => user.email === finalForm.email)) {
           setIsPending(false);
           setOpenDialog(false);
+          setSnackbarSeverity("success");
           setSnackbarMessage('Password changed successfully.');
           setOpenSnackbar(true);
         }
-
-        window.location.reload();
+        else {
+          setSnackbarSeverity("error");
+          setSnackbarMessage("Invalid user details.");
+          setOpenSnackbar(true);
+          setOpenDialog(false);
+        }
+        setEmailTextboxVisible(true);
+        setForm({ ...defaultForm });
         break;
     }
   };
@@ -185,7 +201,7 @@ const ForgotPassword = () => {
           </Grid>
         </Card>
         <Snackbar id="snackbar" name="snackbar" open={openSnackbar} autoHideDuration={5000} onClose={handleClose}>
-          <Alert id="alert" name="alert" onClose={handleClose} severity="success" sx={{ width: '100%' }}>
+          <Alert id="alert" name="alert" onClose={handleClose} severity={snackbarSeverity} sx={{ width: '100%' }}>
             {snackbarMessage}
           </Alert>
         </Snackbar>
@@ -225,7 +241,7 @@ const ForgotPassword = () => {
           </DialogContent>
           <DialogActions>
             <Button id="cancel" name="cancel" onClick={handleClick}>Cancel</Button>
-            <Button id="updatePassword" name="updatePassword" variant="contained" onClick={handleClick}>Reset</Button>
+            <Button id="updatePassword" name="updatePassword" variant="contained" onClick={handleClick} disabled={Object.keys(error).some(k => error[k]) || Object.keys(form).some(k => !form[k])}>Reset</Button>
           </DialogActions>
         </Dialog>
       </Grid>

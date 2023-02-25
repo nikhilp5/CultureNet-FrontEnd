@@ -1,15 +1,17 @@
 import { forwardRef, useState } from "react";
 import TextField from '@mui/material/TextField';
-import { Card, Snackbar, Typography } from "@mui/material";
+import { Button, Card, Snackbar, Typography } from "@mui/material";
 import LoadingButton from '@mui/lab/LoadingButton';
 import MuiAlert from '@mui/material/Alert';
 import Grid from '@mui/material/Grid';
+import { useNavigate } from "react-router";
 
 
 const data = require("../data/db.json");
 
 
 const Login = () => {
+  const navigate = useNavigate();
   const defaultForm = {
     email: '',
     password: '',
@@ -131,6 +133,17 @@ const Login = () => {
                 Submit
               </LoadingButton>
             </Grid>
+            <Grid item>
+              <Button
+                id="forgotPasswordLink"
+                name="forgotPasswordLink"
+                variant="text"
+                href=""
+                onClick={() => navigate("/forgotpassword")}
+                fullWidth>
+                Forgot Password?
+              </Button>
+            </Grid>
           </Grid>
         </Card>
         <Snackbar open={open} autoHideDuration={6000} onClose={handleClose}>
@@ -138,7 +151,7 @@ const Login = () => {
             {snackbarMessage}
           </Alert>
         </Snackbar>
-      </Grid>
+      </Grid >
     </Grid >
 
   );
