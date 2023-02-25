@@ -1,4 +1,7 @@
 import Navbar from './components/Navbar';
+import { CssBaseline, ThemeProvider } from '@mui/material';
+import { appTheme } from './themes/theme';
+
 // import { MuiThemeProvider, createMuiTheme } from 'material-ui/styles';
 
 // const theme = createMuiTheme({
@@ -16,9 +19,12 @@ import Navbar from './components/Navbar';
 
 function App() {
   return (
-    <div>
-      <Navbar />
-    </div>
+    <ThemeProvider theme={appTheme}>
+      <CssBaseline enableColorScheme />
+      <div>
+        <Navbar />
+      </div>
+    </ThemeProvider>
   );
 }
 

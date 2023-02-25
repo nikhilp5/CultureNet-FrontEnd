@@ -102,7 +102,7 @@ function Navbar() {
                     label={auth ? 'FOR DEMO ONLY: The Navbar is currently in "Logged In" state' : 'FOR DEMO ONLY: The Navbar is currently in "Logged Out" state'}
                 />
             </FormGroup>
-            <AppBar position="static">
+            <AppBar color="primary" position="static">
                 <Container maxWidth="xl">
                     <Toolbar disableGutters>
                         <Typography
