@@ -1,6 +1,6 @@
 import { CssBaseline, ThemeProvider } from '@mui/material';
 import { appTheme } from './themes/theme';
-import { AppRoutes } from './routes/Routes';
+import AppRoutes from './routes/Routes';
 import React, { Component } from 'react';
 
 class App extends Component {

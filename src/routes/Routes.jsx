@@ -5,8 +5,7 @@ import Navbar from "../components/common/Navbar";
 import UserDashboard from "../components/user/UserDashboard"
 import AdminDashboard from "../components/admin/AdminDashboard"
 
-
-export const AppRoutes = () => {
+const AppRoutes = () => {
     return (
         <Routes>
             <Route path = "/" element = {<LandingPage />} />
@@ -16,3 +15,5 @@ export const AppRoutes = () => {
         </Routes>
     )
 };
+
+export default AppRoutes;
