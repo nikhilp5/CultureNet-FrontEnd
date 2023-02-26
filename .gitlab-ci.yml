@@ -1,0 +1,15 @@
+image: node:latest
+
+stages:
+  - deploy
+
+deploy:
+  stage: deploy
+  script:
+    - npm install
+    - npm install netlify-cli -g
+    - npm run build
+    - netlify deploy --dir "build" --auth $AUTH_TOKEN --site $SITE_ID --prod
+  only:
+    - main
+    - develop
