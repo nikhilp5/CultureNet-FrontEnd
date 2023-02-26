@@ -201,7 +201,7 @@ function Navbar() {
                         </Search>)}
 
                         <Box sx={{ flexGrow: 0 }}>
-                            <Tooltip title="Open settings">
+                            <Tooltip color="secondary" title="Open settings">
                                 <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
                                     <Avatar alt={auth ? "Remy Sharp" : ""} src={auth ? "/static/images/avatar/2.jpg" : ""} />
                                 </IconButton>
@@ -226,7 +226,7 @@ function Navbar() {
                                     Object.keys(setting).length !== 0 ?
                                         <MenuItem key={setting.text} onClick={handleCloseUserMenu}>
                                             <ListItemIcon>
-                                                <setting.icon fontSize="small" />
+                                                <setting.icon color="secondary" fontSize="small" />
                                             </ListItemIcon>
                                             <ListItemText textAlign="center">{setting.text}</ListItemText>
                                         </MenuItem> : <Divider />
@@ -234,7 +234,7 @@ function Navbar() {
                                     Object.keys(setting).length !== 0 ?
                                         <MenuItem key={setting.text} onClick={handleCloseUserMenu}>
                                             <ListItemIcon>
-                                                <setting.icon fontSize="small" />
+                                                <setting.icon color="secondary" fontSize="small" />
                                             </ListItemIcon>
                                             <ListItemText textAlign="center">{setting.text}</ListItemText>
                                         </MenuItem> : <Divider />
