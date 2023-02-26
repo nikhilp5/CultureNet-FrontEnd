@@ -29,7 +29,7 @@ export default function LandingPage() {
         </Mui.Typography>
       </Mui.Link>
 
-      <Mui.Link href="/UserDashboard">
+      <Mui.Link href="/AdminDashboard">
         <Mui.Typography
           component="h1"
           variant="h6"
