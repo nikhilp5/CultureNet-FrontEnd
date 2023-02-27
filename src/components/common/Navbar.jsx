@@ -24,7 +24,7 @@ const appName = "CultureNet";
 const appNameShort = "CN";
 const pages = ['Movies', 'Books', 'Music'];
 const settings_logged_in = [{ text: 'My Movies', icon: Movie }, { text: 'My Books', icon: Book }, { text: 'My Music', icon: MusicNote }, {}, { text: 'Watchlist', icon: WatchLater, route: 'Watchlist' }, { text: 'Activity', icon: Timeline }, { text: 'Network', icon: Diversity1 }, {}, { text: 'Settings', icon: Settings }, {}, { text: 'Logout', icon: Logout }];
-const settings_logged_out = [{ text: 'Login', icon: Login, route: 'Login' }, { text: 'Register', icon: PersonAdd, route: 'Register' }];
+const settings_logged_out = [{ text: 'Login', icon: Login, route: 'login' }, { text: 'Register', icon: PersonAdd, route: 'register' }];
 
 const Search = styled('div')(({ theme }) => ({
     position: 'relative',
