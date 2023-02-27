@@ -13,15 +13,18 @@ import Tooltip from '@mui/material/Tooltip';
 import MenuItem from '@mui/material/MenuItem';
 import SearchIcon from '@mui/icons-material/Search';
 import InputBase from '@mui/material/InputBase';
+import { useNavigate } from "react-router-dom";
+import { useState } from "react";
 
 import { Divider, FormControlLabel, FormGroup, ListItemIcon, ListItemText, Switch } from '@mui/material';
 import { Settings, Movie, MusicNote, Book, WatchLater, Timeline, Diversity1, Login, PersonAdd, Logout } from '@mui/icons-material';
 import { styled, alpha } from '@mui/material/styles';
+import { Link } from 'react-router-dom';
 
 const appName = "CultureNet";
 const appNameShort = "CN";
 const pages = ['Movies', 'Books', 'Music'];
-const settings_logged_in = [{ 'text': 'My Movies', 'icon': Movie }, { 'text': 'My Books', 'icon': Book }, { 'text': 'My Music', 'icon': MusicNote }, {}, { 'text': 'Watchlist', 'icon': WatchLater }, { 'text': 'Activity', 'icon': Timeline }, { 'text': 'Network', 'icon': Diversity1 }, {}, { 'text': 'Settings', 'icon': Settings }, {}, { 'text': 'Logout', 'icon': Logout }];
+const settings_logged_in = [{ 'text': 'My Movies', 'icon': Movie }, { 'text': 'My Books', 'icon': Book }, { 'text': 'My Music', 'icon': MusicNote }, {}, { 'text': 'Watchlist', 'icon': WatchLater , 'route': 'Watchlist'}, { 'text': 'Activity', 'icon': Timeline }, { 'text': 'Network', 'icon': Diversity1 }, {}, { 'text': 'Settings', 'icon': Settings }, {}, { 'text': 'Logout', 'icon': Logout }];
 const settings_logged_out = [{ 'text': 'Login', 'icon': Login }, { 'text': 'Register', 'icon': PersonAdd }];
 
 const Search = styled('div')(({ theme }) => ({
@@ -88,6 +91,17 @@ function Navbar() {
         setAuth(event.target.checked);
     };
 
+const [enteredText, setEnteredText] = useState("");
+
+  const textChangeHandler = (event) => {
+    setEnteredText(event.target.value);
+  };
+
+  const navigate = useNavigate();
+
+  function handleClick() {
+    navigate("/search", { state: enteredText });
+  }
     return (
         <Box sx={{ flexGrow: 1 }}>
             <FormGroup>
@@ -197,6 +211,14 @@ function Navbar() {
                             <StyledInputBase
                                 placeholder="Search…"
                                 inputProps={{ 'aria-label': 'search' }}
+                                onKeyPress={(e) => {
+                                    if (e.key === "Enter") {
+                                      e.preventDefault();
+                                      handleClick();
+                                    }
+                                  }}
+                                  onChange={textChangeHandler}
+                                  value={enteredText}
                             />
                         </Search>)}
 
@@ -224,12 +246,14 @@ function Navbar() {
                             >
                                 {auth ? settings_logged_in.map((setting) => (
                                     Object.keys(setting).length !== 0 ?
-                                        <MenuItem key={setting.text} onClick={handleCloseUserMenu}>
+                                    <Link to={setting.route}>
+                                        <MenuItem key={setting.text} onClick={handleCloseUserMenu}  >
                                             <ListItemIcon>
                                                 <setting.icon color="secondary" fontSize="small" />
                                             </ListItemIcon>
                                             <ListItemText textAlign="center">{setting.text}</ListItemText>
-                                        </MenuItem> : <Divider />
+                                        </MenuItem>
+                                        </Link> : <Divider />
                                 )) : settings_logged_out.map((setting) => (
                                     Object.keys(setting).length !== 0 ?
                                         <MenuItem key={setting.text} onClick={handleCloseUserMenu}>
