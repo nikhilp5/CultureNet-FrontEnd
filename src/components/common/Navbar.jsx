@@ -19,13 +19,12 @@ import { useState } from "react";
 import { Divider, FormControlLabel, FormGroup, ListItemIcon, ListItemText, Switch } from '@mui/material';
 import { Settings, Movie, MusicNote, Book, WatchLater, Timeline, Diversity1, Login, PersonAdd, Logout } from '@mui/icons-material';
 import { styled, alpha } from '@mui/material/styles';
-import { Link } from 'react-router-dom';
 
 const appName = "CultureNet";
 const appNameShort = "CN";
 const pages = ['Movies', 'Books', 'Music'];
-const settings_logged_in = [{ 'text': 'My Movies', 'icon': Movie }, { 'text': 'My Books', 'icon': Book }, { 'text': 'My Music', 'icon': MusicNote }, {}, { 'text': 'Watchlist', 'icon': WatchLater , 'route': 'Watchlist'}, { 'text': 'Activity', 'icon': Timeline }, { 'text': 'Network', 'icon': Diversity1 }, {}, { 'text': 'Settings', 'icon': Settings }, {}, { 'text': 'Logout', 'icon': Logout }];
-const settings_logged_out = [{ 'text': 'Login', 'icon': Login }, { 'text': 'Register', 'icon': PersonAdd }];
+const settings_logged_in = [{ text: 'My Movies', icon: Movie }, { text: 'My Books', icon: Book }, { text: 'My Music', icon: MusicNote }, {}, { text: 'Watchlist', icon: WatchLater, route: 'Watchlist' }, { text: 'Activity', icon: Timeline }, { text: 'Network', icon: Diversity1 }, {}, { text: 'Settings', icon: Settings }, {}, { text: 'Logout', icon: Logout }];
+const settings_logged_out = [{ text: 'Login', icon: Login, route: 'login' }, { text: 'Register', icon: PersonAdd, route: 'register' }];
 
 const Search = styled('div')(({ theme }) => ({
     position: 'relative',
@@ -91,17 +90,22 @@ function Navbar() {
         setAuth(event.target.checked);
     };
 
-const [enteredText, setEnteredText] = useState("");
+    const [enteredText, setEnteredText] = useState("");
 
-  const textChangeHandler = (event) => {
-    setEnteredText(event.target.value);
-  };
+    const textChangeHandler = (event) => {
+        setEnteredText(event.target.value);
+    };
 
-  const navigate = useNavigate();
+    const navigate = useNavigate();
 
-  function handleClick() {
-    navigate("/search", { state: enteredText });
-  }
+    const navigator = (page) => {
+        console.log(page);
+        navigate("/" + page);
+    };
+
+    function handleClick() {
+        navigate("/search", { state: enteredText });
+    }
     return (
         <Box sx={{ flexGrow: 1 }}>
             <FormGroup>
@@ -213,12 +217,12 @@ const [enteredText, setEnteredText] = useState("");
                                 inputProps={{ 'aria-label': 'search' }}
                                 onKeyPress={(e) => {
                                     if (e.key === "Enter") {
-                                      e.preventDefault();
-                                      handleClick();
+                                        e.preventDefault();
+                                        handleClick();
                                     }
-                                  }}
-                                  onChange={textChangeHandler}
-                                  value={enteredText}
+                                }}
+                                onChange={textChangeHandler}
+                                value={enteredText}
                             />
                         </Search>)}
 
@@ -246,17 +250,15 @@ const [enteredText, setEnteredText] = useState("");
                             >
                                 {auth ? settings_logged_in.map((setting) => (
                                     Object.keys(setting).length !== 0 ?
-                                    <Link to={setting.route}>
-                                        <MenuItem key={setting.text} onClick={handleCloseUserMenu}  >
+                                        <MenuItem key={setting.text} onClick={() => navigator(setting.route)}  >
                                             <ListItemIcon>
                                                 <setting.icon color="secondary" fontSize="small" />
                                             </ListItemIcon>
                                             <ListItemText textAlign="center">{setting.text}</ListItemText>
-                                        </MenuItem>
-                                        </Link> : <Divider />
+                                        </MenuItem> : <Divider />
                                 )) : settings_logged_out.map((setting) => (
                                     Object.keys(setting).length !== 0 ?
-                                        <MenuItem key={setting.text} onClick={handleCloseUserMenu}>
+                                        <MenuItem key={setting.text} onClick={() => navigator(setting.route)}>
                                             <ListItemIcon>
                                                 <setting.icon color="secondary" fontSize="small" />
                                             </ListItemIcon>
