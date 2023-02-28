@@ -223,9 +223,9 @@ function Navbar() {
                         </Search>)}
 
                         <Box sx={{ flexGrow: 0 }}>
-                            <Tooltip color="secondary" title="Open settings">
+                            <Tooltip color="secondary" title="Lorem Ipsum">
                                 <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
-                                    <Avatar alt={auth ? "Remy Sharp" : ""} src={auth ? "/static/images/avatar/2.jpg" : ""} />
+                                    <Avatar alt={auth ? "Lorem Ipsum" : ""} src={auth ? "/static/images/avatar/2.jpg" : ""} />
                                 </IconButton>
                             </Tooltip>
                             <Menu
