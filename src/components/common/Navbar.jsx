@@ -23,8 +23,8 @@ import { UserContext } from '../../utils/UserContext';
 
 const appName = "CultureNet";
 const appNameShort = "CN";
-const pages = ['Movies', 'Books', 'Music'];
-const settings_logged_in = [{ text: 'My Movies', icon: Movie }, { text: 'My Books', icon: Book }, { text: 'My Music', icon: MusicNote }, {}, { text: 'Watchlist', icon: WatchLater, route: 'Watchlist' }, { text: 'Activity', icon: Timeline }, { text: 'Network', icon: Diversity1 }, {}, { text: 'Settings', icon: Settings, route: 'Profile' }, {}, { text: 'Logout', icon: Logout, route: '' }];
+const pages = [{ text: 'Movies', route: 'Movies' }, { text: 'Books', route: 'Books' }, { text: 'Music', route: 'Music' }];
+const settings_logged_in = [{ text: 'My Movies', icon: Movie, route: 'MyMovies' }, { text: 'My Books', icon: Book, route: 'MyBooks' }, { text: 'My Music', icon: MusicNote, route: 'MyMusic' }, {}, { text: 'Watchlist', icon: WatchLater, route: 'Watchlist' }, { text: 'Activity', icon: Timeline, route: 'Activity' }, { text: 'Network', icon: Diversity1, route: 'Network' }, {}, { text: 'Settings', icon: Settings, route: 'Profile' }, {}, { text: 'Logout', icon: Logout, route: '' }];
 const settings_logged_out = [{ text: 'Login', icon: Login, route: 'Login' }, { text: 'Register', icon: PersonAdd, route: 'Register' }];
 
 const Search = styled('div')(({ theme }) => ({
@@ -180,8 +180,8 @@ function Navbar() {
                                 }}
                             >
                                 {pages.map((page) => (
-                                    <MenuItem key={page} onClick={handleCloseNavMenu}>
-                                        <Typography textAlign="center">{page}</Typography>
+                                    <MenuItem key={page.text} onClick={() => navigator(page.route)}>
+                                        <Typography textAlign="center">{page.text}</Typography>
                                     </MenuItem>
                                 ))}
                             </Menu>
@@ -208,11 +208,11 @@ function Navbar() {
                         <Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex', marginLeft: 40 } }}>
                             {auth && (pages.map((page) => (
                                 <Button
-                                    key={page}
-                                    onClick={handleCloseNavMenu}
+                                    key={page.text}
+                                    onClick={() => navigator(page.route)}
                                     sx={{ my: 2, color: 'white', display: 'block' }}
                                 >
-                                    {page}
+                                    {page.text}
                                 </Button>
                             )))}
                         </Box>
