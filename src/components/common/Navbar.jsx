@@ -16,7 +16,7 @@ import InputBase from '@mui/material/InputBase';
 import { useNavigate } from "react-router-dom";
 import { useState, useContext } from "react";
 
-import { Divider, FormControlLabel, FormGroup, ListItemIcon, ListItemText, Switch } from '@mui/material';
+import { Divider, ListItemIcon, ListItemText } from '@mui/material';
 import { Settings, Movie, MusicNote, Book, WatchLater, Timeline, Diversity1, Login, PersonAdd, Logout, AdminPanelSettings, Home } from '@mui/icons-material';
 import { styled, alpha } from '@mui/material/styles';
 import { UserContext } from '../../utils/UserContext';
@@ -116,18 +116,6 @@ function Navbar() {
     }
     return (
         <Box sx={{ flexGrow: 1 }}>
-            <FormGroup>
-                <FormControlLabel
-                    control={
-                        <Switch
-                            checked={auth}
-                            onChange={handleChange}
-                            aria-label="login switch"
-                        />
-                    }
-                    label={auth ? 'FOR DEMO ONLY: The Navbar is currently in "Logged In" state' : 'FOR DEMO ONLY: The Navbar is currently in "Logged Out" state'}
-                />
-            </FormGroup>
             <AppBar color="primary" position="static">
                 <Container maxWidth="xl">
                     <Toolbar disableGutters>
@@ -235,9 +223,9 @@ function Navbar() {
                         </Search>)}
 
                         <Box sx={{ flexGrow: 0 }}>
-                            <Tooltip color="secondary" title="Open settings">
+                            <Tooltip color="secondary" title="Lorem Ipsum">
                                 <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
-                                    <Avatar alt={auth ? "Remy Sharp" : ""} src={auth ? "/static/images/avatar/2.jpg" : ""} />
+                                    <Avatar alt={auth ? "Lorem Ipsum" : ""} src={auth ? "/static/images/avatar/2.jpg" : ""} />
                                 </IconButton>
                             </Tooltip>
                             <Menu
