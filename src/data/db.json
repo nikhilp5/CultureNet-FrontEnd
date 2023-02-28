@@ -1,0 +1,22 @@
+{
+  "users": [
+    {
+      "id": 1,
+      "email": "test@email.com",
+      "password": "Hello@123",
+      "bio": "Why do we use it?\nIt is a long-established fact that a reader will be distracted by the readable content of a page when looking at its layout.",
+      "fname": "Lorem",
+      "lname": "Ipsum",
+      "nsfw": true
+    },
+    {
+      "id": 2,
+      "email": "foo@bar.com",
+      "password": "Test@123",
+      "bio": "Why do we use it?\nIt is a long-established fact that a reader will be distracted by the readable content of a page when looking at its layout.",
+      "fname": "Foo",
+      "lname": "Bar",
+      "nsfw": false
+    }
+  ]
+}
