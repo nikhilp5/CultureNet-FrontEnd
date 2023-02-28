@@ -14,17 +14,18 @@ import MenuItem from '@mui/material/MenuItem';
 import SearchIcon from '@mui/icons-material/Search';
 import InputBase from '@mui/material/InputBase';
 import { useNavigate } from "react-router-dom";
-import { useState } from "react";
+import { useState, useContext } from "react";
 
 import { Divider, FormControlLabel, FormGroup, ListItemIcon, ListItemText, Switch } from '@mui/material';
-import { Settings, Movie, MusicNote, Book, WatchLater, Timeline, Diversity1, Login, PersonAdd, Logout } from '@mui/icons-material';
+import { Settings, Movie, MusicNote, Book, WatchLater, Timeline, Diversity1, Login, PersonAdd, Logout, AdminPanelSettings, Home } from '@mui/icons-material';
 import { styled, alpha } from '@mui/material/styles';
+import { UserContext } from '../../utils/UserContext';
 
 const appName = "CultureNet";
 const appNameShort = "CN";
 const pages = ['Movies', 'Books', 'Music'];
-const settings_logged_in = [{ text: 'My Movies', icon: Movie }, { text: 'My Books', icon: Book }, { text: 'My Music', icon: MusicNote }, {}, { text: 'Watchlist', icon: WatchLater, route: 'Watchlist' }, { text: 'Activity', icon: Timeline }, { text: 'Network', icon: Diversity1 }, {}, { text: 'Settings', icon: Settings }, {}, { text: 'Logout', icon: Logout }];
-const settings_logged_out = [{ text: 'Login', icon: Login, route: 'login' }, { text: 'Register', icon: PersonAdd, route: 'register' }];
+const settings_logged_in = [{ text: 'My Movies', icon: Movie }, { text: 'My Books', icon: Book }, { text: 'My Music', icon: MusicNote }, {}, { text: 'Watchlist', icon: WatchLater, route: 'Watchlist' }, { text: 'Activity', icon: Timeline }, { text: 'Network', icon: Diversity1 }, {}, { text: 'Settings', icon: Settings, route: 'Profile' }, {}, { text: 'Logout', icon: Logout, route: '' }];
+const settings_logged_out = [{ text: 'Login', icon: Login, route: 'Login' }, { text: 'Register', icon: PersonAdd, route: 'Register' }];
 
 const Search = styled('div')(({ theme }) => ({
     position: 'relative',
@@ -67,7 +68,7 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
 }));
 
 function Navbar() {
-    const [auth, setAuth] = React.useState(true);
+    const { auth, setAuth } = useContext(UserContext);
     const [anchorElNav, setAnchorElNav] = React.useState(null);
     const [anchorElUser, setAnchorElUser] = React.useState(null);
 
@@ -88,6 +89,11 @@ function Navbar() {
 
     const handleChange = (event) => {
         setAuth(event.target.checked);
+        if (event.target.checked) {
+            navigator("UserDashboard");
+        } else {
+            navigator("");
+        }
     };
 
     const [enteredText, setEnteredText] = useState("");
@@ -99,7 +105,9 @@ function Navbar() {
     const navigate = useNavigate();
 
     const navigator = (page) => {
-        console.log(page);
+        if (!page) {
+            setAuth(false);
+        }
         navigate("/" + page);
     };
 
