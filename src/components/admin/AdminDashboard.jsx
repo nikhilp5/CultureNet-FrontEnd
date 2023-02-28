@@ -1,35 +1,33 @@
 import * as React from 'react';
-import * as Mui from '@mui/material';
-import Navbar from '../common/Navbar';
-import { appTheme } from '../../themes/theme';
+import { Typography, Button } from '@mui/material';
+import { useNavigate } from "react-router";
 
 export default function AdminDashboard() {
-  return (
-    <Mui.ThemeProvider theme={appTheme}>
-      <Mui.CssBaseline />
-      <Navbar />
+  const navigate = useNavigate();
 
-      <Mui.Typography
+  return (
+    <div>
+      <Typography
         component="h1"
         variant="h5"
-        align="left"
+        align="center"
         color="secondary"
       >
-        Welcome. This Is the Admin Dashboard Page!
-      </Mui.Typography>
+        Welcome. This is the Admin Dashboard Page!
+      </Typography>
 
-      <Mui.Link href="/">
-        <Mui.Typography
-          component="h1"
-          variant="h6"
-          align="left"
-          color="primary"
-        >
-          Click Here to go to back to the Landing Page (To Test Linking and Routing)
-        </Mui.Typography>
-      </Mui.Link>
+      <Button variant="outlined" size="large" onClick={() => navigate("/UserDashboard")}>
+        Click here to switch to User Dashboard
+      </Button>
 
-
-    </Mui.ThemeProvider>
+      <Typography
+        component="h1"
+        variant="caption"
+        align="left"
+        color="primary"
+      >
+        Note: The corresponding dashboard will load based on the role.
+      </Typography>
+    </div>
   );
 }
