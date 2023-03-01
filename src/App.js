@@ -1,23 +1,23 @@
-import logo from './logo.svg';
+import { CssBaseline, ThemeProvider } from '@mui/material';
+import { appTheme } from './themes/theme';
+import AppRoutes from './routes/Routes';
+import React, { Component } from 'react';
 import './App.css';
+import Navbar from './components/common/Navbar';
+import { ContextProvider } from './utils/UserContext';
 
-function App() {
-  return (
-    <div className='App'>
-      <header className='App-header'>
-        <img src={logo} className='App-logo' alt='logo' />
-        <p>Test CICD works!</p>
-        <a
-          className='App-link'
-          href='https://reactjs.org'
-          target='_blank'
-          rel='noopener noreferrer'
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+class App extends Component {
+  render() {
+    return (
+      <ContextProvider>
+        <ThemeProvider theme={appTheme}>
+          <CssBaseline enableColorScheme />
+          <Navbar />
+          <AppRoutes />
+        </ThemeProvider>
+      </ContextProvider>
+    );
+  }
 }
 
 export default App;
