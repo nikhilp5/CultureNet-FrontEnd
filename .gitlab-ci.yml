@@ -9,7 +9,6 @@ deploy:
     - npm install
     - npm install netlify-cli -g
     - npm run build
-    - netlify deploy --dir "build" --auth $AUTH_TOKEN --site $SITE_ID --prod
+    - netlify deploy --dir "build" --auth $AUTH_TOKEN --site $SITE_ID_DEVELOP --prod
   only:
-    - main
     - develop
