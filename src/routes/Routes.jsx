@@ -12,6 +12,7 @@ import Login from "../components/user/Login";
 import Registration from "../components/user/Registration";
 import ForgotPassword from "../components/user/ForgotPassword";
 import UserProfile from "../components/user/UserProfile";
+import Movie from "../components/Movies/Movie";
 
 
 const AppRoutes = () => {
@@ -29,6 +30,7 @@ const AppRoutes = () => {
             <Route path="/Register" element={<Registration />}></Route>
             <Route path="/ForgotPassword" element={<ForgotPassword />}></Route>
             <Route path="/Profile" element={<UserProfile />}></Route>
+            <Route path="/Movies" element={<Movie />}></Route>
         </Routes>
     );
 };
