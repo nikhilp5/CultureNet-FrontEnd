@@ -118,6 +118,24 @@ _Lines 160-164_
 
 The code was adapted from [MUI official documentation](https://mui.com/material-ui/react-snackbar/)
 
+## Assumptions:
+
+1. Any kind username/password combination will work right now for the login page.
+
+2. On registration, popup indicates that user data is registered but it is not stored in a database.
+
+3. On forgot password page, `test@email.com` to be used as email and for code any kind of text is fine.
+
+4. On user profile update, user data is updated successfully but the changes are not reflected in database storage.
+
+5. In search page, static data with movie names as movie1,movie2 and book names as book1, book2 and usernames as user1, user2 are used.
+
+6. To view user dashboard login is required.
+
+7. Watchlist currently only displays movies.
+
+8. Pages which are not yet developed will show a page with message "Page not found".
+
 ## References
 
 [1] Matt The Dev, “Create a Movie Watchlist with React Hooks, Context API and localStorage” Youtube. [Online]. Available: https://youtu.be/1eO_hNYzaSc. [Accessed: 28-Feb-2023].
