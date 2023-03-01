@@ -7,7 +7,6 @@ export default function LandingPage() {
     return (
         <Mui.ThemeProvider theme={appTheme}>
             <Mui.CssBaseline />
-            <Navbar />
 
             <Mui.Grid sx={{ flexGrow: 1 }} container space={1} mt={3}>
                 <Mui.Grid item xs={12}>
