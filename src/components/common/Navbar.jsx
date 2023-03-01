@@ -16,15 +16,15 @@ import InputBase from '@mui/material/InputBase';
 import { useNavigate } from "react-router-dom";
 import { useState, useContext } from "react";
 
-import { Divider, FormControlLabel, FormGroup, ListItemIcon, ListItemText, Switch } from '@mui/material';
+import { Divider, ListItemIcon, ListItemText } from '@mui/material';
 import { Settings, Movie, MusicNote, Book, WatchLater, Timeline, Diversity1, Login, PersonAdd, Logout, AdminPanelSettings, Home } from '@mui/icons-material';
 import { styled, alpha } from '@mui/material/styles';
 import { UserContext } from '../../utils/UserContext';
 
 const appName = "CultureNet";
 const appNameShort = "CN";
-const pages = ['Movies', 'Books', 'Music'];
-const settings_logged_in = [{ text: 'My Movies', icon: Movie }, { text: 'My Books', icon: Book }, { text: 'My Music', icon: MusicNote }, {}, { text: 'Watchlist', icon: WatchLater, route: 'Watchlist' }, { text: 'Activity', icon: Timeline }, { text: 'Network', icon: Diversity1 }, {}, { text: 'Settings', icon: Settings, route: 'Profile' }, {}, { text: 'Logout', icon: Logout, route: '' }];
+const pages = [{ text: 'Movies', route: 'Movies' }, { text: 'Books', route: 'Books' }, { text: 'Music', route: 'Music' }];
+const settings_logged_in = [{ text: 'My Movies', icon: Movie, route: 'MyMovies' }, { text: 'My Books', icon: Book, route: 'MyBooks' }, { text: 'My Music', icon: MusicNote, route: 'MyMusic' }, {}, { text: 'Watchlist', icon: WatchLater, route: 'Watchlist' }, { text: 'Activity', icon: Timeline, route: 'Activity' }, { text: 'Network', icon: Diversity1, route: 'Network' }, {}, { text: 'Settings', icon: Settings, route: 'Profile' }, {}, { text: 'Logout', icon: Logout, route: '' }];
 const settings_logged_out = [{ text: 'Login', icon: Login, route: 'Login' }, { text: 'Register', icon: PersonAdd, route: 'Register' }];
 
 const Search = styled('div')(({ theme }) => ({
@@ -116,18 +116,6 @@ function Navbar() {
     }
     return (
         <Box sx={{ flexGrow: 1 }}>
-            <FormGroup>
-                <FormControlLabel
-                    control={
-                        <Switch
-                            checked={auth}
-                            onChange={handleChange}
-                            aria-label="login switch"
-                        />
-                    }
-                    label={auth ? 'FOR DEMO ONLY: The Navbar is currently in "Logged In" state' : 'FOR DEMO ONLY: The Navbar is currently in "Logged Out" state'}
-                />
-            </FormGroup>
             <AppBar color="primary" position="static">
                 <Container maxWidth="xl">
                     <Toolbar disableGutters>
@@ -180,8 +168,8 @@ function Navbar() {
                                 }}
                             >
                                 {pages.map((page) => (
-                                    <MenuItem key={page} onClick={handleCloseNavMenu}>
-                                        <Typography textAlign="center">{page}</Typography>
+                                    <MenuItem key={page.text} onClick={() => navigator(page.route)}>
+                                        <Typography textAlign="center">{page.text}</Typography>
                                     </MenuItem>
                                 ))}
                             </Menu>
@@ -208,11 +196,11 @@ function Navbar() {
                         <Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex', marginLeft: 40 } }}>
                             {auth && (pages.map((page) => (
                                 <Button
-                                    key={page}
-                                    onClick={handleCloseNavMenu}
+                                    key={page.text}
+                                    onClick={() => navigator(page.route)}
                                     sx={{ my: 2, color: 'white', display: 'block' }}
                                 >
-                                    {page}
+                                    {page.text}
                                 </Button>
                             )))}
                         </Box>
@@ -235,9 +223,9 @@ function Navbar() {
                         </Search>)}
 
                         <Box sx={{ flexGrow: 0 }}>
-                            <Tooltip color="secondary" title="Open settings">
+                            <Tooltip color="secondary" title="Lorem Ipsum">
                                 <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
-                                    <Avatar alt={auth ? "Remy Sharp" : ""} src={auth ? "/static/images/avatar/2.jpg" : ""} />
+                                    <Avatar alt={auth ? "Lorem Ipsum" : ""} src={auth ? "/static/images/avatar/2.jpg" : ""} />
                                 </IconButton>
                             </Tooltip>
                             <Menu
