@@ -12,4 +12,3 @@ deploy:
     - netlify deploy --dir "build" --auth $AUTH_TOKEN --site $SITE_ID --prod
   only:
     - main
-    - develop
