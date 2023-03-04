@@ -13,9 +13,9 @@ import Login from "../components/user/Login";
 import Registration from "../components/user/Registration";
 import ForgotPassword from "../components/user/ForgotPassword";
 import UserProfile from "../components/user/UserProfile";
-import UserMovies from "components/user/userContent/UserMovies";
-import UserBooks from "components/user/userContent/UserBooks";
-import UserMusic from "components/user/userContent/UserMusic";
+import UserMovies from "../components/user/userContent/UserMovies";
+import UserBooks from "../components/user/userContent/UserBooks";
+import UserMusic from "../components/user/userContent/UserMusic";
 
 
 const AppRoutes = () => {
