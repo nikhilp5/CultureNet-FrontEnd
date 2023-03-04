@@ -1,7 +1,14 @@
 import { AppBar, Button, Container, CssBaseline, Grid, ThemeProvider, Toolbar, Typography } from '@mui/material';
 import { appTheme } from '../../themes/theme';
+import { useNavigate } from "react-router-dom";
 
 export default function UserDashboard(props) {
+
+  const navigate = useNavigate();
+
+  const navigator = (page) => {
+    navigate("/" + page);
+  };
 
   return (
     <ThemeProvider theme={appTheme}>
@@ -42,17 +49,17 @@ export default function UserDashboard(props) {
         <AppBar style={{ display: 'flex' }} position="static" color="default" elevation={0} sx={{ mb: '2rem' }}>
           <Toolbar style={{ justifyContent: 'space-around', display: 'flex' }} disableGutters >
 
-            {props.id === "movies" ? <Button id="movies" variant={props.variant} href="/UserMovies" >MY MOVIES</Button> : <Button id="movies" variant="text" href="/UserMovies" >MY MOVIES</Button>}
+            {props.id === "movies" ? <Button id="movies" variant={props.variant} onClick={() => navigator("MyMovies")} >MY MOVIES</Button> : <Button id="movies" variant="text" onClick={() => navigator("MyMovies")} >MY MOVIES</Button>}
 
-            {props.id === "music" ? <Button id="music" variant={props.variant} href="/UserMusic" >MY MUSIC</Button> : <Button id="music" variant="text" href="/UserMusic" >MY MUSIC</Button>}
+            {props.id === "music" ? <Button id="music" variant={props.variant} onClick={() => navigator("MyMusic")} >MY MUSIC</Button> : <Button id="music" variant="text" onClick={() => navigator("MyMusic")}>MY MUSIC</Button>}
 
-            {props.id === "books" ? <Button id="books" variant={props.variant} href="/UserBooks" >MY BOOKS</Button> : <Button id="books" variant="text" href="/UserBooks" >MY BOOKS</Button>}
+            {props.id === "books" ? <Button id="books" variant={props.variant} onClick={() => navigator("MyBooks")} >MY BOOKS</Button> : <Button id="books" variant="text" onClick={() => navigator("MyBooks")} >MY BOOKS</Button>}
 
-            {props.id === "watchlist" ? <Button id="watchlist" variant={props.variant} href="/Watchlist" >WATCHLIST</Button> : <Button id="watchlist" variant="text" href="/Watchlist" >WATCHLIST</Button>}
+            {props.id === "watchlist" ? <Button id="watchlist" variant={props.variant} onClick={() => navigator("Watchlist")} >WATCHLIST</Button> : <Button id="watchlist" variant="text" onClick={() => navigator("Watchlist")}>WATCHLIST</Button>}
 
-            {props.id === "activity" ? <Button id="activity" variant={props.variant} href="" >ACTIVITY</Button> : <Button id="activity" variant="text" href="" >ACTIVITY</Button>}
+            {props.id === "activity" ? <Button id="activity" variant={props.variant} onClick={() => navigator("Activity")}>ACTIVITY</Button> : <Button id="activity" variant="text" onClick={() => navigator("Activity")}>ACTIVITY</Button>}
 
-            {props.id === "network" ? <Button id="network" variant={props.variant} href="" >NETWORK</Button> : <Button id="network" variant="text" href="" >NETWORK</Button>}
+            {props.id === "network" ? <Button id="network" variant={props.variant} onClick={() => navigator("Network")} >NETWORK</Button> : <Button id="network" variant="text" onClick={() => navigator("Network")} >NETWORK</Button>}
 
           </Toolbar>
         </AppBar>

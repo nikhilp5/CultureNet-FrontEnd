@@ -34,9 +34,9 @@ const AppRoutes = () => {
             <Route path="/Register" element={<Registration />}></Route>
             <Route path="/ForgotPassword" element={<ForgotPassword />}></Route>
             <Route path="/Profile" element={<UserProfile />}></Route>            
-            <Route path="/UserMovies" element={<UserMovies />}></Route>            
-            <Route path="/UserMusic" element={<UserMusic />}></Route>
-            <Route path="/UserBooks" element={<UserBooks />}></Route>
+            <Route path="/MyMovies" element={<UserMovies />}></Route>            
+            <Route path="/MyMusic" element={<UserMusic />}></Route>
+            <Route path="/MyBooks" element={<UserBooks />}></Route>
         </Routes>
     );
 };
