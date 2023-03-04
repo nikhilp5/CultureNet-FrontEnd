@@ -13,6 +13,9 @@ import Login from "../components/user/Login";
 import Registration from "../components/user/Registration";
 import ForgotPassword from "../components/user/ForgotPassword";
 import UserProfile from "../components/user/UserProfile";
+import UserMovies from "components/user/userContent/UserMovies";
+import UserBooks from "components/user/userContent/UserBooks";
+import UserMusic from "components/user/userContent/UserMusic";
 
 
 const AppRoutes = () => {
@@ -30,7 +33,10 @@ const AppRoutes = () => {
             <Route path="/Login" element={<Login />}></Route>
             <Route path="/Register" element={<Registration />}></Route>
             <Route path="/ForgotPassword" element={<ForgotPassword />}></Route>
-            <Route path="/Profile" element={<UserProfile />}></Route>
+            <Route path="/Profile" element={<UserProfile />}></Route>            
+            <Route path="/MyMovies" element={<UserMovies />}></Route>            
+            <Route path="/MyMusic" element={<UserMusic />}></Route>
+            <Route path="/MyBooks" element={<UserBooks />}></Route>
         </Routes>
     );
 };
