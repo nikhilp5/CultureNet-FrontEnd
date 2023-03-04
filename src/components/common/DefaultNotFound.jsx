@@ -1,6 +1,5 @@
 import * as React from 'react';
 import * as Mui from '@mui/material';
-import Navbar from './Navbar';
 import { appTheme } from '../../themes/theme';
 
 export default function LandingPage() {
