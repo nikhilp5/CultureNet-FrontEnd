@@ -9,6 +9,6 @@ deploy:
     - npm install
     - npm install netlify-cli -g
     - npm run build
-    - netlify deploy --dir "build" --auth $AUTH_TOKEN_RISHI --site $SITE_ID_DEVELOP_RISHI --prod
+    - netlify deploy --dir "build" --auth $AUTH_TOKEN_RISHI --site $SITE_ID_RISHI --prod
   only:
     - main-rishi
