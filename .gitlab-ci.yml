@@ -3,7 +3,17 @@ image: node:latest
 stages:
   - deploy
 
-deploy:
+deploy_prod:
+  stage: deploy
+  script:
+    - npm install
+    - npm install netlify-cli -g
+    - npm run build
+    - netlify deploy --dir "build" --auth $AUTH_TOKEN --site $SITE_ID_PROD --prod
+  only:
+    - main
+
+deploy_develop:
   stage: deploy
   script:
     - npm install
@@ -12,3 +22,23 @@ deploy:
     - netlify deploy --dir "build" --auth $AUTH_TOKEN --site $SITE_ID_DEVELOP --prod
   only:
     - develop
+
+deploy_monil:
+  stage: deploy
+  script:
+    - npm install
+    - npm install netlify-cli -g
+    - npm run build
+    - netlify deploy --dir "build" --auth $AUTH_TOKEN --site $SITE_ID_MONIL --prod
+  only:
+    - main-monil
+
+deploy_rishi:
+  stage: deploy
+  script:
+    - npm install
+    - npm install netlify-cli -g
+    - npm run build
+    - netlify deploy --dir "build" --auth $AUTH_TOKEN --site $SITE_ID_RISHI --prod
+  only:
+    - main-rishi
