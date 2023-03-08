@@ -16,6 +16,7 @@ import UserProfile from "../components/user/UserProfile";
 import UserMovies from "../components/user/userContent/UserMovies";
 import UserBooks from "../components/user/userContent/UserBooks";
 import UserMusic from "../components/user/userContent/UserMusic";
+import BookCard from "../components/book/BooksGrid";
 
 
 const AppRoutes = () => {
@@ -37,6 +38,7 @@ const AppRoutes = () => {
             <Route path="/MyMovies" element={<UserMovies />}></Route>            
             <Route path="/MyMusic" element={<UserMusic />}></Route>
             <Route path="/MyBooks" element={<UserBooks />}></Route>
+            <Route path="/Books" element={<BookCard />}></Route>
         </Routes>
     );
 };
