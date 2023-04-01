@@ -59,12 +59,12 @@ const Login = () => {
       if (response.status == 200) {
         localStorage.setItem("token", response.data.token);
         localStorage.setItem("email", response.data.email);
+        setAuth(true);
         setForm({ ...defaultForm });
         setSnackbarSeverity("success");
         setSnackbarMessage("User login successful.");
         setOpenSnackbar(true);
         setIsPending(false);
-        setAuth(true);
         navigate("/UserDashboard");
       }
     } catch (error) {

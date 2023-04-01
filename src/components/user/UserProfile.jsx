@@ -20,7 +20,7 @@ const UserProfile = () => {
   const { auth, setAuth } = useContext(UserContext);
 
   const navigate = useNavigate();
-  const defaultForm = {
+  const defaultProfileForm = {
     firstName: '',
     lastName: '',
     bio: '',
@@ -28,12 +28,14 @@ const UserProfile = () => {
     nsfw: false,
   };
 
-  const defaultDialogForm = {
+  const defaultPasswordForm = {
     password: '',
     confirmPassword: ''
   };
 
-  const [form, setForm] = useState({ ...defaultForm, ...defaultDialogForm });
+  const [profileForm, setProfileForm] = useState({ ...defaultProfileForm });
+  const [passwordForm, setPasswordForm] = useState({ ...defaultPasswordForm });
+
 
   const [isPending, setIsPending] = useState(false);
   const [openSnackbar, setOpenSnackbar] = useState(false);
@@ -69,7 +71,7 @@ const UserProfile = () => {
 
     try {
       if (response.status == 200) {
-        setForm(response.data.user);
+        setProfileForm(response.data.user);
       }
     } catch (error) {
       setSnackbarSeverity("error");
@@ -78,30 +80,58 @@ const UserProfile = () => {
     }
   };
 
-  const changePassword = async () => {
-    const response = await axios
-      .put("http://localhost:4000/.netlify/functions/api/changepassword", {
-        email: localStorage.getItem("email"),
-        password: form.password,
-        confirmPassword: form.confirmPassword
-      }, {
-        headers: {
-          "Content-Type": "application/json",
-          "Access-Control-Allow-Origin": "*",
-          "Accept": "application/json",
-        }
-      })
-      .catch((err) => {
-        console.error(err);
-      });
-
+  const updateProfile = async () => {
     try {
+      const response = await axios
+        .put("http://localhost:4000/.netlify/functions/api/updateprofile", {
+          ...profileForm
+        }, {
+          headers: {
+            "Content-Type": "application/json",
+            "Access-Control-Allow-Origin": "*",
+            "Accept": "application/json",
+          }
+        });
       if (response.status == 200) {
-        setForm(response.data.user);
+        setProfileForm(response.data.user);
+        setIsPending(false);
+        setSnackbarSeverity("success");
+        setSnackbarMessage('Profile updated successfully.');
+        setOpenSnackbar(true);
       }
     } catch (error) {
       setSnackbarSeverity("error");
-      setSnackbarMessage('Something went wrong! Please refresh to try again...');
+      setSnackbarMessage(error.response.data.message);
+      setOpenSnackbar(true);
+    }
+  };
+
+  const changePassword = async () => {
+    try {
+      const response = await axios
+        .put("http://localhost:4000/.netlify/functions/api/changepassword", {
+          email: localStorage.getItem("email"),
+          password: passwordForm.password,
+          confirmPassword: passwordForm.confirmPassword
+        }, {
+          headers: {
+            "Content-Type": "application/json",
+            "Access-Control-Allow-Origin": "*",
+            "Accept": "application/json",
+          }
+        });
+      if (response.status == 200) {
+        setProfileForm(response.data.user);
+        setSnackbarSeverity("success");
+        setPasswordForm({ ...defaultPasswordForm });
+        // set({ ...form, ...defaultDialogForm });
+        setOpenDialog(false);
+        setSnackbarMessage('Password changed successfully.');
+        setOpenSnackbar(true);
+      }
+    } catch (error) {
+      setSnackbarSeverity("error");
+      setSnackbarMessage(error.response.data.message);
       setOpenSnackbar(true);
     }
   };
@@ -123,9 +153,10 @@ const UserProfile = () => {
 
 
   const validate = (event) => {
-    let formNew = form;
+    let formNew = { ...profileForm, ...passwordForm };
     formNew[event.target.name] = event.target.value;
-    setForm({ ...formNew });
+    setProfileForm({ ...formNew });
+    setPasswordForm({ ...formNew });
     let errorNew = error;
     switch (event.target.name) {
       case "firstName":
@@ -141,7 +172,7 @@ const UserProfile = () => {
         break;
       case "password":
         errorNew["password"] = !event.target.value.match(passwordRegex);
-        if (form.confirmPassword !== '') {
+        if (passwordForm.confirmPassword !== '') {
           errorNew["confirmPassword"] = event.target.value !== formNew.confirmPassword;
         }
         break;
@@ -156,11 +187,7 @@ const UserProfile = () => {
 
   const handleSubmit = (e) => {
     setIsPending(true);
-    if (!Object.values(data).includes(form.email)) {
-      setIsPending(false);
-      setSnackbarMessage('Profile updated successfully.');
-      setOpenSnackbar(true);
-    }
+    updateProfile();
   };
 
   const handleClose = (event, reason) => {
@@ -182,26 +209,21 @@ const UserProfile = () => {
   const handleClick = (event) => {
     switch (event.target.name) {
       case "nsfw":
-        setForm({ ...form, nsfw: !form.nsfw });
+        setProfileForm({ ...profileForm, nsfw: !profileForm.nsfw });
         break;
       case "cancel":
-        setForm({ ...form, ...defaultDialogForm });
+        setProfileForm({ ...profileForm });
+        setPasswordForm({ ...defaultPasswordForm });
         setError({ ...error, password: false });
         setError({ ...error, confirmPassword: false });
         setOpenDialog(false);
         break;
       case "updatePassword":
-        if (!Object.values(data).includes(form.email)) {
+        if (!Object.values(data).includes(profileForm.email)) {
           setIsPending(false);
           changePassword();
-          setSnackbarSeverity("success");
-          setForm({ ...form, ...defaultDialogForm });
-          setOpenDialog(false);
-          setSnackbarMessage('Password changed successfully.');
-          setOpenSnackbar(true);
-        }
 
-        console.log(form);
+        }
         break;
     }
   };
@@ -227,7 +249,7 @@ const UserProfile = () => {
                   error={error.firstName}
                   onChange={validate}
                   helperText={error.firstName ? "Invalid first name format." : ""}
-                  value={form.firstName}
+                  value={profileForm.firstName}
                   fullWidth
                 />
               </Grid>
@@ -239,7 +261,7 @@ const UserProfile = () => {
                   error={error.lastName}
                   onChange={validate}
                   helperText={error.lastName ? "Invalid last name format." : ""}
-                  value={form.lastName}
+                  value={profileForm.lastName}
                   fullWidth
                 />
               </Grid>
@@ -253,7 +275,7 @@ const UserProfile = () => {
                   readOnly: true,
                 }}
                 variant="filled"
-                value={form.email}
+                value={profileForm.email}
                 fullWidth
               />
             </Grid>
@@ -267,7 +289,7 @@ const UserProfile = () => {
                 error={error.bio}
                 onChange={validate}
                 helperText={error.bio ? "Invalid bio format." : ""}
-                value={form.bio}
+                value={profileForm.bio}
                 fullWidth
               />
             </Grid>
@@ -277,7 +299,7 @@ const UserProfile = () => {
                 control={<Switch
                   id="nsfw"
                   name="nsfw"
-                  checked={form.nsfw}
+                  checked={profileForm.nsfw}
                   onClick={handleClick}
                 />}
               />
@@ -287,7 +309,7 @@ const UserProfile = () => {
                 type="submit"
                 onClick={handleSubmit}
                 loading={isPending}
-                disabled={Object.keys(error).some(k => error[k]) || !form.email || openDialog}
+                disabled={Object.keys(error).some(k => error[k]) || !profileForm.email || openDialog}
                 variant="contained"
                 fullWidth
               >
@@ -326,7 +348,7 @@ const UserProfile = () => {
                   error={error.password}
                   onChange={validate}
                   helperText={error.password ? "Invalid password." : ""}
-                  value={form.password}
+                  value={passwordForm.password}
                   fullWidth
                 />
               </Grid>
@@ -340,7 +362,7 @@ const UserProfile = () => {
                   error={error.confirmPassword}
                   onChange={validate}
                   helperText={error.confirmPassword ? "Passwords do not match." : ""}
-                  value={form.confirmPassword}
+                  value={passwordForm.confirmPassword}
                   fullWidth
                 />
               </Grid>
