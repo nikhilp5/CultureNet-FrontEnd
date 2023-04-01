@@ -1,4 +1,4 @@
-import { forwardRef, useEffect, useState } from "react";
+import { forwardRef, useEffect, useState, useContext } from "react";
 import TextField from '@mui/material/TextField';
 import { Button, Card, Switch, FormControlLabel, Snackbar, Typography } from "@mui/material";
 import LoadingButton from '@mui/lab/LoadingButton';
@@ -8,18 +8,21 @@ import Dialog from '@mui/material/Dialog';
 import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
 import DialogTitle from '@mui/material/DialogTitle';
+import axios from "axios";
+import { UserContext } from '../../utils/UserContext';
+import { useNavigate } from "react-router";
 
 
 const data = require("../../data/db.json");
 
 
 const UserProfile = () => {
+  const { auth, setAuth } = useContext(UserContext);
 
-  const [profileBackup, setProfileBackup] = useState({});
-
+  const navigate = useNavigate();
   const defaultForm = {
-    fname: '',
-    lname: '',
+    firstName: '',
+    lastName: '',
     bio: '',
     email: '',
     nsfw: false,
@@ -36,11 +39,12 @@ const UserProfile = () => {
   const [openSnackbar, setOpenSnackbar] = useState(false);
   const [openDialog, setOpenDialog] = useState(false);
   const [snackbarMessage, setSnackbarMessage] = useState('');
+  const [snackbarSeverity, setSnackbarSeverity] = useState("success");
 
 
   const [error, setError] = useState({
-    fname: false,
-    lname: false,
+    firstName: false,
+    lastName: false,
     bio: false,
     email: false,
     nsfw: false,
@@ -48,10 +52,65 @@ const UserProfile = () => {
     confirmPassword: false
   });
 
+  const fetchProfile = async () => {
+    const response = await axios
+      .post("http://localhost:4000/.netlify/functions/api/profile", {
+        email: localStorage.getItem("email")
+      }, {
+        headers: {
+          "Content-Type": "application/json",
+          "Access-Control-Allow-Origin": "*",
+          "Accept": "application/json",
+        }
+      })
+      .catch((err) => {
+        console.error(err);
+      });
+
+    try {
+      if (response.status == 200) {
+        setForm(response.data.user);
+      }
+    } catch (error) {
+      setSnackbarSeverity("error");
+      setSnackbarMessage('Something went wrong! Please refresh to try again...');
+      setOpenSnackbar(true);
+    }
+  };
+
+  const changePassword = async () => {
+    const response = await axios
+      .put("http://localhost:4000/.netlify/functions/api/changepassword", {
+        email: localStorage.getItem("email"),
+        password: form.password,
+        confirmPassword: form.confirmPassword
+      }, {
+        headers: {
+          "Content-Type": "application/json",
+          "Access-Control-Allow-Origin": "*",
+          "Accept": "application/json",
+        }
+      })
+      .catch((err) => {
+        console.error(err);
+      });
+
+    try {
+      if (response.status == 200) {
+        setForm(response.data.user);
+      }
+    } catch (error) {
+      setSnackbarSeverity("error");
+      setSnackbarMessage('Something went wrong! Please refresh to try again...');
+      setOpenSnackbar(true);
+    }
+  };
+
   useEffect(() => {
-    delete data.users[0].password;
-    setProfileBackup({ ...data.users[0] });
-    setForm({ ...data.users[0] });
+    if (!auth) {
+      navigate("/Login");
+    }
+    fetchProfile();
   }, []);
 
   const Alert = forwardRef(function Alert(props, ref) {
@@ -69,25 +128,16 @@ const UserProfile = () => {
     setForm({ ...formNew });
     let errorNew = error;
     switch (event.target.name) {
-      case "fname":
-        errorNew["fname"] = !event.target.value.match(nameRegex);
+      case "firstName":
+        errorNew["firstName"] = !event.target.value.match(nameRegex);
         break;
-      case "lname":
-        errorNew["lname"] = !event.target.value.match(nameRegex);
+      case "lastName":
+        errorNew["lastName"] = !event.target.value.match(nameRegex);
         break;
       case "email":
         errorNew["email"] = !event.target.value.match(emailRegex);
         break;
       case "nsfw":
-        break;
-      case "password":
-        errorNew["password"] = !event.target.value.match(passwordRegex);
-        if (form.confirmPassword !== '') {
-          errorNew["confirmPassword"] = event.target.value !== formNew.confirmPassword;
-        }
-        break;
-      case "confirmPassword":
-        errorNew["confirmPassword"] = event.target.value !== formNew.password;
         break;
       case "password":
         errorNew["password"] = !event.target.value.match(passwordRegex);
@@ -143,6 +193,8 @@ const UserProfile = () => {
       case "updatePassword":
         if (!Object.values(data).includes(form.email)) {
           setIsPending(false);
+          changePassword();
+          setSnackbarSeverity("success");
           setForm({ ...form, ...defaultDialogForm });
           setOpenDialog(false);
           setSnackbarMessage('Password changed successfully.');
@@ -169,25 +221,25 @@ const UserProfile = () => {
             <Grid item container spacing={2}>
               <Grid item xs={12} md={6}>
                 <TextField
-                  id="fname"
-                  name="fname"
+                  id="firstName"
+                  name="firstName"
                   label="First Name"
-                  error={error.fname}
+                  error={error.firstName}
                   onChange={validate}
-                  helperText={error.fname ? "Invalid first name format." : ""}
-                  value={form.fname}
+                  helperText={error.firstName ? "Invalid first name format." : ""}
+                  value={form.firstName}
                   fullWidth
                 />
               </Grid>
               <Grid item xs={12} md={6}>
                 <TextField
-                  id="lname"
-                  name="lname"
+                  id="lastName"
+                  name="lastName"
                   label="Last Name"
-                  error={error.lname}
+                  error={error.lastName}
                   onChange={validate}
-                  helperText={error.lname ? "Invalid last name format." : ""}
-                  value={form.lname}
+                  helperText={error.lastName ? "Invalid last name format." : ""}
+                  value={form.lastName}
                   fullWidth
                 />
               </Grid>
@@ -256,7 +308,7 @@ const UserProfile = () => {
           </Grid>
         </Card>
         <Snackbar id="snackbar" name="snackbar" open={openSnackbar} autoHideDuration={5000} onClose={handleClose}>
-          <Alert id="alert" name="alert" onClose={handleClose} severity="success" sx={{ width: '100%' }}>
+          <Alert id="alert" name="alert" onClose={handleClose} severity={snackbarSeverity} sx={{ width: '100%' }}>
             {snackbarMessage}
           </Alert>
         </Snackbar>

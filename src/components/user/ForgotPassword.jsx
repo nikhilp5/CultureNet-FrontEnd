@@ -1,4 +1,4 @@
-import { forwardRef, useEffect, useState } from "react";
+import { forwardRef, useEffect, useState, useContext } from "react";
 import TextField from '@mui/material/TextField';
 import { Card, Snackbar, Typography, Button } from "@mui/material";
 import LoadingButton from '@mui/lab/LoadingButton';
@@ -8,12 +8,15 @@ import Dialog from '@mui/material/Dialog';
 import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
 import DialogTitle from '@mui/material/DialogTitle';
-
-
-const data = require("../../data/db.json");
+import { UserContext } from '../../utils/UserContext';
+import { useNavigate } from "react-router";
+import axios from "axios";
 
 
 const ForgotPassword = () => {
+  const { auth, setAuth } = useContext(UserContext);
+
+  const navigate = useNavigate();
   const defaultForm = {
     email: '',
     code: '',
@@ -48,6 +51,12 @@ const ForgotPassword = () => {
   const codeRegex = /^[0-9]{6}$/g;
   const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/g;
 
+  useEffect(() => {
+    if (auth) {
+      navigate("/UserDashboard");
+    }
+  }, []);
+
   const validate = (event) => {
     let formNew = form;
     formNew[event.target.name] = event.target.value;
@@ -74,6 +83,87 @@ const ForgotPassword = () => {
 
   };
 
+  const sendCode = async () => {
+    try {
+      const response = await axios
+        .post("http://localhost:4000/.netlify/functions/api/forgotpassword", {
+          email: form.email
+        }, {
+          headers: {
+            "Content-Type": "application/json",
+            "Access-Control-Allow-Origin": "*",
+            "Accept": "application/json",
+          }
+        });
+      if (response.status == 200) {
+        setEmailTextboxVisible(false);
+        setSnackbarSeverity("success");
+        setSnackbarMessage("A 6-digit code has been sent to the registered email");
+        setOpenSnackbar(true);
+      }
+    } catch (error) {
+      setSnackbarSeverity("error");
+      setSnackbarMessage(error.response.data.message);
+      setOpenSnackbar(true);
+    }
+  };
+
+  const verifyCode = async () => {
+    try {
+      const response = await axios
+        .post("http://localhost:4000/.netlify/functions/api/resetpassword", {
+          email: form.email,
+          code: form.code
+        }, {
+          headers: {
+            "Content-Type": "application/json",
+            "Access-Control-Allow-Origin": "*",
+            "Accept": "application/json",
+          }
+        });
+      if (response.status == 200) {
+        setOpenDialog(true);
+      }
+    } catch (error) {
+      setSnackbarSeverity("error");
+      setSnackbarMessage(error.response.data.message);
+      setOpenSnackbar(true);
+    }
+  };
+
+  const changePassword = async () => {
+
+    try {
+      const response = await axios
+        .put("http://localhost:4000/.netlify/functions/api/changepassword", {
+          email: form.email,
+          password: form.password,
+          confirmPassword: form.confirmPassword
+        }, {
+          headers: {
+            "Content-Type": "application/json",
+            "Access-Control-Allow-Origin": "*",
+            "Accept": "application/json",
+          }
+        });
+      if (response.status == 200) {
+        setForm(response.data.user);
+        setIsPending(false);
+        setOpenDialog(false);
+        setSnackbarSeverity("success");
+        setSnackbarMessage('Password changed successfully.');
+        setOpenSnackbar(true);
+        setEmailTextboxVisible(true);
+        setForm({ ...defaultForm });
+      }
+    } catch (error) {
+      setOpenDialog(false);
+      setSnackbarSeverity("error");
+      setSnackbarMessage(error.response.data.message);
+      setOpenSnackbar(true);
+    }
+  };
+
 
   const handleClose = (event, reason) => {
     if (reason === 'clickaway') {
@@ -84,17 +174,9 @@ const ForgotPassword = () => {
   };
 
   const handleClick = (event) => {
-    let finalForm = form;
     switch (event.target.name) {
       case "sendCode":
-        if (!data.users.find(user => user.email === finalForm.email)) {
-          setSnackbarSeverity("error");
-          setSnackbarMessage("Invalid user details. (Try 'test@email.com' for demo)");
-          setOpenSnackbar(true);
-        }
-        else {
-          setEmailTextboxVisible(false);
-        }
+        sendCode();
         break;
       case "btnOpenDialog":
         break;
@@ -104,21 +186,7 @@ const ForgotPassword = () => {
         setOpenDialog(false);
         break;
       case "updatePassword":
-        if (data.users.find(user => user.email === finalForm.email)) {
-          setIsPending(false);
-          setOpenDialog(false);
-          setSnackbarSeverity("success");
-          setSnackbarMessage('Password changed successfully.');
-          setOpenSnackbar(true);
-        }
-        else {
-          setSnackbarSeverity("error");
-          setSnackbarMessage("Invalid user details.");
-          setOpenSnackbar(true);
-          setOpenDialog(false);
-        }
-        setEmailTextboxVisible(true);
-        setForm({ ...defaultForm });
+        changePassword();
         break;
     }
   };
@@ -126,7 +194,7 @@ const ForgotPassword = () => {
   const handleOpen = (event) => {
     switch (event.target.name) {
       case "btnOpenDialog":
-        setOpenDialog(true);
+        verifyCode();
         break;
     }
   };

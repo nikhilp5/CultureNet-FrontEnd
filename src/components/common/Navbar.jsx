@@ -24,7 +24,7 @@ import { UserContext } from '../../utils/UserContext';
 const appName = "CultureNet";
 const appNameShort = "CN";
 const pages = [{ text: 'Movies', route: 'Movies' }, { text: 'Books', route: 'Books' }, { text: 'Music', route: 'Music' }];
-const settings_logged_in = [{ text: 'My Movies', icon: Movie, route: 'MyMovies' }, { text: 'My Books', icon: Book, route: 'MyBooks' }, { text: 'My Music', icon: MusicNote, route: 'MyMusic' }, {}, { text: 'Watchlist', icon: WatchLater, route: 'Watchlist' }, { text: 'Activity', icon: Timeline, route: 'Activity' }, { text: 'Network', icon: Diversity1, route: 'Network' }, {}, { text: 'Settings', icon: Settings, route: 'Profile' }, {}, { text: 'Logout', icon: Logout, route: '' }];
+const settings_logged_in = [{ text: 'My Movies', icon: Movie, route: 'MyMovies' }, { text: 'My Books', icon: Book, route: 'MyBooks' }, { text: 'My Music', icon: MusicNote, route: 'MyMusic' }, {}, { text: 'Watchlist', icon: WatchLater, route: 'Watchlist' }, { text: 'Activity', icon: Timeline, route: 'Activity' }, { text: 'Network', icon: Diversity1, route: 'Network' }, {}, { text: 'Settings', icon: Settings, route: 'Profile' }, {}, { text: 'Logout', icon: Logout, route: 'Logout' }];
 const settings_logged_out = [{ text: 'Login', icon: Login, route: 'Login' }, { text: 'Register', icon: PersonAdd, route: 'Register' }];
 
 const Search = styled('div')(({ theme }) => ({
@@ -246,7 +246,7 @@ function Navbar() {
                             >
                                 {auth ? settings_logged_in.map((setting) => (
                                     Object.keys(setting).length !== 0 ?
-                                        <MenuItem key={setting.text} onClick={() => navigator(setting.route)}  >
+                                        <MenuItem key={setting.text} onClick={() => { navigator(setting.route); setAnchorElUser(null); }}  >
                                             <ListItemIcon>
                                                 <setting.icon color="secondary" fontSize="small" />
                                             </ListItemIcon>
@@ -254,7 +254,9 @@ function Navbar() {
                                         </MenuItem> : <Divider />
                                 )) : settings_logged_out.map((setting) => (
                                     Object.keys(setting).length !== 0 ?
-                                        <MenuItem key={setting.text} onClick={() => navigator(setting.route)}>
+                                        <MenuItem key={setting.text} onClick={() => {
+                                            navigator(setting.route); setAnchorElUser(null);
+                                        }}>
                                             <ListItemIcon>
                                                 <setting.icon color="secondary" fontSize="small" />
                                             </ListItemIcon>
