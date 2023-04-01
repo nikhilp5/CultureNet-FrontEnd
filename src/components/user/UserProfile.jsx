@@ -1,4 +1,4 @@
-import { forwardRef, useEffect, useState, useContext } from "react";
+import { forwardRef, useEffect, useState } from "react";
 import TextField from '@mui/material/TextField';
 import { Button, Card, Switch, FormControlLabel, Snackbar, Typography } from "@mui/material";
 import LoadingButton from '@mui/lab/LoadingButton';
@@ -9,7 +9,6 @@ import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
 import DialogTitle from '@mui/material/DialogTitle';
 import axios from "axios";
-import { UserContext } from '../../utils/UserContext';
 import { useNavigate } from "react-router";
 
 
@@ -17,8 +16,6 @@ const data = require("../../data/db.json");
 
 
 const UserProfile = () => {
-  const { auth, setAuth } = useContext(UserContext);
-
   const navigate = useNavigate();
   const defaultProfileForm = {
     firstName: '',
@@ -137,7 +134,7 @@ const UserProfile = () => {
   };
 
   useEffect(() => {
-    if (!auth) {
+    if (!localStorage.getItem('token')) {
       navigate("/Login");
     }
     fetchProfile();

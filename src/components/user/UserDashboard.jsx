@@ -1,11 +1,9 @@
 import { AppBar, Button, Container, CssBaseline, Grid, ThemeProvider, Toolbar, Typography } from '@mui/material';
 import { appTheme } from '../../themes/theme';
 import { useNavigate } from "react-router-dom";
-import { useEffect, useContext } from "react";
-import { UserContext } from '../../utils/UserContext';
+import { useEffect } from "react";
 
 export default function UserDashboard(props) {
-  const { auth, setAuth } = useContext(UserContext);
   const navigate = useNavigate();
 
   const navigator = (page) => {
@@ -13,7 +11,7 @@ export default function UserDashboard(props) {
   };
 
   useEffect(() => {
-    if (!auth) {
+    if (!localStorage.getItem('token')) {
       navigate("/Login");
     }
   }, []);

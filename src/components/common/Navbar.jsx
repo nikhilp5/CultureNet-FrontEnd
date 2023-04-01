@@ -14,12 +14,11 @@ import MenuItem from '@mui/material/MenuItem';
 import SearchIcon from '@mui/icons-material/Search';
 import InputBase from '@mui/material/InputBase';
 import { useNavigate } from "react-router-dom";
-import { useState, useContext } from "react";
+import { useState } from "react";
 
 import { Divider, ListItemIcon, ListItemText } from '@mui/material';
 import { Settings, Movie, MusicNote, Book, WatchLater, Timeline, Diversity1, Login, PersonAdd, Logout, AdminPanelSettings, Home } from '@mui/icons-material';
 import { styled, alpha } from '@mui/material/styles';
-import { UserContext } from '../../utils/UserContext';
 
 const appName = "CultureNet";
 const appNameShort = "CN";
@@ -68,7 +67,6 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
 }));
 
 function Navbar() {
-    const { auth, setAuth } = useContext(UserContext);
     const [anchorElNav, setAnchorElNav] = React.useState(null);
     const [anchorElUser, setAnchorElUser] = React.useState(null);
 
@@ -88,8 +86,8 @@ function Navbar() {
     };
 
     const handleChange = (event) => {
-        setAuth(event.target.checked);
-        if (event.target.checked) {
+        // setAuth(event.target.checked);
+        if (localStorage.getItem('token')) {
             navigator("UserDashboard");
         } else {
             navigator("");
@@ -106,7 +104,7 @@ function Navbar() {
 
     const navigator = (page) => {
         if (!page) {
-            setAuth(false);
+            localStorage.clear();
         }
         navigate("/" + page);
     };
@@ -138,7 +136,7 @@ function Navbar() {
                         </Typography>
 
 
-                        {auth && (<Box sx={{ flexGrow: 1, display: { xs: 'flex', md: 'none' } }}>
+                        {localStorage.getItem('token') && (<Box sx={{ flexGrow: 1, display: { xs: 'flex', md: 'none' } }}>
                             <IconButton
                                 size="large"
                                 aria-label="account of current user"
@@ -194,7 +192,7 @@ function Navbar() {
                         </Typography>
 
                         <Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex', marginLeft: 40 } }}>
-                            {auth && (pages.map((page) => (
+                            {localStorage.getItem('token') && (pages.map((page) => (
                                 <Button
                                     key={page.text}
                                     onClick={() => navigator(page.route)}
@@ -204,7 +202,7 @@ function Navbar() {
                                 </Button>
                             )))}
                         </Box>
-                        {auth && (<Search>
+                        {localStorage.getItem('token') && (<Search>
                             <SearchIconWrapper>
                                 <SearchIcon />
                             </SearchIconWrapper>
@@ -225,7 +223,7 @@ function Navbar() {
                         <Box sx={{ flexGrow: 0 }}>
                             <Tooltip color="secondary" title="Lorem Ipsum">
                                 <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
-                                    <Avatar alt={auth ? "Lorem Ipsum" : ""} src={auth ? "/static/images/avatar/2.jpg" : ""} />
+                                    <Avatar alt={localStorage.getItem('token') ? "Lorem Ipsum" : ""} src={localStorage.getItem('token') ? "/static/images/avatar/2.jpg" : ""} />
                                 </IconButton>
                             </Tooltip>
                             <Menu
@@ -244,7 +242,7 @@ function Navbar() {
                                 open={Boolean(anchorElUser)}
                                 onClose={handleCloseUserMenu}
                             >
-                                {auth ? settings_logged_in.map((setting) => (
+                                {localStorage.getItem('token') ? settings_logged_in.map((setting) => (
                                     Object.keys(setting).length !== 0 ?
                                         <MenuItem key={setting.text} onClick={() => { navigator(setting.route); setAnchorElUser(null); }}  >
                                             <ListItemIcon>

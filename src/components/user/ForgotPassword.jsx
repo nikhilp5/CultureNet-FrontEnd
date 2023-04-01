@@ -1,4 +1,4 @@
-import { forwardRef, useEffect, useState, useContext } from "react";
+import { forwardRef, useEffect, useState } from "react";
 import TextField from '@mui/material/TextField';
 import { Card, Snackbar, Typography, Button } from "@mui/material";
 import LoadingButton from '@mui/lab/LoadingButton';
@@ -8,13 +8,11 @@ import Dialog from '@mui/material/Dialog';
 import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
 import DialogTitle from '@mui/material/DialogTitle';
-import { UserContext } from '../../utils/UserContext';
 import { useNavigate } from "react-router";
 import axios from "axios";
 
 
 const ForgotPassword = () => {
-  const { auth, setAuth } = useContext(UserContext);
 
   const navigate = useNavigate();
   const defaultForm = {
@@ -52,7 +50,7 @@ const ForgotPassword = () => {
   const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/g;
 
   useEffect(() => {
-    if (auth) {
+    if (localStorage.getItem('token')) {
       navigate("/UserDashboard");
     }
   }, []);

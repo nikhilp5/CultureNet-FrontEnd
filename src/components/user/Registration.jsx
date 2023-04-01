@@ -1,15 +1,13 @@
-import { forwardRef, useState, useContext, useEffect } from "react";
+import { forwardRef, useState, useEffect } from "react";
 import TextField from '@mui/material/TextField';
 import { Card, Snackbar, Typography } from "@mui/material";
 import LoadingButton from '@mui/lab/LoadingButton';
 import MuiAlert from '@mui/material/Alert';
 import Grid from '@mui/material/Grid';
 import { useNavigate } from "react-router";
-import { UserContext } from '../../utils/UserContext';
 import axios from "axios";
 
 const Registration = () => {
-  const { auth, setAuth } = useContext(UserContext);
 
   const navigate = useNavigate();
   const defaultForm = {
@@ -39,7 +37,7 @@ const Registration = () => {
   const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/g;
 
   useEffect(() => {
-    if (auth) {
+    if (localStorage.getItem('token')) {
       navigate("/UserDashboard");
     }
   }, []);
@@ -107,7 +105,6 @@ const Registration = () => {
     if (reason === 'clickaway') {
       return;
     }
-
     setOpenSnackbar(false);
   };
 

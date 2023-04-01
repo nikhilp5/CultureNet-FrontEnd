@@ -1,15 +1,13 @@
-import { forwardRef, useState, useContext, useEffect } from "react";
+import { forwardRef, useState, useEffect } from "react";
 import TextField from '@mui/material/TextField';
 import { Button, Card, Snackbar, Typography } from "@mui/material";
 import LoadingButton from '@mui/lab/LoadingButton';
 import MuiAlert from '@mui/material/Alert';
 import Grid from '@mui/material/Grid';
 import { useNavigate } from "react-router";
-import { UserContext } from '../../utils/UserContext';
 import axios from "axios";
 
 const Login = () => {
-  const { auth, setAuth } = useContext(UserContext);
 
   const navigate = useNavigate();
   const defaultForm = {
@@ -38,7 +36,7 @@ const Login = () => {
 
 
   useEffect(() => {
-    if (auth) {
+    if (localStorage.getItem('token')) {
       navigate("/UserDashboard");
     }
   }, []);
@@ -59,7 +57,6 @@ const Login = () => {
       if (response.status == 200) {
         localStorage.setItem("token", response.data.token);
         localStorage.setItem("email", response.data.email);
-        setAuth(true);
         setForm({ ...defaultForm });
         setSnackbarSeverity("success");
         setSnackbarMessage("User login successful.");
@@ -76,25 +73,8 @@ const Login = () => {
   };
 
   const handleSubmit = (e) => {
-    // let finalForm = form;
-    // finalForm.email = form.email.toLowerCase();
-
     setIsPending(true);
     loginUser();
-
-    // if (data.users.find(user => user.email === finalForm.email && user.password === finalForm.password)) {
-    //   setForm({ ...defaultForm });
-    //   setSnackbarSeverity("success");
-    //   setSnackbarMessage("User login successful.");
-    // }
-    // else {
-    //   setSnackbarSeverity("error");
-    //   setSnackbarMessage("Invalid user credentials.");
-    // }
-    // setOpen(true);
-    // setIsPending(false);
-    // setAuth(true);
-    // navigate("/UserDashboard");
   };
 
   const validate = (event) => {
@@ -119,7 +99,6 @@ const Login = () => {
     if (reason === 'clickaway') {
       return;
     }
-
     setOpenSnackbar(false);
   };
 
