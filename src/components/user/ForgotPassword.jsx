@@ -8,12 +8,13 @@ import Dialog from '@mui/material/Dialog';
 import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
 import DialogTitle from '@mui/material/DialogTitle';
-
-
-const data = require("../../data/db.json");
+import { useNavigate } from "react-router";
+import axios from "axios";
 
 
 const ForgotPassword = () => {
+
+  const navigate = useNavigate();
   const defaultForm = {
     email: '',
     code: '',
@@ -24,7 +25,7 @@ const ForgotPassword = () => {
   const [form, setForm] = useState(defaultForm);
 
   const [isPending, setIsPending] = useState(false);
-
+  const [isChangePasswordPending, setIsChangePasswordPending] = useState(false);
   const [emailTextboxVisible, setEmailTextboxVisible] = useState(true);
   const [openDialog, setOpenDialog] = useState(false);
 
@@ -47,6 +48,12 @@ const ForgotPassword = () => {
   const emailRegex = /^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/g;
   const codeRegex = /^[0-9]{6}$/g;
   const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/g;
+
+  useEffect(() => {
+    if (localStorage.getItem('token')) {
+      navigate("/UserDashboard");
+    }
+  }, []);
 
   const validate = (event) => {
     let formNew = form;
@@ -74,6 +81,93 @@ const ForgotPassword = () => {
 
   };
 
+  const sendCode = async () => {
+    try {
+      const response = await axios
+        .post(`${process.env.HOST}/.netlify/functions/api/forgotpassword`, {
+          email: form.email
+        }, {
+          headers: {
+            "Content-Type": "application/json",
+            "Access-Control-Allow-Origin": "*",
+            "Accept": "application/json",
+          }
+        });
+      if (response.status == 200) {
+        setIsPending(false);
+        setEmailTextboxVisible(false);
+        setSnackbarSeverity("success");
+        setSnackbarMessage("A 6-digit code has been sent to the registered email");
+        setOpenSnackbar(true);
+      }
+    } catch (error) {
+      setIsPending(false);
+      setSnackbarSeverity("error");
+      setSnackbarMessage(error.response.data.message);
+      setOpenSnackbar(true);
+    }
+  };
+
+  const verifyCode = async () => {
+    try {
+      const response = await axios
+        .post(`${process.env.HOST}/.netlify/functions/api/resetpassword`, {
+          email: form.email,
+          code: form.code
+        }, {
+          headers: {
+            "Content-Type": "application/json",
+            "Access-Control-Allow-Origin": "*",
+            "Accept": "application/json",
+          }
+        });
+      if (response.status == 200) {
+        setIsPending(false);
+        localStorage.setItem("token", response.data.token);
+        localStorage.setItem("email", response.data.email);
+        setOpenDialog(true);
+      }
+    } catch (error) {
+      setIsPending(false);
+      setSnackbarSeverity("error");
+      setSnackbarMessage(error.response.data.message);
+      setOpenSnackbar(true);
+    }
+  };
+
+  const changePassword = async () => {
+
+    try {
+      const response = await axios
+        .put(`${process.env.HOST}/.netlify/functions/api/changepassword`, {
+          email: form.email,
+          password: form.password,
+          confirmPassword: form.confirmPassword
+        }, {
+          headers: {
+            "Content-Type": "application/json",
+            "Access-Control-Allow-Origin": "*",
+            "Accept": "application/json",
+            "Authorization": `Bearer ${localStorage.getItem("token")}`
+          }
+        });
+      if (response.status == 200) {
+        localStorage.clear();
+        setIsChangePasswordPending(false);
+        setSnackbarSeverity("success");
+        setSnackbarMessage('Password changed successfully.');
+        setOpenSnackbar(true);
+        navigate("/Login");
+      }
+    } catch (error) {
+      setIsPending(false);
+      setOpenDialog(false);
+      setSnackbarSeverity("error");
+      setSnackbarMessage(error.response.data.message);
+      setOpenSnackbar(true);
+    }
+  };
+
 
   const handleClose = (event, reason) => {
     if (reason === 'clickaway') {
@@ -84,19 +178,14 @@ const ForgotPassword = () => {
   };
 
   const handleClick = (event) => {
-    let finalForm = form;
     switch (event.target.name) {
       case "sendCode":
-        if (!data.users.find(user => user.email === finalForm.email)) {
-          setSnackbarSeverity("error");
-          setSnackbarMessage("Invalid user details. (Try 'test@email.com' for demo)");
-          setOpenSnackbar(true);
-        }
-        else {
-          setEmailTextboxVisible(false);
-        }
+        setIsPending(true);
+        sendCode();
         break;
       case "btnOpenDialog":
+        setIsPending(true);
+        verifyCode();
         break;
       case "cancel":
         setError({ ...error, password: false });
@@ -104,33 +193,11 @@ const ForgotPassword = () => {
         setOpenDialog(false);
         break;
       case "updatePassword":
-        if (data.users.find(user => user.email === finalForm.email)) {
-          setIsPending(false);
-          setOpenDialog(false);
-          setSnackbarSeverity("success");
-          setSnackbarMessage('Password changed successfully.');
-          setOpenSnackbar(true);
-        }
-        else {
-          setSnackbarSeverity("error");
-          setSnackbarMessage("Invalid user details.");
-          setOpenSnackbar(true);
-          setOpenDialog(false);
-        }
-        setEmailTextboxVisible(true);
-        setForm({ ...defaultForm });
+        setIsChangePasswordPending(true);
+        changePassword();
         break;
     }
   };
-
-  const handleOpen = (event) => {
-    switch (event.target.name) {
-      case "btnOpenDialog":
-        setOpenDialog(true);
-        break;
-    }
-  };
-
 
   return (
     <Grid container sx={{ margin: 5 }}>
@@ -187,8 +254,7 @@ const ForgotPassword = () => {
                   type="submit"
                   id="btnOpenDialog"
                   name="btnOpenDialog"
-                  // onClick={handleClick}
-                  onClick={handleOpen}
+                  onClick={handleClick}
 
                   loading={isPending}
                   disabled={error.code || !form.code || emailTextboxVisible}
@@ -241,7 +307,15 @@ const ForgotPassword = () => {
           </DialogContent>
           <DialogActions>
             <Button id="cancel" name="cancel" onClick={handleClick}>Cancel</Button>
-            <Button id="updatePassword" name="updatePassword" variant="contained" onClick={handleClick} disabled={Object.keys(error).some(k => error[k]) || Object.keys(form).some(k => !form[k])}>Reset</Button>
+            <LoadingButton
+              id="updatePassword" name="updatePassword"
+              onClick={handleClick}
+              loading={isChangePasswordPending}
+              disabled={Object.keys(error).some(k => error[k]) || !form.password || !form.confirmPassword}
+              variant="contained"
+            >
+              Reset
+            </LoadingButton>
           </DialogActions>
         </Dialog>
       </Grid>

@@ -29,6 +29,7 @@ deploy_monil:
     - npm install
     - npm install netlify-cli -g
     - npm run build
+    - netlify env:set HOST "https://culturenet-apis-develop.netlify.app"
     - netlify deploy --dir "build" --auth $AUTH_TOKEN --site $SITE_ID_MONIL --prod
   only:
     - main-monil
