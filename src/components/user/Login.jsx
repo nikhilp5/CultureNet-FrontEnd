@@ -1,4 +1,3 @@
-require('dotenv').config();
 import { forwardRef, useState, useEffect } from "react";
 import TextField from '@mui/material/TextField';
 import { Button, Card, Snackbar, Typography } from "@mui/material";
