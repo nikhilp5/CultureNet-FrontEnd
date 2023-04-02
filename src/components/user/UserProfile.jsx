@@ -52,7 +52,7 @@ const UserProfile = () => {
 
   const fetchProfile = async () => {
     const response = await axios
-      .post(`${process.env.HOST}/.netlify/functions/api/profile`, {
+      .post(`https://culturenet-apis-develop.netlify.app/.netlify/functions/api/profile`, {
         email: localStorage.getItem("email")
       }, {
         headers: {
@@ -80,7 +80,7 @@ const UserProfile = () => {
   const updateProfile = async () => {
     try {
       const response = await axios
-        .put(`${process.env.HOST}/.netlify/functions/api/updateprofile`, {
+        .put(`https://culturenet-apis-develop.netlify.app/.netlify/functions/api/updateprofile`, {
           ...profileForm
         }, {
           headers: {
@@ -107,7 +107,7 @@ const UserProfile = () => {
   const changePassword = async () => {
     try {
       const response = await axios
-        .put(`${process.env.HOST}/.netlify/functions/api/changepassword`, {
+        .put(`https://culturenet-apis-develop.netlify.app/.netlify/functions/api/changepassword`, {
           email: localStorage.getItem("email"),
           password: passwordForm.password,
           confirmPassword: passwordForm.confirmPassword
