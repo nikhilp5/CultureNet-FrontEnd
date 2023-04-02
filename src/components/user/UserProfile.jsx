@@ -12,9 +12,6 @@ import axios from "axios";
 import { useNavigate } from "react-router";
 
 
-const data = require("../../data/db.json");
-
-
 const UserProfile = () => {
   const navigate = useNavigate();
   const defaultProfileForm = {
@@ -35,6 +32,7 @@ const UserProfile = () => {
 
 
   const [isPending, setIsPending] = useState(false);
+  const [isUpdatePasswordPending, setIsUpdatePasswordPending] = useState(false);
   const [openSnackbar, setOpenSnackbar] = useState(false);
   const [openDialog, setOpenDialog] = useState(false);
   const [snackbarMessage, setSnackbarMessage] = useState('');
@@ -121,10 +119,10 @@ const UserProfile = () => {
           }
         });
       if (response.status == 200) {
+        setIsUpdatePasswordPending(false);
         setProfileForm(response.data.user);
         setSnackbarSeverity("success");
         setPasswordForm({ ...defaultPasswordForm });
-        // set({ ...form, ...defaultDialogForm });
         setOpenDialog(false);
         setSnackbarMessage('Password changed successfully.');
         setOpenSnackbar(true);
@@ -219,18 +217,14 @@ const UserProfile = () => {
         setOpenDialog(false);
         break;
       case "updatePassword":
-        if (!Object.values(data).includes(profileForm.email)) {
-          setIsPending(false);
-          changePassword();
-
-        }
+        setIsUpdatePasswordPending(true);
+        changePassword();
         break;
     }
   };
 
   return (
     <Grid container sx={{ margin: 5 }}>
-      {/* <form onSubmit={handleSubmit}> */}
       <Grid item xs={1} md={4}></Grid>
       <Grid item xs={10} md={4}>
         <Card sx={{ padding: 2 }}>
@@ -348,7 +342,6 @@ const UserProfile = () => {
                   error={error.password}
                   onChange={validate}
                   helperText={error.password ? "Invalid password." : ""}
-                  value={passwordForm.password}
                   fullWidth
                 />
               </Grid>
@@ -362,7 +355,6 @@ const UserProfile = () => {
                   error={error.confirmPassword}
                   onChange={validate}
                   helperText={error.confirmPassword ? "Passwords do not match." : ""}
-                  value={passwordForm.confirmPassword}
                   fullWidth
                 />
               </Grid>
@@ -370,7 +362,15 @@ const UserProfile = () => {
           </DialogContent>
           <DialogActions>
             <Button id="cancel" name="cancel" onClick={handleClick}>Cancel</Button>
-            <Button id="updatePassword" name="updatePassword" variant="contained" onClick={handleClick}>Update</Button>
+            <LoadingButton
+              id="updatePassword" name="updatePassword"
+              onClick={handleClick}
+              loading={isUpdatePasswordPending}
+              disabled={Object.keys(error).some(k => error[k]) || !passwordForm.password || !passwordForm.confirmPassword}
+              variant="contained"
+            >
+              Update
+            </LoadingButton>
           </DialogActions>
         </Dialog>
       </Grid>
