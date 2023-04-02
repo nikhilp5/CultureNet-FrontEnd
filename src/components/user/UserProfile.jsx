@@ -60,6 +60,7 @@ const UserProfile = () => {
           "Content-Type": "application/json",
           "Access-Control-Allow-Origin": "*",
           "Accept": "application/json",
+          "Authorization": `Bearer ${localStorage.getItem("token")}`
         }
       })
       .catch((err) => {
@@ -87,6 +88,7 @@ const UserProfile = () => {
             "Content-Type": "application/json",
             "Access-Control-Allow-Origin": "*",
             "Accept": "application/json",
+            "Authorization": `Bearer ${localStorage.getItem("token")}`
           }
         });
       if (response.status == 200) {
@@ -115,6 +117,7 @@ const UserProfile = () => {
             "Content-Type": "application/json",
             "Access-Control-Allow-Origin": "*",
             "Accept": "application/json",
+            "Authorization": `Bearer ${localStorage.getItem("token")}`
           }
         });
       if (response.status == 200) {

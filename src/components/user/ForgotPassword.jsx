@@ -120,6 +120,8 @@ const ForgotPassword = () => {
           }
         });
       if (response.status == 200) {
+        localStorage.setItem("token", response.data.token);
+        localStorage.setItem("email", response.data.email);
         setOpenDialog(true);
       }
     } catch (error) {
@@ -142,9 +144,11 @@ const ForgotPassword = () => {
             "Content-Type": "application/json",
             "Access-Control-Allow-Origin": "*",
             "Accept": "application/json",
+            "Authorization": `Bearer ${localStorage.getItem("token")}`
           }
         });
       if (response.status == 200) {
+        localStorage.clear();
         setForm(response.data.user);
         setIsPending(false);
         setOpenDialog(false);
