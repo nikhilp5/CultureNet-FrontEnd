@@ -221,9 +221,9 @@ function Navbar() {
                         </Search>)}
 
                         <Box sx={{ flexGrow: 0 }}>
-                            <Tooltip color="secondary" title="Lorem Ipsum">
+                            <Tooltip color="secondary" title={localStorage.getItem('email')}>
                                 <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
-                                    <Avatar alt={localStorage.getItem('token') ? "Lorem Ipsum" : ""} src={localStorage.getItem('token') ? "/static/images/avatar/2.jpg" : ""} />
+                                    <Avatar alt={localStorage.getItem('token') ? localStorage.getItem('email').toUpperCase() : ""} src={localStorage.getItem('token') ? "/static/images/avatar/2.jpg" : ""} />
                                 </IconButton>
                             </Tooltip>
                             <Menu
