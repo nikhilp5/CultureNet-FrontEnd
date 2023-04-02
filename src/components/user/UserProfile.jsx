@@ -51,7 +51,7 @@ const UserProfile = () => {
 
   const fetchProfile = async () => {
     const response = await axios
-      .post("http://localhost:4000/.netlify/functions/api/profile", {
+      .post(`${process.env.HOST}/.netlify/functions/api/profile`, {
         email: localStorage.getItem("email")
       }, {
         headers: {
@@ -79,7 +79,7 @@ const UserProfile = () => {
   const updateProfile = async () => {
     try {
       const response = await axios
-        .put("http://localhost:4000/.netlify/functions/api/updateprofile", {
+        .put(`${process.env.HOST}/.netlify/functions/api/updateprofile`, {
           ...profileForm
         }, {
           headers: {
@@ -106,7 +106,7 @@ const UserProfile = () => {
   const changePassword = async () => {
     try {
       const response = await axios
-        .put("http://localhost:4000/.netlify/functions/api/changepassword", {
+        .put(`${process.env.HOST}/.netlify/functions/api/changepassword`, {
           email: localStorage.getItem("email"),
           password: passwordForm.password,
           confirmPassword: passwordForm.confirmPassword

@@ -44,7 +44,7 @@ const Login = () => {
   const loginUser = async () => {
     try {
       const response = await axios
-        .post("http://localhost:4000/.netlify/functions/api/login", {
+        .post(`${process.env.HOST}.netlify/functions/api/login`, {
           email: form.email.toLowerCase(),
           password: form.password,
         }, {

@@ -45,7 +45,7 @@ const Registration = () => {
   const registerUser = async () => {
     try {
       const response = await axios
-        .post("http://localhost:4000/.netlify/functions/api/register", {
+        .post(`${process.env.HOST}/.netlify/functions/api/register`, {
           email: form.email.toLowerCase(),
           password: form.password,
           confirmPassword: form.confirmPassword
