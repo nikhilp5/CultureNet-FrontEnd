@@ -66,7 +66,7 @@ function MovieDetails() {
     // const userId = sessionStorage.getItem("userId");
     console.log(userId)
     if (userId) {
-      fetch(`http://localhost:4000/.netlify/functions/api/movie_ratings`, {
+      fetch(`https://culturenet-apis-develop.netlify.app/.netlify/functions/api/movie_ratings`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'
