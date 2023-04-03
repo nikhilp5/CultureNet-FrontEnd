@@ -20,19 +20,24 @@ function MovieDetails() {
   const location = useLocation();
   const navigate = useNavigate();
   const [userRating, setUserRating] = useState(0);
-  const userId ="6424fbfd655f8005ee60191e";
+  const userId =localStorage.getItem("id");
+  console.log(userId)
   const [genres, setGenres] = useState([]);
   const id = location?.state?.id;
- 
-
+  const email= localStorage.getItem("email");
+  console.log(email);
+  // const [email, setEmail]=useState("");
   useEffect(() => {
-    fetch(`http://localhost:4000/.netlify/functions/api/movies/${id}`)
+    
+    if(!localStorage.getItem("email")) {navigate("/")}
+     fetch(`https://culturenet-apis-develop.netlify.app/.netlify/functions/api/movies/${id}`)
       .then((response) => response.json())
       .then((data) => {
         setMovie(data);
+        
 
       if (data.genre) {
-        fetch(`http://localhost:4000/.netlify/functions/api/movie_genres/${data.genre.join(',')}`)
+        fetch(`https://culturenet-apis-develop.netlify.app/.netlify/functions/api/movie_genres/${data.genre.join(',')}`)
           .then(response => response.json())
           .then(data => setGenres(data))
           .catch(error => console.log(error));
@@ -48,8 +53,8 @@ function MovieDetails() {
 
   useEffect(() => {
     if (userId) {
-      
-      fetch(`http://localhost:4000/.netlify/functions/api/movie_ratings/${userId}/${id}`)
+      console.log(userId)
+      fetch(`https://culturenet-apis-develop.netlify.app/.netlify/functions/api/movie_ratings/${userId}/${id}`)
         .then((response) => response.json())
         .then((data) => setUserRating(data.rating));
       
@@ -59,6 +64,7 @@ function MovieDetails() {
  
   const handleRatingChange = (event, value, movieId) => {
     // const userId = sessionStorage.getItem("userId");
+    console.log(userId)
     if (userId) {
       fetch(`http://localhost:4000/.netlify/functions/api/movie_ratings`, {
         method: 'POST',
@@ -68,7 +74,7 @@ function MovieDetails() {
         body: JSON.stringify({ userId, movieId, rating: value })
       })
         .then((response) => response.json())
-        .then((data) => console.log(`User rated movie ${movieId} with a ${value}-star rating`));
+        .then((data) => {setUserRating(data.rating)});
     } else {
       console.log('User is not logged in');
     }

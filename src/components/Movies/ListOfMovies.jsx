@@ -14,8 +14,9 @@ const ListOfMovies = () => {
   const [movies, setMovies] = useState([]);
   const [movieRatings, setMovieRatings] = useState({});
   const [currentPage, setCurrentPage] = useState(1);
+  const [moviesPerPage, setMoviesPerPage] = useState(9);
   const [loading, setLoading] = useState(true);
-  const moviesPerPage = 9;
+  // const moviesPerPage = 9;
   const startIndex = (currentPage - 1) * moviesPerPage;
   const endIndex = startIndex + moviesPerPage;
   const totalPages = Math.ceil(movies.length / moviesPerPage);
@@ -26,8 +27,9 @@ const ListOfMovies = () => {
     setLoading(true);
     const fetchMovies = async () => {
       try {
+        if(!localStorage.getItem("email")) {navigate("/")}
         const response = await fetch(
-          "http://localhost:4000/.netlify/functions/api/movies"
+          "https://culturenet-apis-develop.netlify.app/.netlify/functions/api/movies"
         );
         const data = await response.json();
         console.log(data)
@@ -46,7 +48,7 @@ const ListOfMovies = () => {
       const movieIds = movies.map((movie) => movie._id);
       const movieRatings = {};
       for (const id of movieIds) {
-        const response = await fetch(`http://localhost:4000/.netlify/functions/api/movie_ratings/${id}/ratings`);
+        const response = await fetch(`https://culturenet-apis-develop.netlify.app/.netlify/functions/api/movie_ratings/${id}/ratings`);
         console.log(id)
         const data = await response.json();
         movieRatings[id] = data.rating;
@@ -63,7 +65,13 @@ const ListOfMovies = () => {
     navigate("/moviedetail", { state: { id } });
     console.log(id)
   };
-
+  useEffect(() => {
+    if (isSmallScreen) {
+      setMoviesPerPage(1);
+    } else {
+      setMoviesPerPage(9);
+    }
+  }, [isSmallScreen]);
  
 
 
