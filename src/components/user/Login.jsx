@@ -1,18 +1,13 @@
-import { forwardRef, useState, useContext } from "react";
+import { forwardRef, useState, useEffect } from "react";
 import TextField from '@mui/material/TextField';
 import { Button, Card, Snackbar, Typography } from "@mui/material";
 import LoadingButton from '@mui/lab/LoadingButton';
 import MuiAlert from '@mui/material/Alert';
 import Grid from '@mui/material/Grid';
 import { useNavigate } from "react-router";
-import { UserContext } from '../../utils/UserContext';
-
-
-const data = require("../../data/db.json");
-
+import axios from "axios";
 
 const Login = () => {
-  const { auth, setAuth } = useContext(UserContext);
 
   const navigate = useNavigate();
   const defaultForm = {
@@ -23,7 +18,7 @@ const Login = () => {
   const [form, setForm] = useState(defaultForm);
 
   const [isPending, setIsPending] = useState(false);
-  const [open, setOpen] = useState(false);
+  const [openSnackbar, setOpenSnackbar] = useState(false);
   const [snackbarSeverity, setSnackbarSeverity] = useState("success");
   const [snackbarMessage, setSnackbarMessage] = useState("User login successful.");
 
@@ -39,25 +34,47 @@ const Login = () => {
   const emailRegex = /^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/g;
   const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/g;
 
-  const handleSubmit = (e) => {
-    let finalForm = form;
-    finalForm.email = form.email.toLowerCase();
 
-    setIsPending(true);
-
-    if (data.users.find(user => user.email === finalForm.email && user.password === finalForm.password)) {
-      setForm({ ...defaultForm });
-      setSnackbarSeverity("success");
-      setSnackbarMessage("User login successful.");
+  useEffect(() => {
+    if (localStorage.getItem('token')) {
+      navigate("/UserDashboard");
     }
-    else {
+  }, []);
+
+  const loginUser = async () => {
+    try {
+      const response = await axios
+        .post(`https://culturenet-apis-develop.netlify.app/.netlify/functions/api/login`, {
+          email: form.email.toLowerCase(),
+          password: form.password,
+        }, {
+          headers: {
+            "Content-Type": "application/json",
+            "Access-Control-Allow-Origin": "*",
+            "Accept": "application/json",
+          }
+        });
+      if (response.status == 200) {
+        localStorage.setItem("token", response.data.token);
+        localStorage.setItem("email", response.data.email);
+        setForm({ ...defaultForm });
+        setSnackbarSeverity("success");
+        setSnackbarMessage("User login successful.");
+        setOpenSnackbar(true);
+        setIsPending(false);
+        navigate("/UserDashboard");
+      }
+    } catch (error) {
       setSnackbarSeverity("error");
-      setSnackbarMessage("Invalid user credentials.");
+      setSnackbarMessage(error.response.data.message);
+      setOpenSnackbar(true);
+      setIsPending(false);
     }
-    setOpen(true);
-    setIsPending(false);
-    setAuth(true);
-    navigate("/UserDashboard");
+  };
+
+  const handleSubmit = (e) => {
+    setIsPending(true);
+    loginUser();
   };
 
   const validate = (event) => {
@@ -82,8 +99,7 @@ const Login = () => {
     if (reason === 'clickaway') {
       return;
     }
-
-    setOpen(false);
+    setOpenSnackbar(false);
   };
 
 
@@ -150,8 +166,8 @@ const Login = () => {
             </Grid>
           </Grid>
         </Card>
-        <Snackbar open={open} autoHideDuration={6000} onClose={handleClose}>
-          <Alert onClose={handleClose} severity={snackbarSeverity} sx={{ width: '100%' }}>
+        <Snackbar id="snackbar" name="snackbar" open={openSnackbar} autoHideDuration={5000} onClose={handleClose}>
+          <Alert id="alert" name="alert" onClose={handleClose} severity={snackbarSeverity} sx={{ width: '100%' }}>
             {snackbarMessage}
           </Alert>
         </Snackbar>

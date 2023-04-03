@@ -14,17 +14,16 @@ import MenuItem from '@mui/material/MenuItem';
 import SearchIcon from '@mui/icons-material/Search';
 import InputBase from '@mui/material/InputBase';
 import { useNavigate } from "react-router-dom";
-import { useState, useContext } from "react";
+import { useState } from "react";
 
-import { Divider, FormControlLabel, FormGroup, ListItemIcon, ListItemText, Switch } from '@mui/material';
+import { Divider, ListItemIcon, ListItemText } from '@mui/material';
 import { Settings, Movie, MusicNote, Book, WatchLater, Timeline, Diversity1, Login, PersonAdd, Logout, AdminPanelSettings, Home } from '@mui/icons-material';
 import { styled, alpha } from '@mui/material/styles';
-import { UserContext } from '../../utils/UserContext';
 
 const appName = "CultureNet";
 const appNameShort = "CN";
-const pages = [{text:'Movies', route:'Movies'}, {text:'Books', route:'Books'}, {text:'Music', route:'Music'}];
-const settings_logged_in = [{ text: 'My Movies', icon: Movie }, { text: 'My Books', icon: Book }, { text: 'My Music', icon: MusicNote }, {}, { text: 'Watchlist', icon: WatchLater, route: 'Watchlist' }, { text: 'Activity', icon: Timeline }, { text: 'Network', icon: Diversity1 }, {}, { text: 'Settings', icon: Settings, route: 'Profile' }, {}, { text: 'Logout', icon: Logout, route: '' }];
+const pages = [{ text: 'Movies', route: 'Movies' }, { text: 'Books', route: 'Books' }, { text: 'Music', route: 'Music' }];
+const settings_logged_in = [{ text: 'My Movies', icon: Movie, route: 'MyMovies' }, { text: 'My Books', icon: Book, route: 'MyBooks' }, { text: 'My Music', icon: MusicNote, route: 'MyMusic' }, {}, { text: 'Watchlist', icon: WatchLater, route: 'Watchlist' }, { text: 'Activity', icon: Timeline, route: 'Activity' }, { text: 'Network', icon: Diversity1, route: 'Network' }, {}, { text: 'Settings', icon: Settings, route: 'Profile' }, {}, { text: 'Logout', icon: Logout, route: 'Logout' }];
 const settings_logged_out = [{ text: 'Login', icon: Login, route: 'Login' }, { text: 'Register', icon: PersonAdd, route: 'Register' }];
 
 const Search = styled('div')(({ theme }) => ({
@@ -68,7 +67,6 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
 }));
 
 function Navbar() {
-    const { auth, setAuth } = useContext(UserContext);
     const [anchorElNav, setAnchorElNav] = React.useState(null);
     const [anchorElUser, setAnchorElUser] = React.useState(null);
 
@@ -88,8 +86,8 @@ function Navbar() {
     };
 
     const handleChange = (event) => {
-        setAuth(event.target.checked);
-        if (event.target.checked) {
+        // setAuth(event.target.checked);
+        if (localStorage.getItem('token')) {
             navigator("UserDashboard");
         } else {
             navigator("");
@@ -106,7 +104,7 @@ function Navbar() {
 
     const navigator = (page) => {
         if (!page) {
-            setAuth(false);
+            localStorage.clear();
         }
         navigate("/" + page);
     };
@@ -116,18 +114,6 @@ function Navbar() {
     }
     return (
         <Box sx={{ flexGrow: 1 }}>
-            <FormGroup>
-                <FormControlLabel
-                    control={
-                        <Switch
-                            checked={auth}
-                            onChange={handleChange}
-                            aria-label="login switch"
-                        />
-                    }
-                    label={auth ? 'FOR DEMO ONLY: The Navbar is currently in "Logged In" state' : 'FOR DEMO ONLY: The Navbar is currently in "Logged Out" state'}
-                />
-            </FormGroup>
             <AppBar color="primary" position="static">
                 <Container maxWidth="xl">
                     <Toolbar disableGutters>
@@ -150,7 +136,7 @@ function Navbar() {
                         </Typography>
 
 
-                        {auth && (<Box sx={{ flexGrow: 1, display: { xs: 'flex', md: 'none' } }}>
+                        {localStorage.getItem('token') && (<Box sx={{ flexGrow: 1, display: { xs: 'flex', md: 'none' } }}>
                             <IconButton
                                 size="large"
                                 aria-label="account of current user"
@@ -206,7 +192,7 @@ function Navbar() {
                         </Typography>
 
                         <Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex', marginLeft: 40 } }}>
-                            {auth && (pages.map((page) => (
+                            {localStorage.getItem('token') && (pages.map((page) => (
                                 <Button
                                     key={page.text}
                                     onClick={() => navigator(page.route)}
@@ -216,7 +202,7 @@ function Navbar() {
                                 </Button>
                             )))}
                         </Box>
-                        {auth && (<Search>
+                        {localStorage.getItem('token') && (<Search>
                             <SearchIconWrapper>
                                 <SearchIcon />
                             </SearchIconWrapper>
@@ -235,9 +221,9 @@ function Navbar() {
                         </Search>)}
 
                         <Box sx={{ flexGrow: 0 }}>
-                            <Tooltip color="secondary" title="Open settings">
+                            <Tooltip color="secondary" title={localStorage.getItem('email')}>
                                 <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
-                                    <Avatar alt={auth ? "Remy Sharp" : ""} src={auth ? "/static/images/avatar/2.jpg" : ""} />
+                                    <Avatar alt={localStorage.getItem('token') ? localStorage.getItem('email').toUpperCase() : ""} src={localStorage.getItem('token') ? "/static/images/avatar/2.jpg" : ""} />
                                 </IconButton>
                             </Tooltip>
                             <Menu
@@ -256,9 +242,9 @@ function Navbar() {
                                 open={Boolean(anchorElUser)}
                                 onClose={handleCloseUserMenu}
                             >
-                                {auth ? settings_logged_in.map((setting) => (
+                                {localStorage.getItem('token') ? settings_logged_in.map((setting) => (
                                     Object.keys(setting).length !== 0 ?
-                                        <MenuItem key={setting.text} onClick={() => navigator(setting.route)}  >
+                                        <MenuItem key={setting.text} onClick={() => { navigator(setting.route); setAnchorElUser(null); }}  >
                                             <ListItemIcon>
                                                 <setting.icon color="secondary" fontSize="small" />
                                             </ListItemIcon>
@@ -266,7 +252,9 @@ function Navbar() {
                                         </MenuItem> : <Divider />
                                 )) : settings_logged_out.map((setting) => (
                                     Object.keys(setting).length !== 0 ?
-                                        <MenuItem key={setting.text} onClick={() => navigator(setting.route)}>
+                                        <MenuItem key={setting.text} onClick={() => {
+                                            navigator(setting.route); setAnchorElUser(null);
+                                        }}>
                                             <ListItemIcon>
                                                 <setting.icon color="secondary" fontSize="small" />
                                             </ListItemIcon>
