@@ -1,16 +1,14 @@
-import { forwardRef, useState } from "react";
+import { forwardRef, useState, useEffect } from "react";
 import TextField from '@mui/material/TextField';
 import { Card, Snackbar, Typography } from "@mui/material";
 import LoadingButton from '@mui/lab/LoadingButton';
 import MuiAlert from '@mui/material/Alert';
 import Grid from '@mui/material/Grid';
 import { useNavigate } from "react-router";
-
-
-const data = require("../../data/db.json");
-
+import axios from "axios";
 
 const Registration = () => {
+
   const navigate = useNavigate();
   const defaultForm = {
     email: '',
@@ -21,7 +19,7 @@ const Registration = () => {
   const [form, setForm] = useState(defaultForm);
 
   const [isPending, setIsPending] = useState(false);
-  const [open, setOpen] = useState(false);
+  const [openSnackbar, setOpenSnackbar] = useState(false);
   const [snackbarSeverity, setSnackbarSeverity] = useState("success");
   const [snackbarMessage, setSnackbarMessage] = useState("User login successful.");
 
@@ -38,27 +36,45 @@ const Registration = () => {
   const emailRegex = /^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/g;
   const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/g;
 
-  const handleSubmit = (e) => {
-    let finalForm = form;
-    finalForm.email = form.email.toLowerCase();
-
-
-    setIsPending(true);
-
-    if (!data.users.find(user => user.email === finalForm.email)) {
-      // let data = { email: finalForm.email, password: finalForm.password };
-      setForm({ ...defaultForm });
-      setSnackbarSeverity("success");
-      setSnackbarMessage("User registration successful.");
+  useEffect(() => {
+    if (localStorage.getItem('token')) {
+      navigate("/UserDashboard");
     }
-    else {
+  }, []);
+
+  const registerUser = async () => {
+    try {
+      const response = await axios
+        .post(`https://culturenet-apis-develop.netlify.app/.netlify/functions/api/register`, {
+          email: form.email.toLowerCase(),
+          password: form.password,
+          confirmPassword: form.confirmPassword
+        }, {
+          headers: {
+            "Content-Type": "application/json",
+            "Access-Control-Allow-Origin": "*",
+            "Accept": "application/json",
+          }
+        });
+      if (response.status == 201) {
+        setForm({ ...defaultForm });
+        setSnackbarSeverity("success");
+        setSnackbarMessage("User registration successful.");
+        setOpenSnackbar(true);
+        setIsPending(false);
+        navigate("/Login");
+      }
+    } catch (error) {
       setSnackbarSeverity("error");
-      setSnackbarMessage("User already exists!");
+      setSnackbarMessage(error.response.data.message);
+      setOpenSnackbar(true);
+      setIsPending(false);
     }
-    setOpen(true);
-    setIsPending(false);
-    navigate("/Login");
+  };
 
+  const handleSubmit = (e) => {
+    setIsPending(true);
+    registerUser();
   };
 
   const validate = (event) => {
@@ -89,8 +105,7 @@ const Registration = () => {
     if (reason === 'clickaway') {
       return;
     }
-
-    setOpen(false);
+    setOpenSnackbar(false);
   };
 
 
@@ -160,8 +175,8 @@ const Registration = () => {
             </Grid>
           </Grid>
         </Card>
-        <Snackbar open={open} autoHideDuration={6000} onClose={handleClose}>
-          <Alert onClose={handleClose} severity={snackbarSeverity} sx={{ width: '100%' }}>
+        <Snackbar id="snackbar" name="snackbar" open={openSnackbar} autoHideDuration={5000} onClose={handleClose}>
+          <Alert id="alert" name="alert" onClose={handleClose} severity={snackbarSeverity} sx={{ width: '100%' }}>
             {snackbarMessage}
           </Alert>
         </Snackbar>

@@ -8,6 +8,7 @@ import AdminDashboard from "../components/admin/AdminDashboard";
 import WatchListContent from "../components/watchlist/watchListContent/WatchListContent";
 import SearchedContent from "../components/searchpage/searchedContent/SearchedContent";
 import Login from "../components/user/Login";
+import Logout from "../components/user/Logout";
 import Registration from "../components/user/Registration";
 import ForgotPassword from "../components/user/ForgotPassword";
 import UserProfile from "../components/user/UserProfile";
@@ -21,7 +22,7 @@ const AppRoutes = () => {
     return (
         <Routes>
             <Route path="/" element={<LandingPage />} />
-            <Route path='*' element={<DefaultNotFound />}/>
+            <Route path='*' element={<DefaultNotFound />} />
             <Route path="/UserDashboard" element={<UserDashboard />} />
             <Route path="/AdminDashboard" element={<AdminDashboard />} />
             <Route path="/Navbar" element={<Navbar />} />
@@ -30,11 +31,12 @@ const AppRoutes = () => {
             <Route path="/Login" element={<Login />}></Route>
             <Route path="/Register" element={<Registration />}></Route>
             <Route path="/ForgotPassword" element={<ForgotPassword />}></Route>
-            <Route path="/Profile" element={<UserProfile />}></Route>            
-            <Route path="/MyMovies" element={<UserMovies />}></Route>            
+            <Route path="/Profile" element={<UserProfile />}></Route>
+            <Route path="/MyMovies" element={<UserMovies />}></Route>
             <Route path="/MyMusic" element={<UserMusic />}></Route>
             <Route path="/MyBooks" element={<UserBooks />}></Route>
             <Route path="/Books" element={<BookCard />}></Route>
+            <Route path="/Logout" element={<Logout />}></Route>
         </Routes>
     );
 };
