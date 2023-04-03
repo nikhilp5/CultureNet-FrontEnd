@@ -12,7 +12,9 @@ import Login from "../components/user/Login";
 import Registration from "../components/user/Registration";
 import ForgotPassword from "../components/user/ForgotPassword";
 import UserProfile from "../components/user/UserProfile";
-import Movie from "../components/Movies/Movie";
+import Movie from "../components/Movies/ListOfMovies";
+import ListOfMovies from "../components/Movies/ListOfMovies";
+import MovieDetails from "../components/Movies/MovieDetails";
 
 
 const AppRoutes = () => {
@@ -30,7 +32,8 @@ const AppRoutes = () => {
             <Route path="/Register" element={<Registration />}></Route>
             <Route path="/ForgotPassword" element={<ForgotPassword />}></Route>
             <Route path="/Profile" element={<UserProfile />}></Route>
-            <Route path="/Movies" element={<Movie />}></Route>
+            <Route path="/Movies" element={<ListOfMovies />}></Route>
+            <Route path="/MovieDetail" element={<MovieDetails/>}></Route>
         </Routes>
     );
 };
