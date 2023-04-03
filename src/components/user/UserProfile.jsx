@@ -29,6 +29,7 @@ const UserProfile = () => {
 
   const [profileForm, setProfileForm] = useState({ ...defaultProfileForm });
   const [passwordForm, setPasswordForm] = useState({ ...defaultPasswordForm });
+  const [profileFormChanged, setProfileFormChanged] = useState(false);
 
 
   const [isPending, setIsPending] = useState(false);
@@ -90,6 +91,7 @@ const UserProfile = () => {
           }
         });
       if (response.status == 200) {
+        setProfileFormChanged(false);
         setProfileForm(response.data.user);
         setIsPending(false);
         setSnackbarSeverity("success");
@@ -119,6 +121,7 @@ const UserProfile = () => {
           }
         });
       if (response.status == 200) {
+        setProfileFormChanged(false);
         setIsUpdatePasswordPending(false);
         setProfileForm(response.data.user);
         setSnackbarSeverity("success");
@@ -151,6 +154,7 @@ const UserProfile = () => {
 
 
   const validate = (event) => {
+    setProfileFormChanged(true);
     let formNew = { ...profileForm, ...passwordForm };
     formNew[event.target.name] = event.target.value;
     setProfileForm({ ...formNew });
@@ -158,10 +162,10 @@ const UserProfile = () => {
     let errorNew = error;
     switch (event.target.name) {
       case "firstName":
-        errorNew["firstName"] = !event.target.value.match(nameRegex);
+        errorNew["firstName"] = !event.target.value.match(nameRegex) && event.target.value;
         break;
       case "lastName":
-        errorNew["lastName"] = !event.target.value.match(nameRegex);
+        errorNew["lastName"] = !event.target.value.match(nameRegex) && event.target.value;
         break;
       case "email":
         errorNew["email"] = !event.target.value.match(emailRegex);
@@ -207,6 +211,7 @@ const UserProfile = () => {
   const handleClick = (event) => {
     switch (event.target.name) {
       case "nsfw":
+        setProfileFormChanged(true);
         setProfileForm({ ...profileForm, nsfw: !profileForm.nsfw });
         break;
       case "cancel":
@@ -303,7 +308,7 @@ const UserProfile = () => {
                 type="submit"
                 onClick={handleSubmit}
                 loading={isPending}
-                disabled={Object.keys(error).some(k => error[k]) || !profileForm.email || openDialog}
+                disabled={!profileFormChanged || Object.keys(error).some(k => error[k]) || !profileForm.email || openDialog}
                 variant="contained"
                 fullWidth
               >
