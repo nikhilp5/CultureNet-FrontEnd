@@ -32,7 +32,8 @@ const WatchListContent = () => {
     handleOpen();
     axios
       .get(
-        "https://culturenet-apis-develop.netlify.app/.netlify/functions/api/getWatchlist/"
+        "https://culturenet-apis-develop.netlify.app/.netlify/functions/api/getWatchlist/" +
+          localStorage.getItem("id")
       )
       .then((res) => {
         setMovieResults(res.data.result.movies);

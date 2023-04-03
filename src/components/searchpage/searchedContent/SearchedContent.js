@@ -39,7 +39,9 @@ const SearchedContent = () => {
     axios
       .get(
         "https://culturenet-apis-develop.netlify.app/.netlify/functions/api/search/" +
-          searchTerm
+          searchTerm +
+          "/" +
+          localStorage.getItem("id")
       )
       .then((res) => {
         setMovieResults(res.data.result.movies);

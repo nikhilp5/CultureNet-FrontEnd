@@ -10,6 +10,7 @@ const ContentControl = ({ type, content, buttonClick, setButtonClick }) => {
         {
           type: type,
           content: content,
+          userid: localStorage.getItem("id"),
         }
       )
       .then((res) => {
@@ -26,6 +27,7 @@ const ContentControl = ({ type, content, buttonClick, setButtonClick }) => {
         {
           type: type,
           content: content,
+          userid: localStorage.getItem("id"),
         }
       )
       .then((res) => {
