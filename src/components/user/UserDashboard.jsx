@@ -1,14 +1,20 @@
 import { AppBar, Button, Container, CssBaseline, Grid, ThemeProvider, Toolbar, Typography } from '@mui/material';
 import { appTheme } from '../../themes/theme';
 import { useNavigate } from "react-router-dom";
+import { useEffect } from "react";
 
 export default function UserDashboard(props) {
-
   const navigate = useNavigate();
 
   const navigator = (page) => {
     navigate("/" + page);
   };
+
+  useEffect(() => {
+    if (!localStorage.getItem('token')) {
+      navigate("/Login");
+    }
+  }, []);
 
   return (
     <ThemeProvider theme={appTheme}>
