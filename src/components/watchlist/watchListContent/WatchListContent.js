@@ -32,8 +32,17 @@ const WatchListContent = () => {
     handleOpen();
     axios
       .get(
-        "https://culturenet-apis-develop.netlify.app/.netlify/functions/api/getWatchlist/" +
-          localStorage.getItem("id")
+        `${process.env.REACT_APP_BASE_URL}` +
+          "/getWatchlist/" +
+          localStorage.getItem("id"),
+        {
+          headers: {
+            "Content-Type": "application/json",
+            "Access-Control-Allow-Origin": "*",
+            Accept: "application/json",
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
+          },
+        }
       )
       .then((res) => {
         setMovieResults(res.data.result.movies);

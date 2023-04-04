@@ -29,7 +29,7 @@ const ListOfMovies = () => {
       try {
         if(!localStorage.getItem("email")) {navigate("/")}
         const response = await fetch(
-          "https://culturenet-apis-develop.netlify.app/.netlify/functions/api/movies"
+          `${process.env.REACT_APP_BASE_URL}`+"/movies"
         );
         const data = await response.json();
         console.log(data)
@@ -48,7 +48,7 @@ const ListOfMovies = () => {
       const movieIds = movies.map((movie) => movie._id);
       const movieRatings = {};
       for (const id of movieIds) {
-        const response = await fetch(`https://culturenet-apis-develop.netlify.app/.netlify/functions/api/movie_ratings/${id}/ratings`);
+        const response = await fetch(`${process.env.REACT_APP_BASE_URL}`+`/movie_ratings/${id}/ratings`);
         console.log(id)
         const data = await response.json();
         movieRatings[id] = data.rating;

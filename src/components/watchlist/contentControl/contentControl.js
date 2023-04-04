@@ -6,11 +6,19 @@ const ContentControl = ({ type, content, buttonClick, setButtonClick }) => {
   const addContentToWatchlist = () => {
     axios
       .post(
-        "https://culturenet-apis-develop.netlify.app/.netlify/functions/api/addToWatchlist/",
+        `${process.env.REACT_APP_BASE_URL}` + "/addToWatchlist/",
         {
           type: type,
           content: content,
           userid: localStorage.getItem("id"),
+        },
+        {
+          headers: {
+            "Content-Type": "application/json",
+            "Access-Control-Allow-Origin": "*",
+            Accept: "application/json",
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
+          },
         }
       )
       .then((res) => {
@@ -23,11 +31,19 @@ const ContentControl = ({ type, content, buttonClick, setButtonClick }) => {
   const removeContentFromWatchlist = () => {
     axios
       .post(
-        "https://culturenet-apis-develop.netlify.app/.netlify/functions/api/removeFromWatchlist/",
+        `${process.env.REACT_APP_BASE_URL}` + "/removeFromWatchlist/",
         {
           type: type,
           content: content,
           userid: localStorage.getItem("id"),
+        },
+        {
+          headers: {
+            "Content-Type": "application/json",
+            "Access-Control-Allow-Origin": "*",
+            Accept: "application/json",
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
+          },
         }
       )
       .then((res) => {

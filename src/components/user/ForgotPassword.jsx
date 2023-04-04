@@ -84,7 +84,7 @@ const ForgotPassword = () => {
   const sendCode = async () => {
     try {
       const response = await axios
-        .post(`https://culturenet-apis-develop.netlify.app/.netlify/functions/api/forgotpassword`, {
+        .post(`${process.env.REACT_APP_BASE_URL}`+`/forgotpassword`, {
           email: form.email
         }, {
           headers: {
@@ -111,7 +111,7 @@ const ForgotPassword = () => {
   const verifyCode = async () => {
     try {
       const response = await axios
-        .post(`https://culturenet-apis-develop.netlify.app/.netlify/functions/api/resetpassword`, {
+        .post(`${process.env.REACT_APP_BASE_URL}`+`/resetpassword`, {
           email: form.email,
           code: form.code
         }, {
@@ -140,7 +140,7 @@ const ForgotPassword = () => {
 
     try {
       const response = await axios
-        .put(`https://culturenet-apis-develop.netlify.app/.netlify/functions/api/changepassword`, {
+        .put(`${process.env.REACT_APP_BASE_URL}`+`/changepassword`, {
           email: form.email,
           password: form.password,
           confirmPassword: form.confirmPassword
