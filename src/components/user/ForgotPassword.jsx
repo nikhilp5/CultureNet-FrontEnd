@@ -154,6 +154,9 @@ const ForgotPassword = () => {
         navigate("/Login");
       }
     } catch (error) {
+      if (error.response.status == 401) {
+        navigate("/SessionTimeOut");
+      }
       setIsPending(false);
       setOpenDialog(false);
       setSnackbarSeverity("error");

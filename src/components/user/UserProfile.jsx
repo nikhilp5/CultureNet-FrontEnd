@@ -70,6 +70,9 @@ const UserProfile = () => {
         setProfileForm(response.data.user);
       }
     } catch (error) {
+      if (error.response.status == 401) {
+        navigate("/SessionTimeOut");
+      }
       setSnackbarSeverity("error");
       setSnackbarMessage('Something went wrong! Please refresh to try again...');
       setOpenSnackbar(true);
@@ -98,7 +101,9 @@ const UserProfile = () => {
         setOpenSnackbar(true);
       }
     } catch (error) {
-      console.error(error);
+      if (error.response.status == 401) {
+        navigate("/SessionTimeOut");
+      }
       setSnackbarSeverity("error");
       setSnackbarMessage(error.response.data.message);
       setOpenSnackbar(true);
@@ -131,6 +136,9 @@ const UserProfile = () => {
         setOpenSnackbar(true);
       }
     } catch (error) {
+      if (error.response.status == 401) {
+        navigate("/SessionTimeOut");
+      }
       setSnackbarSeverity("error");
       setSnackbarMessage(error.response.data.message);
       setOpenSnackbar(true);
