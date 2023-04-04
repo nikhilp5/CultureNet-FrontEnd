@@ -17,7 +17,7 @@ import { useNavigate } from "react-router";
 let theme = createTheme();
 theme = responsiveFontSizes(theme);
 
-const WatchListContent = () => {
+const WatchedContent = () => {
   const [movieResults, setMovieResults] = useState([]);
   const [bookResults, setBookResults] = useState([]);
   const [buttonClick, setButtonClick] = useState(false);
@@ -35,7 +35,7 @@ const WatchListContent = () => {
     axios
       .get(
         `${process.env.REACT_APP_BASE_URL}` +
-          "/getWatchlist/" +
+          "/getWatched/" +
           localStorage.getItem("id"),
         {
           headers: {
@@ -91,13 +91,13 @@ const WatchListContent = () => {
       <ThemeProvider theme={theme}>
         <Typography
           variant="h4"
-          style={{ fontWeight: "600" ,marginRight:"100px"}}
+          style={{ fontWeight: "600",marginRight:"100px" }}
           mt={2}
           ml={10}
           mb={2}
           align="center"
         >
-          WatchList
+          Watched
         </Typography>
         <Divider />
         <SearchedMovies
@@ -121,4 +121,4 @@ const WatchListContent = () => {
   );
 };
 
-export default WatchListContent;
+export default WatchedContent;

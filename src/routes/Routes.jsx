@@ -19,7 +19,7 @@ import UserMovies from "../components/user/userContent/UserMovies";
 import UserBooks from "../components/user/userContent/UserBooks";
 import UserMusic from "../components/user/userContent/UserMusic";
 import BookCard from "../components/book/BooksGrid";
-
+import WatchedContent from "../components/watchlist/watchedContent/WatchedContent";
 
 const AppRoutes = () => {
     return (
@@ -30,6 +30,7 @@ const AppRoutes = () => {
             <Route path="/AdminDashboard" element={<AdminDashboard />} />
             <Route path="/Navbar" element={<Navbar />} />
             <Route path="/Watchlist" element={<WatchListContent />}></Route>
+            <Route path="/Watched" element={<WatchedContent />}></Route>
             <Route path="/Search" element={<SearchedContent />}></Route>
             <Route path="/Login" element={<Login />}></Route>
             <Route path="/Register" element={<Registration />}></Route>

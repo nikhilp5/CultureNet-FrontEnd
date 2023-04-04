@@ -67,7 +67,7 @@ const SearchContentGrid = ({ contents, type, buttonClick, setButtonClick }) => {
             ))}
           </Grid>
         </Grid>
-        <div style={{ margin: "auto", marginTop: "25px" }}>
+        <div style={{ margin: "auto", marginTop: "30px",marginLeft: "44%" }}>
           <Stack spacing={2}>
             <Pagination
               count={Math.ceil(contents.length / pageSize)}
