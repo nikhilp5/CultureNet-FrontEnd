@@ -30,7 +30,11 @@ const ListOfMovies = () => {
         if(!localStorage.getItem("email")) {navigate("/")}
         const response = await fetch(
           `${process.env.REACT_APP_BASE_URL}`+"/movies"
-        );
+        ,  {
+          headers: {
+            "Authorization": `Bearer ${localStorage.getItem("token")}`
+          }
+        });
         const data = await response.json();
         console.log(data)
         setMovies(data);
