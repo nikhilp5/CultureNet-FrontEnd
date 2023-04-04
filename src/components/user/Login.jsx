@@ -44,7 +44,7 @@ const Login = () => {
   const loginUser = async () => {
     try {
       const response = await axios
-        .post(`${process.env.REACT_HOST_NAME}/.netlify/functions/api/login`, {
+        .post(`${process.env.REACT_APP_BASE_URL}` + `/login`, {
           email: form.email.toLowerCase(),
           password: form.password,
         }, {
@@ -57,6 +57,7 @@ const Login = () => {
       if (response.status == 200) {
         localStorage.setItem("token", response.data.token);
         localStorage.setItem("email", response.data.email);
+        localStorage.setItem("id", response.data.id);
         setForm({ ...defaultForm });
         setSnackbarSeverity("success");
         setSnackbarMessage("User login successful.");

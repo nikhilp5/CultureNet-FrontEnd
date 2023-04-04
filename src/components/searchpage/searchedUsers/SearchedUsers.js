@@ -11,7 +11,7 @@ const SearchedUsers = ({ userResults }) => {
         <Divider />
         {userResults.length > 0 ? (
           <>
-            <SearchContentGrid contents={userResults} />
+            <SearchContentGrid contents={userResults} type="users" />
           </>
         ) : (
           <h2>No Users Available</h2>
