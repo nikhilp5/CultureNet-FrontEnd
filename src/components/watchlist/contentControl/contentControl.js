@@ -1,50 +1,59 @@
-import { Clear, Visibility, VisibilityOff } from "@mui/icons-material";
+import { Clear, Visibility } from "@mui/icons-material";
 import { Button, Stack, Tooltip } from "@mui/material";
-import { useDispatch } from "react-redux";
-import {
-  addContentToWatched,
-  removeContentFromWatchlist,
-  moveContentToWatchlistFromWatched,
-  removeContentFromWatched,
-} from "../addContent/contentsSlice";
+import axios from "axios";
 
-const ContentControl = ({ type, content, display }) => {
-  const dispatch = useDispatch();
+const ContentControl = ({ type, content, buttonClick, setButtonClick }) => {
+  const addContentToWatchlist = () => {
+    axios
+      .post(
+        "https://culturenet-apis-develop.netlify.app/.netlify/functions/api/addToWatchlist/",
+        {
+          type: type,
+          content: content,
+          userid: localStorage.getItem("id"),
+        }
+      )
+      .then((res) => {
+        setButtonClick(!buttonClick);
+      })
+      .catch((error) => {
+        alert("Error in updating- " + error);
+      });
+  };
+  const removeContentFromWatchlist = () => {
+    axios
+      .post(
+        "https://culturenet-apis-develop.netlify.app/.netlify/functions/api/removeFromWatchlist/",
+        {
+          type: type,
+          content: content,
+          userid: localStorage.getItem("id"),
+        }
+      )
+      .then((res) => {
+        setButtonClick(!buttonClick);
+      })
+      .catch((error) => {
+        alert("Error in updating- " + error);
+      });
+  };
 
   return (
-    <div className={`notdisplayed ${display}`}>
-      {type === "watchlist" && (
+    <div className="notdisplayed">
+      {content.watchlist === undefined && (
         <Stack direction="row">
-          <Tooltip title="Add To Watched" placement="top">
-            <Button onClick={() => dispatch(addContentToWatched(content))}>
+          <Tooltip title="Add To Watchlist" placement="top">
+            <Button onClick={addContentToWatchlist}>
               <Visibility />
-            </Button>
-          </Tooltip>
-          <Tooltip title="Remove" placement="top">
-            <Button
-              onClick={() => dispatch(removeContentFromWatchlist(content.id))}
-            >
-              <Clear />
             </Button>
           </Tooltip>
         </Stack>
       )}
 
-      {type === "watched" && (
+      {content.watchlist === true && (
         <Stack direction="row">
-          <Tooltip title="Add To Watchlist" placement="top">
-            <Button
-              onClick={() =>
-                dispatch(moveContentToWatchlistFromWatched(content))
-              }
-            >
-              <VisibilityOff />
-            </Button>
-          </Tooltip>
-          <Tooltip title="Remove" placement="top">
-            <Button
-              onClick={() => dispatch(removeContentFromWatched(content.id))}
-            >
+          <Tooltip title="Remove from watchlist" placement="top">
+            <Button onClick={removeContentFromWatchlist}>
               <Clear />
             </Button>
           </Tooltip>
