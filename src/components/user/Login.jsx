@@ -1,11 +1,11 @@
-import { forwardRef, useState, useEffect } from "react";
+import { useState, useEffect, useContext } from "react";
 import TextField from '@mui/material/TextField';
-import { Button, Card, Snackbar, Typography } from "@mui/material";
+import { Button, Card, Typography } from "@mui/material";
 import LoadingButton from '@mui/lab/LoadingButton';
-import MuiAlert from '@mui/material/Alert';
 import Grid from '@mui/material/Grid';
 import { useNavigate } from "react-router";
 import axios from "axios";
+import { UserContext } from "../../utils/UserContext";
 
 const Login = () => {
 
@@ -18,17 +18,12 @@ const Login = () => {
   const [form, setForm] = useState(defaultForm);
 
   const [isPending, setIsPending] = useState(false);
-  const [openSnackbar, setOpenSnackbar] = useState(false);
-  const [snackbarSeverity, setSnackbarSeverity] = useState("success");
-  const [snackbarMessage, setSnackbarMessage] = useState("User login successful.");
+  const { setOpenSnackbar, setSnackbarMessage, setSnackbarSeverity } = useContext(UserContext);
+
 
   const [error, setError] = useState({
     email: false,
     password: false,
-  });
-
-  const Alert = forwardRef(function Alert(props, ref) {
-    return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
   });
 
   const emailRegex = /^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/g;
@@ -60,7 +55,7 @@ const Login = () => {
         localStorage.setItem("id", response.data.id);
         setForm({ ...defaultForm });
         setSnackbarSeverity("success");
-        setSnackbarMessage("User login successful.");
+        setSnackbarMessage(`Welcome, ${localStorage.getItem("email")}`);
         setOpenSnackbar(true);
         setIsPending(false);
         navigate("/UserDashboard");
@@ -93,14 +88,6 @@ const Login = () => {
     }
     setError({ ...errorNew });
 
-  };
-
-
-  const handleClose = (event, reason) => {
-    if (reason === 'clickaway') {
-      return;
-    }
-    setOpenSnackbar(false);
   };
 
 
@@ -164,14 +151,18 @@ const Login = () => {
                 fullWidth>
                 Forgot Password?
               </Button>
+              <Button
+                id="registerLink"
+                name="registerLink"
+                variant="text"
+                href=""
+                onClick={() => navigate("/Register")}
+                fullWidth>
+                New user? Register
+              </Button>
             </Grid>
           </Grid>
         </Card>
-        <Snackbar id="snackbar" name="snackbar" open={openSnackbar} autoHideDuration={5000} onClose={handleClose}>
-          <Alert id="alert" name="alert" onClose={handleClose} severity={snackbarSeverity} sx={{ width: '100%' }}>
-            {snackbarMessage}
-          </Alert>
-        </Snackbar>
       </Grid >
     </Grid >
 

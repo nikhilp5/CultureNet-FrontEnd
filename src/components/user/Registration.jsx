@@ -1,11 +1,11 @@
-import { forwardRef, useState, useEffect } from "react";
+import { useState, useEffect, useContext } from "react";
 import TextField from '@mui/material/TextField';
-import { Card, Snackbar, Typography } from "@mui/material";
+import { Button, Card, Typography } from "@mui/material";
 import LoadingButton from '@mui/lab/LoadingButton';
-import MuiAlert from '@mui/material/Alert';
 import Grid from '@mui/material/Grid';
 import { useNavigate } from "react-router";
 import axios from "axios";
+import { UserContext } from "../../utils/UserContext";
 
 const Registration = () => {
 
@@ -19,18 +19,12 @@ const Registration = () => {
   const [form, setForm] = useState(defaultForm);
 
   const [isPending, setIsPending] = useState(false);
-  const [openSnackbar, setOpenSnackbar] = useState(false);
-  const [snackbarSeverity, setSnackbarSeverity] = useState("success");
-  const [snackbarMessage, setSnackbarMessage] = useState("User login successful.");
+  const { setOpenSnackbar, setSnackbarMessage, setSnackbarSeverity } = useContext(UserContext);
 
   const [error, setError] = useState({
     email: false,
     password: false,
     confirmPassword: false
-  });
-
-  const Alert = forwardRef(function Alert(props, ref) {
-    return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
   });
 
   const emailRegex = /^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/g;
@@ -101,14 +95,6 @@ const Registration = () => {
   };
 
 
-  const handleClose = (event, reason) => {
-    if (reason === 'clickaway') {
-      return;
-    }
-    setOpenSnackbar(false);
-  };
-
-
   return (
     <Grid container sx={{ margin: 5 }}>
       <Grid item xs={1} md={4}></Grid>
@@ -173,13 +159,19 @@ const Registration = () => {
                 Submit
               </LoadingButton>
             </Grid>
+            <Grid item>
+              <Button
+                id="loginLink"
+                name="loginLink"
+                variant="text"
+                href=""
+                onClick={() => navigate("/Login")}
+                fullWidth>
+                Already a user? login
+              </Button>
+            </Grid>
           </Grid>
         </Card>
-        <Snackbar id="snackbar" name="snackbar" open={openSnackbar} autoHideDuration={5000} onClose={handleClose}>
-          <Alert id="alert" name="alert" onClose={handleClose} severity={snackbarSeverity} sx={{ width: '100%' }}>
-            {snackbarMessage}
-          </Alert>
-        </Snackbar>
       </Grid>
     </Grid >
 
