@@ -9,6 +9,7 @@
     "@mui/joy": "^5.0.0-alpha.68",
     "@mui/lab": "^5.0.0-alpha.124",
     "@mui/material": "^5.11.7",
+    "@mui/styles": "^5.11.7",
     "@reduxjs/toolkit": "^1.9.2",
     "@testing-library/jest-dom": "^5.16.5",
     "@testing-library/react": "^13.4.0",
