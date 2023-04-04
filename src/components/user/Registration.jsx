@@ -45,7 +45,7 @@ const Registration = () => {
   const registerUser = async () => {
     try {
       const response = await axios
-        .post(`https://culturenet-apis-develop.netlify.app/.netlify/functions/api/register`, {
+        .post(`${process.env.REACT_APP_BASE_URL}`+`/register`, {
           email: form.email.toLowerCase(),
           password: form.password,
           confirmPassword: form.confirmPassword

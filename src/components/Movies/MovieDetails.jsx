@@ -30,14 +30,14 @@ function MovieDetails() {
   useEffect(() => {
     
     if(!localStorage.getItem("email")) {navigate("/")}
-     fetch(`https://culturenet-apis-develop.netlify.app/.netlify/functions/api/movies/${id}`)
+     fetch(`${process.env.REACT_APP_BASE_URL}`+`/movies/${id}`)
       .then((response) => response.json())
       .then((data) => {
         setMovie(data);
         
 
       if (data.genre) {
-        fetch(`https://culturenet-apis-develop.netlify.app/.netlify/functions/api/movie_genres/${data.genre.join(',')}`)
+        fetch(`${process.env.REACT_APP_BASE_URL}`+`/movie_genres/${data.genre.join(',')}`)
           .then(response => response.json())
           .then(data => setGenres(data))
           .catch(error => console.log(error));
@@ -54,7 +54,7 @@ function MovieDetails() {
   useEffect(() => {
     if (userId) {
       console.log(userId)
-      fetch(`https://culturenet-apis-develop.netlify.app/.netlify/functions/api/movie_ratings/${userId}/${id}`)
+      fetch(`${process.env.REACT_APP_BASE_URL}`+`/movie_ratings/${userId}/${id}`)
         .then((response) => response.json())
         .then((data) => setUserRating(data.rating));
       
@@ -66,7 +66,7 @@ function MovieDetails() {
     // const userId = sessionStorage.getItem("userId");
     console.log(userId)
     if (userId) {
-      fetch(`https://culturenet-apis-develop.netlify.app/.netlify/functions/api/movie_ratings`, {
+      fetch(`${process.env.REACT_APP_BASE_URL}`+`/movie_ratings`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'
