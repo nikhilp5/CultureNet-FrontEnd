@@ -44,7 +44,7 @@ const Login = () => {
   const loginUser = async () => {
     try {
       const response = await axios
-        .post(`https://culturenet-apis-develop.netlify.app/.netlify/functions/api/login`, {
+        .post(`${process.env.REACT_APP_BASE_URL}`+`/login`, {
           email: form.email.toLowerCase(),
           password: form.password,
         }, {

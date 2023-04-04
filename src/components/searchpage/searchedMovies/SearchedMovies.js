@@ -1,7 +1,7 @@
 import { Container, Divider, Typography } from "@mui/material";
 import SearchContentGrid from "../contentShowcaseUI/searchContentGrid";
 
-const SearchedMovies = ({ movieResults }) => {
+const SearchedMovies = ({ movieResults, buttonClick, setButtonClick }) => {
   return (
     <div>
       <Container fixed>
@@ -11,7 +11,12 @@ const SearchedMovies = ({ movieResults }) => {
         <Divider />
         {movieResults.length > 0 ? (
           <>
-            <SearchContentGrid contents={movieResults} />
+            <SearchContentGrid
+              contents={movieResults}
+              buttonClick={buttonClick}
+              setButtonClick={setButtonClick}
+              type="movies"
+            />
           </>
         ) : (
           <h2>No Movies Available</h2>
