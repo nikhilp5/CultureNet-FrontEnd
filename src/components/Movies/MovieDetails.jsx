@@ -30,7 +30,13 @@ function MovieDetails() {
   useEffect(() => {
     
     if(!localStorage.getItem("email")) {navigate("/")}
-     fetch(`${process.env.REACT_APP_BASE_URL}`+`/movies/${id}`)
+     fetch(`${process.env.REACT_APP_BASE_URL}`+`/movies/${id}`,  { headers: {
+      "Authorization": `Bearer ${localStorage.getItem("token")}`
+    }
+  })
+
+     
+     
       .then((response) => response.json())
       .then((data) => {
         setMovie(data);

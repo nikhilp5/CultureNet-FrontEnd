@@ -5,6 +5,7 @@ import React, { Component } from 'react';
 import './App.css';
 import Navbar from './components/common/Navbar';
 import { ContextProvider } from './utils/UserContext';
+import CommonSnackbar from './components/common/CommonSnackbar';
 
 class App extends Component {
   render() {
@@ -13,6 +14,7 @@ class App extends Component {
         <ThemeProvider theme={appTheme}>
           <CssBaseline enableColorScheme />
           <Navbar />
+          <CommonSnackbar />
           <AppRoutes />
         </ThemeProvider>
       </ContextProvider>

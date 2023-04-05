@@ -9,6 +9,7 @@ import WatchListContent from "../components/watchlist/watchListContent/WatchList
 import SearchedContent from "../components/searchpage/searchedContent/SearchedContent";
 import Login from "../components/user/Login";
 import Logout from "../components/user/Logout";
+import SessionTimeOut from "../components/user/SessionTimeOut";
 import Registration from "../components/user/Registration";
 import ForgotPassword from "../components/user/ForgotPassword";
 import UserProfile from "../components/user/UserProfile";
@@ -19,7 +20,7 @@ import UserMovies from "../components/user/userContent/UserMovies";
 import UserBooks from "../components/user/userContent/UserBooks";
 import UserMusic from "../components/user/userContent/UserMusic";
 import BookCard from "../components/book/BooksGrid";
-
+import WatchedContent from "../components/watchlist/watchedContent/WatchedContent";
 
 const AppRoutes = () => {
     return (
@@ -30,18 +31,20 @@ const AppRoutes = () => {
             <Route path="/AdminDashboard" element={<AdminDashboard />} />
             <Route path="/Navbar" element={<Navbar />} />
             <Route path="/Watchlist" element={<WatchListContent />}></Route>
+            <Route path="/Watched" element={<WatchedContent />}></Route>
             <Route path="/Search" element={<SearchedContent />}></Route>
             <Route path="/Login" element={<Login />}></Route>
             <Route path="/Register" element={<Registration />}></Route>
             <Route path="/ForgotPassword" element={<ForgotPassword />}></Route>
             <Route path="/Profile" element={<UserProfile />}></Route>
             <Route path="/Movies" element={<ListOfMovies />}></Route>
-            <Route path="/MovieDetail" element={<MovieDetails/>}></Route>
+            <Route path="/MovieDetail" element={<MovieDetails />}></Route>
             <Route path="/MyMovies" element={<UserMovies />}></Route>
             <Route path="/MyMusic" element={<UserMusic />}></Route>
             <Route path="/MyBooks" element={<UserBooks />}></Route>
             <Route path="/Books" element={<BookCard />}></Route>
             <Route path="/Logout" element={<Logout />}></Route>
+            <Route path="/SessionTimeOut" element={<SessionTimeOut />}></Route>
         </Routes>
     );
 };
