@@ -18,5 +18,115 @@
       "lname": "Bar",
       "nsfw": false
     }
+  ],
+  "books": [
+    {
+      "id": "1",
+      "title": "A Brief History of Time",
+      "category": "Popular Science",
+      "author": "Stephen Hawkings",
+      "img": "https://blog.12min.com/wp-content/uploads/2017/12/617m43n-HWL._SX331_BO1204203200_.jpg",
+      "rating": 4.5,
+      "desc": " A Brief History of Time: From the Big Bang to Black Holes is a book on theoretical cosmology by English physicist Stephen Hawking."
+    },
+    {
+      "id": "2",
+      "title": "How to talk to anyone",
+      "category": "Self-help Book",
+      "author": "Leil Lowndes",
+      "rating": 4.5,
+      "img": "https://kbimages1-a.akamaihd.net/c7d78c98-75be-4d71-bc26-82b5519cf83c/353/569/90/False/how-to-talk-to-anyone-92-little-tricks-for-big-success-in-relationships.jpg",
+      "desc": "How to Talk to Anyone reveals the secrets of successful communication. With Leil Lowndes's ninety-two easy and effective techniques."
+    },
+    {
+      "id": "3",
+      "title": "I too had a Love Story",
+      "category": "Novel",
+      "author": "Ravinder Singh",
+      "rating": 4.5,
+      "img": "https://m.media-amazon.com/images/I/81fxf8EaTgL.jpg",
+      "desc": "I Too Had a Love Story is an English autobiographical novel written by Ravinder Singh. This was the debut novel of the author "
+    },
+    {
+      "id": "4",
+      "title": "Pride & Prejudice",
+      "category": "Fiction",
+      "author": "Jane Austen",
+      "rating": 4.5,
+      "img": "https://kbimages1-a.akamaihd.net/afcd8653-3b27-4423-bee9-570fb1441aed/353/569/90/False/pride-and-prejudice-71.jpg",
+      "desc": "DescriptionPride and Prejudice is an 1813 novel of manners by Jane Austen. The novel follows the character development of Elizabeth Bennet."
+    },
+    {
+      "id": "5",
+      "title": "The 5AM Club",
+      "category": "Self-help Book",
+      "author": "Robin Sharma",
+      "rating": 4.5,
+      "img": "https://m.media-amazon.com/images/I/71QmjMGNeoL.jpg",
+      "desc": "Legendary leadership and elite performance expert Robin Sharma introduced The 5am Club concept over twenty years ago, based on a revolutionary morning routine."
+    },
+    {
+      "id": "6",
+      "title": "The Intelligent Investor",
+      "category": "Investment",
+      "author": "Benjamin Graham",
+      "rating": 4.5,
+      "img": "https://images-na.ssl-images-amazon.com/images/I/919mmNCTaaL._AC_UL900_SR615,900_.jpg",
+      "desc": "The Intelligent Investor by Benjamin Graham, first published in 1949, is a widely acclaimed book on value investing. The book provides strategies on how to successfully use value investing in the stock market. "
+    },
+    {
+      "id": "7",
+      "title": "The last of us",
+      "category": "Comics",
+      "author": "Neil Druckmann",
+      "rating": 4.5,
+      "img": "https://m.media-amazon.com/images/I/A1iIpeQ+oPL.jpg",
+      "desc": "Nineteen years ago, a parasitic fungal outbreak killed the majority of the world's population, forcing survivors into a handful of quarantine zones. Thirteen-year-old Ellie has grown up in this violent, postpandemic world"
+    },
+    {
+      "id": "8",
+      "title": "The Lord of the Rings",
+      "category": "Fantasy",
+      "author": "J.R.R Tolkien",
+      "rating": 4.5,
+      "img": "https://m.media-amazon.com/images/I/71VjmMcE-rL.jpg",
+      "desc": "The Lord of the Rings is an epic high-fantasy novel by English author and scholar J. R. R. Tolkien. Set in Middle-earth, the story began as a sequel to Tolkien's 1937 children's book The Hobbit, but eventually developed into a much larger work"
+    },
+    {
+      "id": "9",
+      "title": "The Diary of a Young Girl",
+      "category": "Autobiography",
+      "author": "Anne Frank",
+      "rating": 4.5,
+      "img": "https://m.media-amazon.com/images/I/81xPFVVGesL.jpg",
+      "desc": "The Diary of a Young Girl, also known as The Diary of Anne Frank, is a book of the writings from the Dutch-language diary kept by Anne Frank while she was in hiding for two years with her family during the Nazi occupation of the Netherlands. "
+    },
+    {
+      "id": "10",
+      "title": "The Little Princess",
+      "category": "Children's Literature",
+      "author": "Frances Hodgson Burnett",
+      "rating": 4.5,
+      "img": "https://m.media-amazon.com/images/I/51CBax8SDsL.jpg",
+      "desc": "A Little Princess is a children's novel by Frances Hodgson Burnett, first published as a book in 1905. It is an expanded version of the short story \\\"Sara Crewe: or, What Happened at Miss Minchin's\\\""
+    },
+    {
+      "id": "11",
+      "title": "Where the side walk ends",
+      "category": "Childen's Poetry",
+      "author": "Shel Silverstein",
+      "rating": 4.5,
+      "img": "https://www.toysrus.ca/dw/image/v2/BDFX_PRD/on/demandware.static/-/Sites-toys-master-catalog/default/dw09c47915/images/24AE7A84_1.jpg?sw=767&sh=767&sm=fit",
+      "desc": "Where the Sidewalk Ends is a 1974 children's poetry collection written and illustrated by Shel Silverstein. It was published by Harper and Row Publishers."
+    },
+    {
+      "id": "12",
+      "title": "To Kill a Mockingbird",
+      "category": "Novel",
+      "author": "Harper Lee",
+      "rating": 4.5,
+      "img": "https://cdn.britannica.com/21/182021-050-666DB6B1/book-cover-To-Kill-a-Mockingbird-many-1961.jpg",
+      "desc": "To Kill a Mockingbird is a novel by the American author Harper Lee. It was published in 1960 and was instantly successful. In the United States, it is widely read in high schools and middle schools. "
+    }
   ]
 }

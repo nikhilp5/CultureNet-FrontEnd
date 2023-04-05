@@ -1,7 +1,7 @@
 import { Divider, Container, Typography } from "@mui/material";
 import SearchContentGrid from "../contentShowcaseUI/searchContentGrid";
 
-const SearchedBooks = ({ bookResults }) => {
+const SearchedBooks = ({ bookResults, buttonClick, setButtonClick }) => {
   return (
     <div>
       <Container fixed>
@@ -11,7 +11,12 @@ const SearchedBooks = ({ bookResults }) => {
         <Divider />
         {bookResults.length > 0 ? (
           <>
-            <SearchContentGrid contents={bookResults} />
+            <SearchContentGrid
+              contents={bookResults}
+              buttonClick={buttonClick}
+              setButtonClick={setButtonClick}
+              type="books"
+            />
           </>
         ) : (
           <h2>No Books Available</h2>

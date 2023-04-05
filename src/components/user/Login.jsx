@@ -1,18 +1,13 @@
-import { forwardRef, useState, useContext } from "react";
+import { useState, useEffect, useContext } from "react";
 import TextField from '@mui/material/TextField';
-import { Button, Card, Snackbar, Typography } from "@mui/material";
+import { Button, Card, Typography } from "@mui/material";
 import LoadingButton from '@mui/lab/LoadingButton';
-import MuiAlert from '@mui/material/Alert';
 import Grid from '@mui/material/Grid';
 import { useNavigate } from "react-router";
-import { UserContext } from '../../utils/UserContext';
-
-
-const data = require("../../data/db.json");
-
+import axios from "axios";
+import { UserContext } from "../../utils/UserContext";
 
 const Login = () => {
-  const { auth, setAuth } = useContext(UserContext);
 
   const navigate = useNavigate();
   const defaultForm = {
@@ -23,41 +18,59 @@ const Login = () => {
   const [form, setForm] = useState(defaultForm);
 
   const [isPending, setIsPending] = useState(false);
-  const [open, setOpen] = useState(false);
-  const [snackbarSeverity, setSnackbarSeverity] = useState("success");
-  const [snackbarMessage, setSnackbarMessage] = useState("User login successful.");
+  const { setOpenSnackbar, setSnackbarMessage, setSnackbarSeverity } = useContext(UserContext);
+
 
   const [error, setError] = useState({
     email: false,
     password: false,
   });
 
-  const Alert = forwardRef(function Alert(props, ref) {
-    return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
-  });
-
   const emailRegex = /^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/g;
   const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/g;
 
-  const handleSubmit = (e) => {
-    let finalForm = form;
-    finalForm.email = form.email.toLowerCase();
 
-    setIsPending(true);
-
-    if (data.users.find(user => user.email === finalForm.email && user.password === finalForm.password)) {
-      setForm({ ...defaultForm });
-      setSnackbarSeverity("success");
-      setSnackbarMessage("User login successful.");
+  useEffect(() => {
+    if (localStorage.getItem('token')) {
+      navigate("/UserDashboard");
     }
-    else {
+  }, []);
+
+  const loginUser = async () => {
+    try {
+      const response = await axios
+        .post(`${process.env.REACT_APP_BASE_URL}` + `/login`, {
+          email: form.email.toLowerCase(),
+          password: form.password,
+        }, {
+          headers: {
+            "Content-Type": "application/json",
+            "Access-Control-Allow-Origin": "*",
+            "Accept": "application/json",
+          }
+        });
+      if (response.status == 200) {
+        localStorage.setItem("token", response.data.token);
+        localStorage.setItem("email", response.data.email);
+        localStorage.setItem("id", response.data.id);
+        setForm({ ...defaultForm });
+        setSnackbarSeverity("success");
+        setSnackbarMessage(`Welcome, ${localStorage.getItem("email")}`);
+        setOpenSnackbar(true);
+        setIsPending(false);
+        navigate("/UserDashboard");
+      }
+    } catch (error) {
       setSnackbarSeverity("error");
-      setSnackbarMessage("Invalid user credentials.");
+      setSnackbarMessage(error.response.data.message);
+      setOpenSnackbar(true);
+      setIsPending(false);
     }
-    setOpen(true);
-    setIsPending(false);
-    setAuth(true);
-    navigate("/UserDashboard");
+  };
+
+  const handleSubmit = (e) => {
+    setIsPending(true);
+    loginUser();
   };
 
   const validate = (event) => {
@@ -75,15 +88,6 @@ const Login = () => {
     }
     setError({ ...errorNew });
 
-  };
-
-
-  const handleClose = (event, reason) => {
-    if (reason === 'clickaway') {
-      return;
-    }
-
-    setOpen(false);
   };
 
 
@@ -147,14 +151,18 @@ const Login = () => {
                 fullWidth>
                 Forgot Password?
               </Button>
+              <Button
+                id="registerLink"
+                name="registerLink"
+                variant="text"
+                href=""
+                onClick={() => navigate("/Register")}
+                fullWidth>
+                New user? Register
+              </Button>
             </Grid>
           </Grid>
         </Card>
-        <Snackbar open={open} autoHideDuration={6000} onClose={handleClose}>
-          <Alert onClose={handleClose} severity={snackbarSeverity} sx={{ width: '100%' }}>
-            {snackbarMessage}
-          </Alert>
-        </Snackbar>
       </Grid >
     </Grid >
 

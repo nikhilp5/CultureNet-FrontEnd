@@ -1,46 +1,47 @@
-import { forwardRef, useEffect, useState } from "react";
+import { useEffect, useState, useContext } from "react";
 import TextField from '@mui/material/TextField';
-import { Button, Card, Switch, FormControlLabel, Snackbar, Typography } from "@mui/material";
+import { Button, Card, Switch, FormControlLabel, Typography } from "@mui/material";
 import LoadingButton from '@mui/lab/LoadingButton';
-import MuiAlert from '@mui/material/Alert';
 import Grid from '@mui/material/Grid';
 import Dialog from '@mui/material/Dialog';
 import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
 import DialogTitle from '@mui/material/DialogTitle';
-
-
-const data = require("../../data/db.json");
+import axios from "axios";
+import { useNavigate } from "react-router";
+import { UserContext } from "../../utils/UserContext";
 
 
 const UserProfile = () => {
-
-  const [profileBackup, setProfileBackup] = useState({});
-
-  const defaultForm = {
-    fname: '',
-    lname: '',
+  const navigate = useNavigate();
+  const defaultProfileForm = {
+    firstName: '',
+    lastName: '',
     bio: '',
     email: '',
     nsfw: false,
   };
 
-  const defaultDialogForm = {
+  const defaultPasswordForm = {
     password: '',
     confirmPassword: ''
   };
 
-  const [form, setForm] = useState({ ...defaultForm, ...defaultDialogForm });
+  const [profileForm, setProfileForm] = useState({ ...defaultProfileForm });
+  const [passwordForm, setPasswordForm] = useState({ ...defaultPasswordForm });
+  const [profileFormChanged, setProfileFormChanged] = useState(false);
+
 
   const [isPending, setIsPending] = useState(false);
-  const [openSnackbar, setOpenSnackbar] = useState(false);
+  const [isUpdatePasswordPending, setIsUpdatePasswordPending] = useState(false);
   const [openDialog, setOpenDialog] = useState(false);
-  const [snackbarMessage, setSnackbarMessage] = useState('');
+
+  const { setOpenSnackbar, setSnackbarMessage, setSnackbarSeverity } = useContext(UserContext);
 
 
   const [error, setError] = useState({
-    fname: false,
-    lname: false,
+    firstName: false,
+    lastName: false,
     bio: false,
     email: false,
     nsfw: false,
@@ -48,15 +49,109 @@ const UserProfile = () => {
     confirmPassword: false
   });
 
+  const fetchProfile = async () => {
+    const response = await axios
+      .post(`${process.env.REACT_APP_BASE_URL}` + `/profile`, {
+        email: localStorage.getItem("email")
+      }, {
+        headers: {
+          "Content-Type": "application/json",
+          "Access-Control-Allow-Origin": "*",
+          "Accept": "application/json",
+          "Authorization": `Bearer ${localStorage.getItem("token")}`
+        }
+      })
+      .catch((err) => {
+        console.error(err);
+      });
+
+    try {
+      if (response.status == 200) {
+        setProfileForm(response.data.user);
+      }
+    } catch (error) {
+      if (error.response.status == 401) {
+        navigate("/SessionTimeOut");
+      }
+      setSnackbarSeverity("error");
+      setSnackbarMessage('Something went wrong! Please refresh to try again...');
+      setOpenSnackbar(true);
+    }
+  };
+
+  const updateProfile = async () => {
+    try {
+      const response = await axios
+        .put(`${process.env.REACT_APP_BASE_URL}` + `/updateprofile`, {
+          ...profileForm
+        }, {
+          headers: {
+            "Content-Type": "application/json",
+            "Access-Control-Allow-Origin": "*",
+            "Accept": "application/json",
+            "Authorization": `Bearer ${localStorage.getItem("token")}`
+          }
+        });
+      if (response.status == 200) {
+        setProfileFormChanged(false);
+        setProfileForm(response.data.user);
+        setIsPending(false);
+        setSnackbarSeverity("success");
+        setSnackbarMessage('Profile updated successfully.');
+        setOpenSnackbar(true);
+      }
+    } catch (error) {
+      if (error.response.status == 401) {
+        navigate("/SessionTimeOut");
+      }
+      setSnackbarSeverity("error");
+      setSnackbarMessage(error.response.data.message);
+      setOpenSnackbar(true);
+    }
+  };
+
+  const changePassword = async () => {
+    try {
+      const response = await axios
+        .put(`${process.env.REACT_APP_BASE_URL}` + `/changepassword`, {
+          email: localStorage.getItem("email"),
+          password: passwordForm.password,
+          confirmPassword: passwordForm.confirmPassword
+        }, {
+          headers: {
+            "Content-Type": "application/json",
+            "Access-Control-Allow-Origin": "*",
+            "Accept": "application/json",
+            "Authorization": `Bearer ${localStorage.getItem("token")}`
+          }
+        });
+      if (response.status == 200) {
+        setProfileFormChanged(false);
+        setIsUpdatePasswordPending(false);
+        setProfileForm(response.data.user);
+        setSnackbarSeverity("success");
+        setPasswordForm({ ...defaultPasswordForm });
+        setOpenDialog(false);
+        setSnackbarMessage('Password changed successfully.');
+        setOpenSnackbar(true);
+      }
+    } catch (error) {
+      if (error.response.status == 401) {
+        navigate("/SessionTimeOut");
+      }
+      setSnackbarSeverity("error");
+      setSnackbarMessage(error.response.data.message);
+      setOpenSnackbar(true);
+    }
+  };
+
   useEffect(() => {
-    delete data.users[0].password;
-    setProfileBackup({ ...data.users[0] });
-    setForm({ ...data.users[0] });
+    if (!localStorage.getItem('token')) {
+      navigate("/Login");
+    }
+    fetchProfile();
   }, []);
 
-  const Alert = forwardRef(function Alert(props, ref) {
-    return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
-  });
 
   const emailRegex = /^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/g;
   const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/g;
@@ -64,16 +159,18 @@ const UserProfile = () => {
 
 
   const validate = (event) => {
-    let formNew = form;
+    setProfileFormChanged(true);
+    let formNew = { ...profileForm, ...passwordForm };
     formNew[event.target.name] = event.target.value;
-    setForm({ ...formNew });
+    setProfileForm({ ...formNew });
+    setPasswordForm({ ...formNew });
     let errorNew = error;
     switch (event.target.name) {
-      case "fname":
-        errorNew["fname"] = !event.target.value.match(nameRegex);
+      case "firstName":
+        errorNew["firstName"] = !event.target.value.match(nameRegex) && event.target.value;
         break;
-      case "lname":
-        errorNew["lname"] = !event.target.value.match(nameRegex);
+      case "lastName":
+        errorNew["lastName"] = !event.target.value.match(nameRegex) && event.target.value;
         break;
       case "email":
         errorNew["email"] = !event.target.value.match(emailRegex);
@@ -82,16 +179,7 @@ const UserProfile = () => {
         break;
       case "password":
         errorNew["password"] = !event.target.value.match(passwordRegex);
-        if (form.confirmPassword !== '') {
-          errorNew["confirmPassword"] = event.target.value !== formNew.confirmPassword;
-        }
-        break;
-      case "confirmPassword":
-        errorNew["confirmPassword"] = event.target.value !== formNew.password;
-        break;
-      case "password":
-        errorNew["password"] = !event.target.value.match(passwordRegex);
-        if (form.confirmPassword !== '') {
+        if (passwordForm.confirmPassword !== '') {
           errorNew["confirmPassword"] = event.target.value !== formNew.confirmPassword;
         }
         break;
@@ -106,20 +194,10 @@ const UserProfile = () => {
 
   const handleSubmit = (e) => {
     setIsPending(true);
-    if (!Object.values(data).includes(form.email)) {
-      setIsPending(false);
-      setSnackbarMessage('Profile updated successfully.');
-      setOpenSnackbar(true);
-    }
+    updateProfile();
   };
 
-  const handleClose = (event, reason) => {
-    if (reason === 'clickaway') {
-      return;
-    }
-    setSnackbarMessage('');
-    setOpenSnackbar(false);
-  };
+
 
   const handleOpen = (event) => {
     switch (event.target.name) {
@@ -132,31 +210,25 @@ const UserProfile = () => {
   const handleClick = (event) => {
     switch (event.target.name) {
       case "nsfw":
-        setForm({ ...form, nsfw: !form.nsfw });
+        setProfileFormChanged(true);
+        setProfileForm({ ...profileForm, nsfw: !profileForm.nsfw });
         break;
       case "cancel":
-        setForm({ ...form, ...defaultDialogForm });
+        setProfileForm({ ...profileForm });
+        setPasswordForm({ ...defaultPasswordForm });
         setError({ ...error, password: false });
         setError({ ...error, confirmPassword: false });
         setOpenDialog(false);
         break;
       case "updatePassword":
-        if (!Object.values(data).includes(form.email)) {
-          setIsPending(false);
-          setForm({ ...form, ...defaultDialogForm });
-          setOpenDialog(false);
-          setSnackbarMessage('Password changed successfully.');
-          setOpenSnackbar(true);
-        }
-
-        console.log(form);
+        setIsUpdatePasswordPending(true);
+        changePassword();
         break;
     }
   };
 
   return (
     <Grid container sx={{ margin: 5 }}>
-      {/* <form onSubmit={handleSubmit}> */}
       <Grid item xs={1} md={4}></Grid>
       <Grid item xs={10} md={4}>
         <Card sx={{ padding: 2 }}>
@@ -169,25 +241,25 @@ const UserProfile = () => {
             <Grid item container spacing={2}>
               <Grid item xs={12} md={6}>
                 <TextField
-                  id="fname"
-                  name="fname"
+                  id="firstName"
+                  name="firstName"
                   label="First Name"
-                  error={error.fname}
+                  error={error.firstName}
                   onChange={validate}
-                  helperText={error.fname ? "Invalid first name format." : ""}
-                  value={form.fname}
+                  helperText={error.firstName ? "Invalid first name format." : ""}
+                  value={profileForm.firstName}
                   fullWidth
                 />
               </Grid>
               <Grid item xs={12} md={6}>
                 <TextField
-                  id="lname"
-                  name="lname"
+                  id="lastName"
+                  name="lastName"
                   label="Last Name"
-                  error={error.lname}
+                  error={error.lastName}
                   onChange={validate}
-                  helperText={error.lname ? "Invalid last name format." : ""}
-                  value={form.lname}
+                  helperText={error.lastName ? "Invalid last name format." : ""}
+                  value={profileForm.lastName}
                   fullWidth
                 />
               </Grid>
@@ -201,7 +273,7 @@ const UserProfile = () => {
                   readOnly: true,
                 }}
                 variant="filled"
-                value={form.email}
+                value={profileForm.email}
                 fullWidth
               />
             </Grid>
@@ -215,7 +287,7 @@ const UserProfile = () => {
                 error={error.bio}
                 onChange={validate}
                 helperText={error.bio ? "Invalid bio format." : ""}
-                value={form.bio}
+                value={profileForm.bio}
                 fullWidth
               />
             </Grid>
@@ -225,7 +297,7 @@ const UserProfile = () => {
                 control={<Switch
                   id="nsfw"
                   name="nsfw"
-                  checked={form.nsfw}
+                  checked={profileForm.nsfw}
                   onClick={handleClick}
                 />}
               />
@@ -235,7 +307,7 @@ const UserProfile = () => {
                 type="submit"
                 onClick={handleSubmit}
                 loading={isPending}
-                disabled={Object.keys(error).some(k => error[k]) || !form.email || openDialog}
+                disabled={!profileFormChanged || Object.keys(error).some(k => error[k]) || !profileForm.email || openDialog}
                 variant="contained"
                 fullWidth
               >
@@ -255,11 +327,6 @@ const UserProfile = () => {
             </Grid>
           </Grid>
         </Card>
-        <Snackbar id="snackbar" name="snackbar" open={openSnackbar} autoHideDuration={5000} onClose={handleClose}>
-          <Alert id="alert" name="alert" onClose={handleClose} severity="success" sx={{ width: '100%' }}>
-            {snackbarMessage}
-          </Alert>
-        </Snackbar>
         <Dialog open={openDialog}>
           <DialogTitle>Change Password</DialogTitle>
           <DialogContent>
@@ -274,7 +341,6 @@ const UserProfile = () => {
                   error={error.password}
                   onChange={validate}
                   helperText={error.password ? "Invalid password." : ""}
-                  value={form.password}
                   fullWidth
                 />
               </Grid>
@@ -288,7 +354,6 @@ const UserProfile = () => {
                   error={error.confirmPassword}
                   onChange={validate}
                   helperText={error.confirmPassword ? "Passwords do not match." : ""}
-                  value={form.confirmPassword}
                   fullWidth
                 />
               </Grid>
@@ -296,7 +361,15 @@ const UserProfile = () => {
           </DialogContent>
           <DialogActions>
             <Button id="cancel" name="cancel" onClick={handleClick}>Cancel</Button>
-            <Button id="updatePassword" name="updatePassword" variant="contained" onClick={handleClick}>Update</Button>
+            <LoadingButton
+              id="updatePassword" name="updatePassword"
+              onClick={handleClick}
+              loading={isUpdatePasswordPending}
+              disabled={Object.keys(error).some(k => error[k]) || !passwordForm.password || !passwordForm.confirmPassword}
+              variant="contained"
+            >
+              Update
+            </LoadingButton>
           </DialogActions>
         </Dialog>
       </Grid>
