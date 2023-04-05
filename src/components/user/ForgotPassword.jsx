@@ -1,8 +1,7 @@
-import { forwardRef, useEffect, useState } from "react";
+import { useEffect, useState, useContext } from "react";
 import TextField from '@mui/material/TextField';
-import { Card, Snackbar, Typography, Button } from "@mui/material";
+import { Card, Typography, Button } from "@mui/material";
 import LoadingButton from '@mui/lab/LoadingButton';
-import MuiAlert from '@mui/material/Alert';
 import Grid from '@mui/material/Grid';
 import Dialog from '@mui/material/Dialog';
 import DialogActions from '@mui/material/DialogActions';
@@ -10,6 +9,7 @@ import DialogContent from '@mui/material/DialogContent';
 import DialogTitle from '@mui/material/DialogTitle';
 import { useNavigate } from "react-router";
 import axios from "axios";
+import { UserContext } from "../../utils/UserContext";
 
 
 const ForgotPassword = () => {
@@ -29,20 +29,13 @@ const ForgotPassword = () => {
   const [emailTextboxVisible, setEmailTextboxVisible] = useState(true);
   const [openDialog, setOpenDialog] = useState(false);
 
-
-  const [openSnackbar, setOpenSnackbar] = useState(false);
-  const [snackbarMessage, setSnackbarMessage] = useState('');
-  const [snackbarSeverity, setSnackbarSeverity] = useState('success');
+  const { setOpenSnackbar, setSnackbarMessage, setSnackbarSeverity } = useContext(UserContext);
 
   const [error, setError] = useState({
     email: false,
     code: false,
     password: false,
     confirmPassword: false
-  });
-
-  const Alert = forwardRef(function Alert(props, ref) {
-    return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
   });
 
   const emailRegex = /^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/g;
@@ -84,7 +77,7 @@ const ForgotPassword = () => {
   const sendCode = async () => {
     try {
       const response = await axios
-        .post(`${process.env.REACT_APP_BASE_URL}`+`/forgotpassword`, {
+        .post(`${process.env.REACT_APP_BASE_URL}` + `/forgotpassword`, {
           email: form.email
         }, {
           headers: {
@@ -111,7 +104,7 @@ const ForgotPassword = () => {
   const verifyCode = async () => {
     try {
       const response = await axios
-        .post(`${process.env.REACT_APP_BASE_URL}`+`/resetpassword`, {
+        .post(`${process.env.REACT_APP_BASE_URL}` + `/resetpassword`, {
           email: form.email,
           code: form.code
         }, {
@@ -140,7 +133,7 @@ const ForgotPassword = () => {
 
     try {
       const response = await axios
-        .put(`${process.env.REACT_APP_BASE_URL}`+`/changepassword`, {
+        .put(`${process.env.REACT_APP_BASE_URL}` + `/changepassword`, {
           email: form.email,
           password: form.password,
           confirmPassword: form.confirmPassword
@@ -161,6 +154,9 @@ const ForgotPassword = () => {
         navigate("/Login");
       }
     } catch (error) {
+      if (error.response.status == 401) {
+        navigate("/SessionTimeOut");
+      }
       setIsPending(false);
       setOpenDialog(false);
       setSnackbarSeverity("error");
@@ -169,14 +165,6 @@ const ForgotPassword = () => {
     }
   };
 
-
-  const handleClose = (event, reason) => {
-    if (reason === 'clickaway') {
-      return;
-    }
-
-    setOpenSnackbar(false);
-  };
 
   const handleClick = (event) => {
     switch (event.target.name) {
@@ -267,11 +255,6 @@ const ForgotPassword = () => {
             </Grid>
           </Grid>
         </Card>
-        <Snackbar id="snackbar" name="snackbar" open={openSnackbar} autoHideDuration={5000} onClose={handleClose}>
-          <Alert id="alert" name="alert" onClose={handleClose} severity={snackbarSeverity} sx={{ width: '100%' }}>
-            {snackbarMessage}
-          </Alert>
-        </Snackbar>
         <Dialog open={openDialog}>
           <DialogTitle>Reset Password</DialogTitle>
           <DialogContent>

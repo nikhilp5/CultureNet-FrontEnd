@@ -2,20 +2,20 @@ import { useEffect, useContext } from "react";
 import { useNavigate } from "react-router";
 import { UserContext } from "../../utils/UserContext";
 
-const Logout = () => {
+const SessionTimeOut = () => {
   const navigate = useNavigate();
   const { setOpenSnackbar, setSnackbarMessage, setSnackbarSeverity } = useContext(UserContext);
 
   useEffect(() => {
     localStorage.clear();
-    setSnackbarSeverity("success");
-    setSnackbarMessage("User logged out");
+    setSnackbarSeverity("error");
+    setSnackbarMessage("Session timed out. Please login again");
     setOpenSnackbar(true);
-    navigate("/");
+    navigate("/Login");
   }, []);
 
 
   return (<div></div>);
 };
 
-export default Logout;
+export default SessionTimeOut;

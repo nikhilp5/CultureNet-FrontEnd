@@ -1,8 +1,7 @@
-import { forwardRef, useEffect, useState } from "react";
+import { useEffect, useState, useContext } from "react";
 import TextField from '@mui/material/TextField';
-import { Button, Card, Switch, FormControlLabel, Snackbar, Typography } from "@mui/material";
+import { Button, Card, Switch, FormControlLabel, Typography } from "@mui/material";
 import LoadingButton from '@mui/lab/LoadingButton';
-import MuiAlert from '@mui/material/Alert';
 import Grid from '@mui/material/Grid';
 import Dialog from '@mui/material/Dialog';
 import DialogActions from '@mui/material/DialogActions';
@@ -10,6 +9,7 @@ import DialogContent from '@mui/material/DialogContent';
 import DialogTitle from '@mui/material/DialogTitle';
 import axios from "axios";
 import { useNavigate } from "react-router";
+import { UserContext } from "../../utils/UserContext";
 
 
 const UserProfile = () => {
@@ -34,10 +34,9 @@ const UserProfile = () => {
 
   const [isPending, setIsPending] = useState(false);
   const [isUpdatePasswordPending, setIsUpdatePasswordPending] = useState(false);
-  const [openSnackbar, setOpenSnackbar] = useState(false);
   const [openDialog, setOpenDialog] = useState(false);
-  const [snackbarMessage, setSnackbarMessage] = useState('');
-  const [snackbarSeverity, setSnackbarSeverity] = useState("success");
+
+  const { setOpenSnackbar, setSnackbarMessage, setSnackbarSeverity } = useContext(UserContext);
 
 
   const [error, setError] = useState({
@@ -52,7 +51,7 @@ const UserProfile = () => {
 
   const fetchProfile = async () => {
     const response = await axios
-      .post(`${process.env.REACT_APP_BASE_URL}`+`/profile`, {
+      .post(`${process.env.REACT_APP_BASE_URL}` + `/profile`, {
         email: localStorage.getItem("email")
       }, {
         headers: {
@@ -71,6 +70,9 @@ const UserProfile = () => {
         setProfileForm(response.data.user);
       }
     } catch (error) {
+      if (error.response.status == 401) {
+        navigate("/SessionTimeOut");
+      }
       setSnackbarSeverity("error");
       setSnackbarMessage('Something went wrong! Please refresh to try again...');
       setOpenSnackbar(true);
@@ -80,7 +82,7 @@ const UserProfile = () => {
   const updateProfile = async () => {
     try {
       const response = await axios
-        .put(`${process.env.REACT_APP_BASE_URL}`+`/updateprofile`, {
+        .put(`${process.env.REACT_APP_BASE_URL}` + `/updateprofile`, {
           ...profileForm
         }, {
           headers: {
@@ -99,6 +101,9 @@ const UserProfile = () => {
         setOpenSnackbar(true);
       }
     } catch (error) {
+      if (error.response.status == 401) {
+        navigate("/SessionTimeOut");
+      }
       setSnackbarSeverity("error");
       setSnackbarMessage(error.response.data.message);
       setOpenSnackbar(true);
@@ -108,7 +113,7 @@ const UserProfile = () => {
   const changePassword = async () => {
     try {
       const response = await axios
-        .put(`${process.env.REACT_APP_BASE_URL}`+`/changepassword`, {
+        .put(`${process.env.REACT_APP_BASE_URL}` + `/changepassword`, {
           email: localStorage.getItem("email"),
           password: passwordForm.password,
           confirmPassword: passwordForm.confirmPassword
@@ -131,6 +136,9 @@ const UserProfile = () => {
         setOpenSnackbar(true);
       }
     } catch (error) {
+      if (error.response.status == 401) {
+        navigate("/SessionTimeOut");
+      }
       setSnackbarSeverity("error");
       setSnackbarMessage(error.response.data.message);
       setOpenSnackbar(true);
@@ -144,9 +152,6 @@ const UserProfile = () => {
     fetchProfile();
   }, []);
 
-  const Alert = forwardRef(function Alert(props, ref) {
-    return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
-  });
 
   const emailRegex = /^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/g;
   const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/g;
@@ -192,13 +197,7 @@ const UserProfile = () => {
     updateProfile();
   };
 
-  const handleClose = (event, reason) => {
-    if (reason === 'clickaway') {
-      return;
-    }
-    setSnackbarMessage('');
-    setOpenSnackbar(false);
-  };
+
 
   const handleOpen = (event) => {
     switch (event.target.name) {
@@ -328,11 +327,6 @@ const UserProfile = () => {
             </Grid>
           </Grid>
         </Card>
-        <Snackbar id="snackbar" name="snackbar" open={openSnackbar} autoHideDuration={5000} onClose={handleClose}>
-          <Alert id="alert" name="alert" onClose={handleClose} severity={snackbarSeverity} sx={{ width: '100%' }}>
-            {snackbarMessage}
-          </Alert>
-        </Snackbar>
         <Dialog open={openDialog}>
           <DialogTitle>Change Password</DialogTitle>
           <DialogContent>
