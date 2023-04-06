@@ -54,7 +54,7 @@ const Login = () => {
         localStorage.setItem("user", JSON.stringify(response.data.user));
         setForm({ ...defaultForm });
         setSnackbarSeverity("success");
-        setSnackbarMessage(`Welcome, ${JSON.parse(localStorage.getItem('user')).firstName}`);
+        setSnackbarMessage(`Welcome, ${JSON.parse(localStorage.getItem('user')).firstName || "user"}`);
         setOpenSnackbar(true);
         setIsPending(false);
         navigate("/UserDashboard");
