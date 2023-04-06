@@ -1,7 +1,15 @@
+//Author-Nikhil Panikkassery (B00934514)
+
 import { Card, CardMedia } from "@mui/material";
 import ContentControl from "../../watchlist/contentControl/contentControl";
+import { useNavigate } from "react-router";
 
 const SearchContentCard = ({ content, type, buttonClick, setButtonClick }) => {
+  const navigate = useNavigate();
+  let id = content._id;
+  const handleMovieClick = () => {
+    navigate("/MovieDetail", { state: { id } });
+  };
   return (
     <div className="content-card">
       <Card sx={{ display: "flex", m: 1 }}>
@@ -10,8 +18,10 @@ const SearchContentCard = ({ content, type, buttonClick, setButtonClick }) => {
             <CardMedia
               component="img"
               sx={{ width: 150 }}
-              image={`https://cdn.pixabay.com/photo/2016/11/03/14/18/stamp-1794352_960_720.png`}
+              image={content.image}
               alt={content.title}
+              onClick={handleMovieClick}
+              style={{ cursor: "pointer" }}
             />
             <ContentControl
               type="movies"
