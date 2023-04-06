@@ -1,3 +1,5 @@
+//Author-Nikhil Panikkassery (B00934514)
+
 import { Container, Divider, Typography } from "@mui/material";
 import SearchContentGrid from "../contentShowcaseUI/searchContentGrid";
 
