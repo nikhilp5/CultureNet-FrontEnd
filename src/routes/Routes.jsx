@@ -21,6 +21,18 @@ import UserBooks from "../components/user/userContent/UserBooks";
 import UserMusic from "../components/user/userContent/UserMusic";
 import BookCard from "../components/book/BooksGrid";
 import WatchedContent from "../components/watchlist/watchedContent/WatchedContent";
+import ConfigureMovies from "../components/admin/movies/ConfigureMovies";
+import AddMovie from "../components/admin/movies/AddMovie";
+import UpdateMovie from "../components/admin/movies/UpdateMovie";
+import DeleteMovie from "../components/admin/movies/DeleteMovie";
+import ConfigureBooks from "../components/admin/books/ConfigureBooks";
+import AddBook from "../components/admin/books/AddBook";
+import UpdateBook from "../components/admin/books/UpdateBook";
+import DeleteBook from "../components/admin/books/DeleteBook";
+import ConfigureMusic from "../components/admin/music/ConfigureMusic";
+import AddMusic from "../components/admin/music/AddMusic";
+import UpdateMusic from "../components/admin/music/UpdateMusic";
+import DeleteMusic from "../components/admin/music/DeleteMusic";
 
 const AppRoutes = () => {
     return (
@@ -45,6 +57,18 @@ const AppRoutes = () => {
             <Route path="/Books" element={<BookCard />}></Route>
             <Route path="/Logout" element={<Logout />}></Route>
             <Route path="/SessionTimeOut" element={<SessionTimeOut />}></Route>
+            <Route path="/ConfigureMovies" element={<ConfigureMovies />} />
+            <Route path="/AddMovie" element={<AddMovie />} />
+            <Route path="/UpdateMovie" element={<UpdateMovie />} />
+            <Route path="/DeleteMovie" element={<DeleteMovie />} />
+            <Route path="/ConfigureBooks" element={<ConfigureBooks />} />
+            <Route path="/AddBook" element={<AddBook />} />
+            <Route path="/UpdateBook" element={<UpdateBook />} />
+            <Route path="/DeleteBook" element={<DeleteBook />} />
+            <Route path="/ConfigureMusic" element={<ConfigureMusic />} />
+            <Route path="/AddMusic" element={<AddMusic />} />
+            <Route path="/UpdateMusic" element={<UpdateMusic />} />
+            <Route path="/DeleteMusic" element={<DeleteMusic />} />
         </Routes>
     );
 };

@@ -21,7 +21,7 @@ export default function UserBooks() {
                                 <CardMedia
                                     component="img"
                                     sx={{ pt: 8 }}
-                                    image="/Books.jpg"
+                                    image="/images/Books.jpg"
                                 />
                                 <CardContent>
                                     <Typography variant="h5" component="h2">
