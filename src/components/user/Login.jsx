@@ -51,11 +51,10 @@ const Login = () => {
         });
       if (response.status == 200) {
         localStorage.setItem("token", response.data.token);
-        localStorage.setItem("email", response.data.email);
-        localStorage.setItem("id", response.data.id);
+        localStorage.setItem("user", JSON.stringify(response.data.user));
         setForm({ ...defaultForm });
         setSnackbarSeverity("success");
-        setSnackbarMessage(`Welcome, ${localStorage.getItem("email")}`);
+        setSnackbarMessage(`Welcome, ${JSON.parse(localStorage.getItem('user')).firstName}`);
         setOpenSnackbar(true);
         setIsPending(false);
         navigate("/UserDashboard");
@@ -124,7 +123,7 @@ const Login = () => {
                 type="password"
                 error={error.password}
                 onChange={validate}
-                helperText={error.password ? "Invalid password." : ""}
+                helperText={error.password ? "Password must at least contain: 8 characters, 1 special character, 1 uppercase character." : ""}
                 value={form.password}
                 fullWidth
               />

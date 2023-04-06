@@ -11,6 +11,8 @@ const Registration = () => {
 
   const navigate = useNavigate();
   const defaultForm = {
+    firstName: '',
+    lastName: '',
     email: '',
     password: '',
     confirmPassword: ''
@@ -22,6 +24,8 @@ const Registration = () => {
   const { setOpenSnackbar, setSnackbarMessage, setSnackbarSeverity } = useContext(UserContext);
 
   const [error, setError] = useState({
+    firstName: false,
+    lastName: false,
     email: false,
     password: false,
     confirmPassword: false
@@ -29,6 +33,7 @@ const Registration = () => {
 
   const emailRegex = /^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/g;
   const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/g;
+  const nameRegex = /^\b([A-Za-zÀ-ÿ][-,a-z. ']+[ ]*)+$/g;
 
   useEffect(() => {
     if (localStorage.getItem('token')) {
@@ -40,6 +45,8 @@ const Registration = () => {
     try {
       const response = await axios
         .post(`${process.env.REACT_APP_BASE_URL}` + `/register`, {
+          firstName: form.firstName,
+          lastName: form.lastName,
           email: form.email.toLowerCase(),
           password: form.password,
           confirmPassword: form.confirmPassword
@@ -77,6 +84,12 @@ const Registration = () => {
     setForm({ ...formNew });
     let errorNew = error;
     switch (event.target.name) {
+      case "firstName":
+        errorNew["firstName"] = !event.target.value.trim().match(nameRegex);
+        break;
+      case "lastName":
+        errorNew["lastName"] = !event.target.value.trim().match(nameRegex);
+        break;
       case "email":
         errorNew["email"] = !event.target.value.match(emailRegex);
         break;
@@ -106,6 +119,34 @@ const Registration = () => {
                 Register
               </Typography>
             </Grid>
+            <Grid item container spacing={2}>
+              <Grid item xs={12} md={6}>
+                <TextField
+                  required
+                  id="firstName"
+                  name="firstName"
+                  label="First Name"
+                  error={error.firstName}
+                  onChange={validate}
+                  helperText={error.firstName ? "Invalid first name format." : ""}
+                  value={form.firstName}
+                  fullWidth
+                />
+              </Grid>
+              <Grid item xs={12} md={6}>
+                <TextField
+                  required
+                  id="lastName"
+                  name="lastName"
+                  label="Last Name"
+                  error={error.lastName}
+                  onChange={validate}
+                  helperText={error.lastName ? "Invalid last name format." : ""}
+                  value={form.lastName}
+                  fullWidth
+                />
+              </Grid>
+            </Grid>
             <Grid item>
               <TextField
                 required
@@ -128,7 +169,7 @@ const Registration = () => {
                 type="password"
                 error={error.password}
                 onChange={validate}
-                helperText={error.password ? "Invalid password." : ""}
+                helperText={error.password ? "Password must at least contain: 8 characters, 1 special character, 1 uppercase character." : ""}
                 value={form.password}
                 fullWidth
               />

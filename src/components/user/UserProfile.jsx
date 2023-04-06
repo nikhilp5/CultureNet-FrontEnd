@@ -51,9 +51,7 @@ const UserProfile = () => {
 
   const fetchProfile = async () => {
     const response = await axios
-      .post(`${process.env.REACT_APP_BASE_URL}` + `/profile`, {
-        email: localStorage.getItem("email")
-      }, {
+      .get(`${process.env.REACT_APP_BASE_URL}` + `/profile`, {
         headers: {
           "Content-Type": "application/json",
           "Access-Control-Allow-Origin": "*",
@@ -82,7 +80,7 @@ const UserProfile = () => {
   const updateProfile = async () => {
     try {
       const response = await axios
-        .put(`${process.env.REACT_APP_BASE_URL}` + `/updateprofile`, {
+        .put(`${process.env.REACT_APP_BASE_URL}` + `/profile`, {
           ...profileForm
         }, {
           headers: {
@@ -114,7 +112,6 @@ const UserProfile = () => {
     try {
       const response = await axios
         .put(`${process.env.REACT_APP_BASE_URL}` + `/changepassword`, {
-          email: localStorage.getItem("email"),
           password: passwordForm.password,
           confirmPassword: passwordForm.confirmPassword
         }, {
@@ -340,7 +337,7 @@ const UserProfile = () => {
                   type="password"
                   error={error.password}
                   onChange={validate}
-                  helperText={error.password ? "Invalid password." : ""}
+                  helperText={error.password ? "Password must at least contain: 8 characters, 1 special character, 1 uppercase character." : ""}
                   fullWidth
                 />
               </Grid>
