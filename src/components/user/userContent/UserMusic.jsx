@@ -21,7 +21,7 @@ export default function UserMusic() {
                                 <CardMedia
                                     component="img"
                                     sx={{ pt: 8 }}
-                                    image="/Music.jpg"
+                                    image="/images/Music.jpg"
                                 />
                                 <CardContent>
                                     <Typography variant="h5" component="h2">
