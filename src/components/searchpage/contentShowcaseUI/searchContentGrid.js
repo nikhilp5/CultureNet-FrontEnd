@@ -1,3 +1,5 @@
+//Author-Nikhil Panikkassery (B00934514)
+
 import { Grid, ThemeProvider, Tooltip } from "@mui/material";
 import SearchContentCard from "../contentShowcaseUI/searchContentCard";
 import Stack from "@mui/material/Stack";
