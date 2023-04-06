@@ -20,7 +20,7 @@ export default function UserMovies() {
                                 <CardMedia
                                     component="img"
                                     sx={{ pt: 8 }}
-                                    image="/Movies.jpg"
+                                    image="/images/Movies.jpg"
                                 />
                                 <CardContent>
                                     <Typography variant="h5" component="h2">
