@@ -43,6 +43,7 @@ const AppRoutes = () => {
             <Route path="/MyMusic" element={<UserMusic />}></Route>
             <Route path="/MyBooks" element={<UserBooks />}></Route>
             <Route path="/Books" element={<BookCard />}></Route>
+            <Route path="/BookDetail" element={<BookCard />}></Route>
             <Route path="/Logout" element={<Logout />}></Route>
             <Route path="/SessionTimeOut" element={<SessionTimeOut />}></Route>
         </Routes>
