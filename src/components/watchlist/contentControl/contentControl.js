@@ -1,9 +1,31 @@
-import { Clear, DownloadDone, Visibility, VisibilityOff } from "@mui/icons-material";
-import { Button, Stack, Tooltip } from "@mui/material";
+//Author-Nikhil Panikkassery (B00934514)
+
+import {
+  Clear,
+  DownloadDone,
+  Visibility,
+  VisibilityOff,
+} from "@mui/icons-material";
+import {
+  Backdrop,
+  Button,
+  Stack,
+  Tooltip,
+  CircularProgress,
+} from "@mui/material";
 import axios from "axios";
+import { useState } from "react";
 
 const ContentControl = ({ type, content, buttonClick, setButtonClick }) => {
+  const [open, setOpen] = useState(false);
+  const handleClose = () => {
+    setOpen(false);
+  };
+  const handleOpen = () => {
+    setOpen(!open);
+  };
   const addContentToWatchlist = () => {
+    handleOpen();
     axios
       .post(
         `${process.env.REACT_APP_BASE_URL}` + "/addToWatchlist/",
@@ -23,12 +45,15 @@ const ContentControl = ({ type, content, buttonClick, setButtonClick }) => {
       )
       .then((res) => {
         setButtonClick(!buttonClick);
+        handleClose();
       })
       .catch((error) => {
         alert("Error in updating- " + error);
+        handleClose();
       });
   };
   const removeContentFromWatchlist = () => {
+    handleOpen();
     axios
       .post(
         `${process.env.REACT_APP_BASE_URL}` + "/removeFromWatchlist/",
@@ -48,13 +73,16 @@ const ContentControl = ({ type, content, buttonClick, setButtonClick }) => {
       )
       .then((res) => {
         setButtonClick(!buttonClick);
+        handleClose();
       })
       .catch((error) => {
         alert("Error in updating- " + error);
+        handleClose();
       });
   };
 
   const addContentToWatched = () => {
+    handleOpen();
     axios
       .post(
         `${process.env.REACT_APP_BASE_URL}` + "/addToWatched/",
@@ -74,13 +102,16 @@ const ContentControl = ({ type, content, buttonClick, setButtonClick }) => {
       )
       .then((res) => {
         setButtonClick(!buttonClick);
+        handleClose();
       })
       .catch((error) => {
         alert("Error in updating- " + error);
+        handleClose();
       });
   };
 
   const removeContentFromWatched = () => {
+    handleOpen();
     axios
       .post(
         `${process.env.REACT_APP_BASE_URL}` + "/removeFromWatched/",
@@ -100,14 +131,22 @@ const ContentControl = ({ type, content, buttonClick, setButtonClick }) => {
       )
       .then((res) => {
         setButtonClick(!buttonClick);
+        handleClose();
       })
       .catch((error) => {
         alert("Error in updating- " + error);
+        handleClose();
       });
   };
 
   return (
     <div className="notdisplayed">
+      <Backdrop
+        sx={{ color: "#fff", zIndex: (theme) => theme.zIndex.drawer + 1 }}
+        open={open}
+      >
+        <CircularProgress color="inherit" />
+      </Backdrop>
       {content.watchlist === undefined && content.watched === undefined && (
         <Stack direction="row">
           <Tooltip title="Add To Watchlist" placement="top">
@@ -116,8 +155,8 @@ const ContentControl = ({ type, content, buttonClick, setButtonClick }) => {
             </Button>
           </Tooltip>
           <Tooltip title="Add To Watched" placement="top">
-            <Button>
-              <DownloadDone onClick={addContentToWatched} />
+            <Button onClick={addContentToWatched}>
+              <DownloadDone />
             </Button>
           </Tooltip>
         </Stack>
