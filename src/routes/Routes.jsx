@@ -22,17 +22,17 @@ import UserMusic from "../components/user/userContent/UserMusic";
 import BookCard from "../components/book/BooksGrid";
 import WatchedContent from "../components/watchlist/watchedContent/WatchedContent";
 import ConfigureMovies from "../components/admin/movies/ConfigureMovies";
-import AddMovie from "components/admin/movies/AddMovie";
-import UpdateMovie from "components/admin/movies/UpdateMovie";
-import DeleteMovie from "components/admin/movies/DeleteMovie";
+import AddMovie from "../components/admin/movies/AddMovie";
+import UpdateMovie from "../components/admin/movies/UpdateMovie";
+import DeleteMovie from "../components/admin/movies/DeleteMovie";
 import ConfigureBooks from "../components/admin/books/ConfigureBooks";
-import AddBook from "components/admin/books/AddBook";
-import UpdateBook from "components/admin/books/UpdateBook";
-import DeleteBook from "components/admin/books/DeleteBook";
+import AddBook from "../components/admin/books/AddBook";
+import UpdateBook from "../components/admin/books/UpdateBook";
+import DeleteBook from "../components/admin/books/DeleteBook";
 import ConfigureMusic from "../components/admin/music/ConfigureMusic";
-import AddMusic from "components/admin/music/AddMusic";
-import UpdateMusic from "components/admin/music/UpdateMusic";
-import DeleteMusic from "components/admin/music/DeleteMusic";
+import AddMusic from "../components/admin/music/AddMusic";
+import UpdateMusic from "../components/admin/music/UpdateMusic";
+import DeleteMusic from "../components/admin/music/DeleteMusic";
 
 const AppRoutes = () => {
     return (
