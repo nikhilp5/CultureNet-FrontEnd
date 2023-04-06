@@ -337,7 +337,7 @@ const UserProfile = () => {
                   type="password"
                   error={error.password}
                   onChange={validate}
-                  helperText={error.password ? "Password must at least contain: 8 characters, 1 special character, 1 uppercase character." : ""}
+                  helperText={error.password ? "Password must at least contain: 8 characters, 1 special character, 1 uppercase alphabet, 1 lowercase alphabet." : ""}
                   fullWidth
                 />
               </Grid>
