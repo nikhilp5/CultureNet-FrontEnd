@@ -61,7 +61,7 @@ const SearchedContent = () => {
         handleClose();
       })
       .catch((error) => {
-        alert("Error- " + error);
+        alert("Error message -" + error);
         handleClose();
       });
   }, [searchTerm, buttonClick]);

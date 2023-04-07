@@ -1,23 +1,56 @@
+import React, { useState, useEffect } from "react";
 import { Container, CssBaseline, Grid, Pagination, ThemeProvider } from '@mui/material';
 import { appTheme } from '../../themes/theme';
 
+import { useNavigate } from "react-router";
 import BooksCard from './BooksCard';
 
 const bookData = require("../../data/db.json");
 const items = bookData.books;
 
-console.log(items);
 
 export default function BookCards() {
 
+    const [books, setBooks] = useState([]);
+    const [loading, setLoading] = useState(true);
+
+    const navigate = useNavigate();
+
+    useEffect(() => {
+        setLoading(true);
+        const fetchBooks = async () => {
+          try {
+            if(!localStorage.getItem("email")) {navigate("/")};
+
+            const response = await fetch(
+              `${process.env.REACT_APP_BASE_URL}`+"/books"
+            ,  {
+              headers: {
+                "Authorization": `Bearer ${localStorage.getItem("token")}`
+              }
+            });
+            const data = await response.json();
+            console.log(data)
+            setBooks(data);
+            setLoading(false);
+          } catch (error) {
+            console.log(error);
+            setLoading(false);
+          }
+        };
+        fetchBooks();
+      }, []);
+
+
     return (
+
         <ThemeProvider theme={appTheme}>
             <CssBaseline />
-            <Container maxWidth="md" my={5}>
+            <Container maxWidth="md" my={5} style={{ marginTop: '20px' }}>
             
                 <Grid container spacing={4}>
                     
-                    {items.map((book) => (
+                    {books.map((book) => (
 
                         <Grid item key={book} md={4}>
                             

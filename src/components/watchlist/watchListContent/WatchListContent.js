@@ -54,7 +54,7 @@ const WatchListContent = () => {
         handleClose();
       })
       .catch((error) => {
-        alert("Error- " + error);
+        alert("Error message - " + error);
         handleClose();
       });
   }, [buttonClick]);
@@ -93,7 +93,7 @@ const WatchListContent = () => {
       <ThemeProvider theme={theme}>
         <Typography
           variant="h4"
-          style={{ fontWeight: "600" ,marginRight:"100px"}}
+          style={{ fontWeight: "600", marginRight: "100px" }}
           mt={2}
           ml={10}
           mb={2}
