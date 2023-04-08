@@ -39,8 +39,12 @@ export default function BookCards() {
           }
         };
         fetchBooks();
-      }, []);
+    }, []);
 
+    const handleBookClick = (id) => {
+      navigate("/bookdetail", { state: { id } });
+      console.log(id)
+    };
 
     return (
 
@@ -54,7 +58,10 @@ export default function BookCards() {
 
                         <Grid item key={book} md={4}>
                             
-                            <BooksCard book={book} />
+                            <BooksCard 
+                              book={book}
+                              onBookClick={handleBookClick}
+                            />
                         
                         </Grid>
                     ))}

@@ -1,4 +1,5 @@
 import * as React from 'react';
+import { useEffect, useState } from 'react';
 import { styled } from '@mui/material/styles';
 import Grid from '@mui/material/Grid';
 import Paper from '@mui/material/Paper';
@@ -8,6 +9,7 @@ import Rating from '@mui/material/Rating';
 import StarIcon from '@mui/icons-material/Star';
 import Button from '@mui/material/Button';
 import { Box } from '@mui/system';
+import { useLocation, useNavigate } from 'react-router-dom';
 
 const Img = styled('img')({
   margin: 'auto',
@@ -17,7 +19,41 @@ const Img = styled('img')({
 });
 
 export default function BookDetails() {
-  return (
+
+    const [book, setBook] = useState(null);
+    const navigate = useNavigate();
+    const userId = localStorage.getItem("id");
+    console.log(userId);
+    const location = useLocation();
+    const id = location?.state?.id;
+    const email = localStorage.getItem("email");
+    console.log(email);
+
+    useEffect(() => {
+    
+        if(!localStorage.getItem("email")) {navigate("/")}
+         fetch(
+            `${process.env.REACT_APP_BASE_URL}`+`/books/${id}`,
+              { headers: {
+                "Authorization": `Bearer ${localStorage.getItem("token")}`
+                }
+            }).then((response) => response.json())
+            .then((data) => {
+                setBook(data);
+            })
+        .catch((error) => console.log(error));
+    }, [id]);
+
+    if (!book) {
+        return <div>Loading...</div>;
+    }
+
+    const { image_url, title, authors, publisher, isbn, summary, genre, dateReleased } = book;
+
+    const releaseDate = new Date(dateReleased);
+    const formattedDate = releaseDate.toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' });
+
+    return (
 
     <Paper
         style={{ marginTop: '20px' }}
@@ -31,12 +67,12 @@ export default function BookDetails() {
         }}
     >
     <Grid container spacing={2}>
-        
+
         <Grid item sx={{ width: 'auto' }}>
             <ButtonBase sx={{ width: 'auto', height: 600 }}>
                 <Img
                 alt="complex"
-                src="https://m.media-amazon.com/images/W/IMAGERENDERING_521856-T1/images/I/71c-1s150eL.jpg"
+                src={image_url}
                 />
             </ButtonBase>
         </Grid>
@@ -44,7 +80,7 @@ export default function BookDetails() {
         <Grid item xs sx={{ display: 'flex', flexDirection: 'column' }}>
             <Box sx={{ flexGrow: 1 }}>
                 <Typography gutterBottom variant="h4" component="div">
-                    A brief History of Time
+                    {title}
                 </Typography>
 
                 <Rating
@@ -56,28 +92,27 @@ export default function BookDetails() {
                 />
 
                 <Typography variant="subtitle1">
-                    By Stephen Hawkings
+                    By {authors}
                 </Typography>
                 <Typography variant="body2" color="text.secondary" gutterBottom>
-                    14th January, 1960
+                    {formattedDate}
                 </Typography>
 
                 <Typography variant="h6" color="text.secondary" sx={{ color: 'black'}}gutterBottom>
-                    Category: Popular Science
+                    Category: {genre}
                 </Typography>
 
-                <Typography variant="body2" color="text.secondary">
-                    Published by J. B. Lippincott & Co.
+                <Typography variant="body2" color="text.secondary" sx={{ color: 'black'}}>
+                    Published By {publisher}
                 </Typography>
                 
-
                 <Typography variant="body2" color="text.secondary" gutterBottom>
-                    ISBN 978-0446310789
+                    ISBN {isbn}
                 </Typography>
                 
                 <Typography variant="h5" gutterBottom> Summary </Typography>
                 <Typography variant="body2" color="text.secondary" sx={{ textAlign: 'justify' }} gutterBottom>
-                    Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Malesuada proin libero nunc consequat interdum varius sit. Tincidunt id aliquet risus feugiat in ante metus dictum. Mi sit amet mauris commodo quis imperdiet massa. Eu mi bibendum neque egestas congue quisque egestas diam in. Lobortis mattis aliquam faucibus purus. Volutpat lacus laoreet non curabitur gravida. Eu turpis egestas pretium aenean pharetra. Et malesuada fames ac turpis egestas sed tempus urna et. Platea dictumst vestibulum rhoncus est pellentesque. Purus sit amet volutpat consequat. Proin nibh nisl condimentum id venenatis. Pulvinar pellentesque habitant morbi tristique. Vestibulum morbi blandit cursus risus at ultrices mi tempus. Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Malesuada proin libero nunc consequat interdum varius sit. Tincidunt id aliquet risus feugiat in ante metus dictum. Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Malesuada proin libero nunc consequat interdum varius sit. Tincidunt id aliquet risus feugiat in ante metus dictum.
+                    {summary}
                 </Typography>
             </Box>
         </Grid>
