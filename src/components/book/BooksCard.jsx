@@ -3,15 +3,17 @@ import { List, ListItem, ListItemText } from '@material-ui/core';
 import { Card, CardActions, CardContent, CardMedia, Rating, Typography } from '@mui/material';
 
 
-const BooksCard = ({ book }) => {
+const BooksCard = ({ book, onBookClick }) => {
   return (
     <div className="content-card">
-        <Card>
+
+        <Card onClick={ () => onBookClick(book._id) }>
 
             <CardMedia
                 component="img"
                 sx={{ width: '100%', height: 400 }}
                 image={book.image_url}
+                alt={book.title}
             />
 
             <CardContent>
