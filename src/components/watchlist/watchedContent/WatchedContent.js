@@ -1,3 +1,5 @@
+//Author-Nikhil Panikkassery (B00934514)
+
 import {
   Backdrop,
   Button,
@@ -9,10 +11,11 @@ import {
   Typography,
 } from '@mui/material';
 import axios from 'axios';
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback, useContext, useEffect, useState } from 'react';
 import SearchedBooks from '../../searchpage/searchedBooks/SearchedBooks';
 import SearchedMovies from '../../searchpage/searchedMovies/SearchedMovies';
 import { useNavigate } from 'react-router';
+import { UserContext } from '../../../utils/UserContext';
 
 let theme = createTheme();
 theme = responsiveFontSizes(theme);
@@ -21,6 +24,9 @@ const WatchedContent = () => {
   const [movieResults, setMovieResults] = useState([]);
   const [bookResults, setBookResults] = useState([]);
   const [buttonClick, setButtonClick] = useState(false);
+
+  const { setOpenSnackbar, setSnackbarMessage, setSnackbarSeverity } =
+    useContext(UserContext);
 
   const [open, setOpen] = useState(false);
   const handleClose = () => {
@@ -52,7 +58,11 @@ const WatchedContent = () => {
         handleClose();
       })
       .catch((error) => {
-        alert('Error- ' + error);
+        setSnackbarSeverity('error');
+        setSnackbarMessage(
+          'Something went wrong! Please refresh to try again...',
+        );
+        setOpenSnackbar(true);
         handleClose();
       });
   }, [buttonClick]);

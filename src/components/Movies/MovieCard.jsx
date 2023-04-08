@@ -1,15 +1,33 @@
 import { Card, CardContent, CardMedia, Grid, Typography, Box } from "@mui/material";
 import Rating from "@mui/material/Rating";
+import { Buffer } from "buffer";
 
 function MovieCard({ movie, onMovieClick, movieRatings }) {
+  console.log("Movie Card:", movie);
+
+  let imageSrc = '';
+  if (movie.image) {
+    if (movie.image.type === "Buffer") {
+      imageSrc = `data:image/jpeg;base64,${Buffer.from(movie.image).toString('base64')}`;
+    } else {
+      imageSrc = movie.image;
+    }
+  } else{
+    imageSrc = '';
+  }
   return (
     <Grid item xs={12} sm={6} md={4}>
       <Card onClick={() => onMovieClick(movie._id)}>
         <CardMedia
           component="img"
           height="300"
-          image={movie.image}
+          image={imageSrc}
           alt={movie.title}
+          sx={{
+            paddingTop: "56.25%", // 16:9 aspect ratio
+            width: "100%",
+            objectFit: "cover",
+          }}
         />
         <CardContent
           sx={{

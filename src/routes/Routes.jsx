@@ -20,9 +20,22 @@ import UserMovies from "../components/user/userContent/UserMovies";
 import UserBooks from "../components/user/userContent/UserBooks";
 import UserMusic from "../components/user/userContent/UserMusic";
 import BookCard from "../components/book/BooksGrid";
+import BookDetails from "../components/book/BookDetail";
 import WatchedContent from "../components/watchlist/watchedContent/WatchedContent";
 import MusicDetailsPage from "../components/music/MusicDetailsPage";
 import MusicLandingPage from "../components/music/MusicLandingPage";
+import ConfigureMovies from "../components/admin/movies/ConfigureMovies";
+import AddMovie from "../components/admin/movies/AddMovie";
+import { UpdateMovie } from "../components/admin/movies/UpdateMovie";
+import DeleteMovie from "../components/admin/movies/DeleteMovie";
+import ConfigureBooks from "../components/admin/books/ConfigureBooks";
+import AddBook from "../components/admin/books/AddBook";
+import UpdateBook from "../components/admin/books/UpdateBook";
+import DeleteBook from "../components/admin/books/DeleteBook";
+import ConfigureMusic from "../components/admin/music/ConfigureMusic";
+import AddMusic from "../components/admin/music/AddMusic";
+import UpdateMusic from "../components/admin/music/UpdateMusic";
+import DeleteMusic from "../components/admin/music/DeleteMusic";
 
 const AppRoutes = () => {
     return (
@@ -41,14 +54,27 @@ const AppRoutes = () => {
             <Route path="/Profile" element={<UserProfile />}></Route>
             <Route path="/Movies" element={<ListOfMovies />}></Route>
             <Route path="/Music" element={<MusicLandingPage />}></Route>
-            <Route path="/MusicDetails/:id" element={<MusicDetailsPage   />}></Route>
+            <Route path="/MusicDetails/:id" element={<MusicDetailsPage />}></Route>
             <Route path="/MovieDetail" element={<MovieDetails />}></Route>
             <Route path="/MyMovies" element={<UserMovies />}></Route>
             <Route path="/MyMusic" element={<UserMusic />}></Route>
             <Route path="/MyBooks" element={<UserBooks />}></Route>
             <Route path="/Books" element={<BookCard />}></Route>
+            <Route path="/BookDetail" element={<BookDetails />}></Route>
             <Route path="/Logout" element={<Logout />}></Route>
             <Route path="/SessionTimeOut" element={<SessionTimeOut />}></Route>
+            <Route path="/ConfigureMovies" element={<ConfigureMovies />} />
+            <Route path="/AddMovie" element={<AddMovie />} />
+            <Route path="/UpdateMovie" element={<UpdateMovie />} />
+            <Route path="/DeleteMovie" element={<DeleteMovie />} />
+            <Route path="/ConfigureBooks" element={<ConfigureBooks />} />
+            <Route path="/AddBook" element={<AddBook />} />
+            <Route path="/UpdateBook" element={<UpdateBook />} />
+            <Route path="/DeleteBook" element={<DeleteBook />} />
+            <Route path="/ConfigureMusic" element={<ConfigureMusic />} />
+            <Route path="/AddMusic" element={<AddMusic />} />
+            <Route path="/UpdateMusic" element={<UpdateMusic />} />
+            <Route path="/DeleteMusic" element={<DeleteMusic />} />
         </Routes>
     );
 };

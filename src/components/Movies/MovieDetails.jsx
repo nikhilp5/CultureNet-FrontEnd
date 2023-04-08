@@ -2,6 +2,8 @@ import React, { useEffect, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { Typography, Card, CardMedia, CardContent, CardHeader, Avatar, Chip, Button, Box, Rating } from '@mui/material';
 import { makeStyles } from '@mui/styles';
+import ContentControl from '../watchlist/contentControl/contentControl';
+import { Buffer } from "buffer";
 
 const useStyles = makeStyles({
   root: {
@@ -27,7 +29,16 @@ function MovieDetails() {
   const email = JSON.parse(localStorage.getItem('user')).email;
   console.log(email);
   // const [email, setEmail]=useState("");
+  const [buttonClick, setButtonClick] = useState(false);
   useEffect(() => {
+
+    if (!localStorage.getItem("email")) { navigate("/"); }
+    fetch(`${process.env.REACT_APP_BASE_URL}` + `/movies/${id}`, {
+      headers: {
+        "userid": localStorage.getItem("id"),
+        "Authorization": `Bearer ${localStorage.getItem("token")}`
+      }
+    });
 
     if (!localStorage.getItem("token")) { navigate("/"); }
     fetch(`${process.env.REACT_APP_BASE_URL}` + `/movies/${id}`, {
@@ -42,7 +53,6 @@ function MovieDetails() {
       .then((data) => {
         setMovie(data);
 
-
         if (data.genre) {
           fetch(`${process.env.REACT_APP_BASE_URL}` + `/movie_genres/${data.genre.join(',')}`)
             .then(response => response.json())
@@ -52,7 +62,7 @@ function MovieDetails() {
       })
       .catch((error) => console.log(error));
 
-  }, [id]);
+  }, [id, buttonClick]);
 
 
 
@@ -90,7 +100,19 @@ function MovieDetails() {
   if (!movie) {
     return <div>Loading...</div>;
   }
-  const { description, title, image, dateReleased, rating, genre, director } = movie;
+  const { description, title, dateReleased, rating, genre, director } = movie;
+
+  let imageSrc = '';
+  if (movie.image) {
+    if (movie.image.type === "Buffer") {
+      imageSrc = `data:image/jpeg;base64,${Buffer.from(movie.image).toString('base64')}`;
+    } else {
+      imageSrc = movie.image;
+    }
+  } else {
+    imageSrc = '';
+  }
+
   const releaseDate = new Date(dateReleased);
   const formattedDate = releaseDate.toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' });
   return (
@@ -105,7 +127,7 @@ function MovieDetails() {
         subheader={`Release Date: ${formattedDate}`}
 
       />
-      <CardMedia className={classes.media} image={image} title={title} style={{ width: '100%', objectFit: 'cover' }} />
+      <CardMedia className={classes.media} image={imageSrc} title={title} style={{ width: '100%', objectFit: 'cover' }} />
       <CardContent>
 
         <Typography variant="body2" color="textSecondary" component="p">
@@ -127,6 +149,12 @@ function MovieDetails() {
           />
         </Box>
       </CardContent>
+      <div style={{ position: 'relative', float: 'right', bottom: '20px', right: "20px" }}>
+        <ContentControl
+          type="movies" content={movie} buttonClick={buttonClick}
+          setButtonClick={setButtonClick}
+        />
+      </div>
     </Card>
   );
 }

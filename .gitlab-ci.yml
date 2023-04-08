@@ -21,7 +21,7 @@ deploy_develop:
     - npm install --legacy-peer-deps
     - npm install netlify-cli -g
     - npm run build
-    - netlify deploy --dir "build" --auth $AUTH_TOKEN --site $SITE_ID_DEVELOP --prod
+    - netlify deploy --dir "build" --auth $AUTH_TOKEN_RISHI --site $SITE_ID_RISHI --prod
   only:
     - develop
 
@@ -43,6 +43,6 @@ deploy_rishi:
     - npm install --legacy-peer-deps
     - npm install netlify-cli -g
     - npm run build
-    - netlify deploy --dir "build" --auth $AUTH_TOKEN --site $SITE_ID_RISHI --prod
+    - netlify deploy --dir "build" --auth $AUTH_TOKEN_RISHI --site $SITE_ID_RISHI --prod
   only:
     - main-rishi
