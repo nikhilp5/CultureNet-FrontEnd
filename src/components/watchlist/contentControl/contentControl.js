@@ -55,7 +55,11 @@ const ContentControl = ({ type, content, buttonClick, setButtonClick }) => {
         handleClose();
       })
       .catch((error) => {
-        alert("Error message - " + error);
+        setSnackbarSeverity("error");
+        setSnackbarMessage(
+          "Something went wrong! Please refresh to try again..."
+        );
+        setOpenSnackbar(true);
         handleClose();
       });
   };
@@ -86,7 +90,11 @@ const ContentControl = ({ type, content, buttonClick, setButtonClick }) => {
         handleClose();
       })
       .catch((error) => {
-        alert("Error message - " + error);
+        setSnackbarSeverity("error");
+        setSnackbarMessage(
+          "Something went wrong! Please refresh to try again..."
+        );
+        setOpenSnackbar(true);
         handleClose();
       });
   };
@@ -118,7 +126,11 @@ const ContentControl = ({ type, content, buttonClick, setButtonClick }) => {
         handleClose();
       })
       .catch((error) => {
-        alert("Error message - " + error);
+        setSnackbarSeverity("error");
+        setSnackbarMessage(
+          "Something went wrong! Please refresh to try again..."
+        );
+        setOpenSnackbar(true);
         handleClose();
       });
   };
@@ -150,7 +162,11 @@ const ContentControl = ({ type, content, buttonClick, setButtonClick }) => {
         handleClose();
       })
       .catch((error) => {
-        alert("Error message - " + error);
+        setSnackbarSeverity("error");
+        setSnackbarMessage(
+          "Something went wrong! Please refresh to try again..."
+        );
+        setOpenSnackbar(true);
         handleClose();
       });
   };

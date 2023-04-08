@@ -10,11 +10,12 @@ import {
   Typography,
 } from "@mui/material";
 import axios from "axios";
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { useLocation } from "react-router-dom";
 import SearchedBooks from "../searchedBooks/SearchedBooks";
 import SearchedMovies from "../searchedMovies/SearchedMovies";
 import SearchedUsers from "../searchedUsers/SearchedUsers";
+import { UserContext } from "../../../utils/UserContext";
 
 let theme = createTheme();
 theme = responsiveFontSizes(theme);
@@ -24,6 +25,9 @@ const SearchedContent = () => {
   const [bookResults, setBookResults] = useState([]);
   const [userResults, setUserResults] = useState([]);
   const [buttonClick, setButtonClick] = useState(false);
+
+  const { setOpenSnackbar, setSnackbarMessage, setSnackbarSeverity } =
+    useContext(UserContext);
 
   const { state } = useLocation();
   const searchTerm = state;
@@ -61,7 +65,11 @@ const SearchedContent = () => {
         handleClose();
       })
       .catch((error) => {
-        alert("Error message -" + error);
+        setSnackbarSeverity("error");
+        setSnackbarMessage(
+          "Something went wrong! Please refresh to try again..."
+        );
+        setOpenSnackbar(true);
         handleClose();
       });
   }, [searchTerm, buttonClick]);
