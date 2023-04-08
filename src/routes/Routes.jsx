@@ -20,6 +20,7 @@ import UserMovies from "../components/user/userContent/UserMovies";
 import UserBooks from "../components/user/userContent/UserBooks";
 import UserMusic from "../components/user/userContent/UserMusic";
 import BookCard from "../components/book/BooksGrid";
+import BookDetails from "../components/book/BookDetail";
 import WatchedContent from "../components/watchlist/watchedContent/WatchedContent";
 import ConfigureMovies from "../components/admin/movies/ConfigureMovies";
 import AddMovie from "../components/admin/movies/AddMovie";
@@ -55,6 +56,7 @@ const AppRoutes = () => {
             <Route path="/MyMusic" element={<UserMusic />}></Route>
             <Route path="/MyBooks" element={<UserBooks />}></Route>
             <Route path="/Books" element={<BookCard />}></Route>
+            <Route path="/BookDetail" element={<BookDetails />}></Route>
             <Route path="/Logout" element={<Logout />}></Route>
             <Route path="/SessionTimeOut" element={<SessionTimeOut />}></Route>
             <Route path="/ConfigureMovies" element={<ConfigureMovies />} />
