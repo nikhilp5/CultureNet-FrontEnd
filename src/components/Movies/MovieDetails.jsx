@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useLocation, useNavigate} from 'react-router-dom';
 import { Typography, Card, CardMedia, CardContent, CardHeader, Avatar, Chip, Button, Box, Rating } from '@mui/material';
 import { makeStyles } from '@mui/styles';
+import ContentControl from '../watchlist/contentControl/contentControl';
 import { Buffer } from "buffer";
 
 const useStyles = makeStyles({
@@ -28,10 +29,12 @@ function MovieDetails() {
   const email= localStorage.getItem("email");
   console.log(email);
   // const [email, setEmail]=useState("");
+  const [buttonClick, setButtonClick] = useState(false);
   useEffect(() => {
     
     if(!localStorage.getItem("email")) {navigate("/")}
      fetch(`${process.env.REACT_APP_BASE_URL}`+`/movies/${id}`,  { headers: {
+      "userid":localStorage.getItem("id"),
       "Authorization": `Bearer ${localStorage.getItem("token")}`
     }
   })
@@ -52,7 +55,7 @@ function MovieDetails() {
     })
     .catch((error) => console.log(error));
       
-  }, [id]);
+  }, [id,buttonClick]);
 
   
 
@@ -139,6 +142,12 @@ const formattedDate = releaseDate.toLocaleDateString('en-US', { year: 'numeric',
                       />
                     </Box>
       </CardContent>
+      <div style={{position:'relative',float:'right',bottom:'20px',right:"20px"}}>
+        <ContentControl 
+              type="movies" content={movie} buttonClick={buttonClick}
+              setButtonClick={setButtonClick}
+         />
+      </div>
     </Card>
   );
 }
