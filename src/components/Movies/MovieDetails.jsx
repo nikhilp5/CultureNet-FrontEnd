@@ -3,6 +3,7 @@ import { useLocation, useNavigate} from 'react-router-dom';
 import { Typography, Card, CardMedia, CardContent, CardHeader, Avatar, Chip, Button, Box, Rating } from '@mui/material';
 import { makeStyles } from '@mui/styles';
 import ContentControl from '../watchlist/contentControl/contentControl';
+import { Buffer } from "buffer";
 
 const useStyles = makeStyles({
   root: {
@@ -92,7 +93,19 @@ function MovieDetails() {
   if (!movie) {
     return <div>Loading...</div>;
   }
-  const { description,title, image, dateReleased, rating, genre, director} = movie;
+  const { description,title, dateReleased, rating, genre, director} = movie;
+
+  let imageSrc = '';
+  if (movie.image) {
+    if (movie.image.type === "Buffer") {
+      imageSrc = `data:image/jpeg;base64,${Buffer.from(movie.image).toString('base64')}`;
+    } else {
+      imageSrc = movie.image;
+    }
+  } else{
+    imageSrc = '';
+  }
+
   const releaseDate = new Date(dateReleased);
 const formattedDate = releaseDate.toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' });
   return (
@@ -107,7 +120,7 @@ const formattedDate = releaseDate.toLocaleDateString('en-US', { year: 'numeric',
         subheader={`Release Date: ${formattedDate}`}
       
       />
-      <CardMedia className={classes.media} image={image} title={title} style={{ width: '100%', objectFit: 'cover' }} />
+      <CardMedia className={classes.media} image={imageSrc} title={title} style={{ width: '100%', objectFit: 'cover' }} />
       <CardContent>
 
         <Typography variant="body2" color="textSecondary" component="p">

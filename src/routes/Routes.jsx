@@ -24,7 +24,7 @@ import BookDetails from "../components/book/BookDetail";
 import WatchedContent from "../components/watchlist/watchedContent/WatchedContent";
 import ConfigureMovies from "../components/admin/movies/ConfigureMovies";
 import AddMovie from "../components/admin/movies/AddMovie";
-import UpdateMovie from "../components/admin/movies/UpdateMovie";
+import { UpdateMovie } from "../components/admin/movies/UpdateMovie";
 import DeleteMovie from "../components/admin/movies/DeleteMovie";
 import ConfigureBooks from "../components/admin/books/ConfigureBooks";
 import AddBook from "../components/admin/books/AddBook";
