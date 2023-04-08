@@ -50,6 +50,7 @@ const SearchContentGrid = ({ contents, type, buttonClick, setButtonClick }) => {
     const from = (page - 1) * pageSize;
     const to = (page - 1) * pageSize + pageSize;
     setPagination({ ...pagination, from: from, to: to });
+    handleClose();
   };
   return (
     <ThemeProvider theme={appTheme}>
