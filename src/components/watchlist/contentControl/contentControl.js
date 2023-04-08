@@ -14,9 +14,13 @@ import {
   CircularProgress,
 } from "@mui/material";
 import axios from "axios";
-import { useState } from "react";
+import { useContext, useState } from "react";
+import { UserContext } from "../../../utils/UserContext";
 
 const ContentControl = ({ type, content, buttonClick, setButtonClick }) => {
+  const { setOpenSnackbar, setSnackbarMessage, setSnackbarSeverity } =
+    useContext(UserContext);
+
   const [open, setOpen] = useState(false);
   const handleClose = () => {
     setOpen(false);
@@ -44,11 +48,14 @@ const ContentControl = ({ type, content, buttonClick, setButtonClick }) => {
         }
       )
       .then((res) => {
+        setSnackbarSeverity("success");
+        setSnackbarMessage("Added to Watchlist");
+        setOpenSnackbar(true);
         setButtonClick(!buttonClick);
         handleClose();
       })
       .catch((error) => {
-        alert("Error in updating- " + error);
+        alert("Error message - " + error);
         handleClose();
       });
   };
@@ -72,11 +79,14 @@ const ContentControl = ({ type, content, buttonClick, setButtonClick }) => {
         }
       )
       .then((res) => {
+        setSnackbarSeverity("success");
+        setSnackbarMessage("Removed from Watchlist");
+        setOpenSnackbar(true);
         setButtonClick(!buttonClick);
         handleClose();
       })
       .catch((error) => {
-        alert("Error in updating- " + error);
+        alert("Error message - " + error);
         handleClose();
       });
   };
@@ -101,11 +111,14 @@ const ContentControl = ({ type, content, buttonClick, setButtonClick }) => {
         }
       )
       .then((res) => {
+        setSnackbarSeverity("success");
+        setSnackbarMessage("Added to Watched");
+        setOpenSnackbar(true);
         setButtonClick(!buttonClick);
         handleClose();
       })
       .catch((error) => {
-        alert("Error in updating- " + error);
+        alert("Error message - " + error);
         handleClose();
       });
   };
@@ -130,11 +143,14 @@ const ContentControl = ({ type, content, buttonClick, setButtonClick }) => {
         }
       )
       .then((res) => {
+        setSnackbarSeverity("success");
+        setSnackbarMessage("Removed from Watched");
+        setOpenSnackbar(true);
         setButtonClick(!buttonClick);
         handleClose();
       })
       .catch((error) => {
-        alert("Error in updating- " + error);
+        alert("Error message - " + error);
         handleClose();
       });
   };
