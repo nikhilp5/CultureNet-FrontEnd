@@ -91,6 +91,13 @@ const SearchContentGrid = ({ contents, type, buttonClick, setButtonClick }) => {
                       {content.firstName + " " + content.lastName}
                     </div>
                   )}
+                  {type === "music" && (
+                    <Tooltip title={content.title}>
+                      <div className="center">
+                        {content.title.substring(0, 10) + "..."}
+                      </div>
+                    </Tooltip>
+                  )}
                 </Grid>
               </div>
             ))}

@@ -1,53 +1,44 @@
 //Author - Rishi Vasa (B00902815)
 
-import React, { useState } from 'react';
-import { TextField, Button, Grid, Card, InputLabel, Input, Typography, Dialog, DialogTitle, DialogContent, DialogActions } from '@mui/material';
+import React from 'react';
+import { Button, Typography, Dialog, DialogTitle, DialogContent, DialogActions } from '@mui/material';
 import axios from 'axios';
 
-const DeleteMovie = () => {
-
-  const [open, setOpen] = useState(false);
+const DeleteMovie = ({ movieID, open, onClose }) => {
 
   const handleDelete = () => {
     axios
-    .delete(
-      `${process.env.REACT_APP_BASE_URL}/deleteMovie/`,
-      {
-        headers: {
-          "Content-Type": "multipart/form-data",
-          "Access-Control-Allow-Origin": "*",
-          Authorization: `Bearer ${localStorage.getItem("token")}`,
-        },
-      }
-    )
-    .then((res) => {
-      alert("Movie Deleted!");
-      setOpen(false);
-    })
-    .catch((error) => {
-      alert("Error in deleting Movie: " + error);
-    });
-  };
-
-  const handleClose = () => {
-    setOpen(false);
+      .delete(
+        `${process.env.REACT_APP_BASE_URL}/deleteMovie/` + movieID,
+        {
+          headers: {
+            "Content-Type": "multipart/form-data",
+            "Access-Control-Allow-Origin": "*",
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
+          },
+        }
+      )
+      .then((res) => {
+        alert("Movie Deleted!");
+        onClose();
+        window.location.reload();
+      })
+      .catch((error) => {
+        alert("Error in deleting Movie: " + error);
+      });
   };
 
   return (
-    <Grid container sx={{ margin: 5 }}>
-      <Button variant="contained" color="error" onClick={() => setOpen(true)}>Delete Movie</Button>
-
-      <Dialog open={open} onClose={handleClose}>
-        <DialogTitle>Are you sure you want to delete the movie?</DialogTitle>
-        <DialogContent>
-          <Typography variant="body1">This action cannot be undone.</Typography>
-        </DialogContent>
-        <DialogActions>
-          <Button onClick={handleClose}>Cancel</Button>
-          <Button onClick={handleDelete}>Delete</Button>
-        </DialogActions>
-      </Dialog>
-    </Grid>
+    <Dialog open={true}>
+      <DialogTitle>Confirm Deletion</DialogTitle>
+      <DialogContent>
+        <Typography>Are you sure you want to delete this movie?</Typography>
+      </DialogContent>
+      <DialogActions>
+        <Button onClick={onClose}>No</Button>
+        <Button onClick={handleDelete}>Yes</Button>
+      </DialogActions>
+    </Dialog>
   );
 };
 
