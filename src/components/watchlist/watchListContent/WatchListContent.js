@@ -9,13 +9,13 @@ import {
   responsiveFontSizes,
   ThemeProvider,
   Typography,
-} from "@mui/material";
-import axios from "axios";
-import { useCallback, useContext, useEffect, useState } from "react";
-import SearchedBooks from "../../searchpage/searchedBooks/SearchedBooks";
-import SearchedMovies from "../../searchpage/searchedMovies/SearchedMovies";
-import { useNavigate } from "react-router";
-import { UserContext } from "../../../utils/UserContext";
+} from '@mui/material';
+import axios from 'axios';
+import { useCallback, useContext, useEffect, useState } from 'react';
+import SearchedBooks from '../../searchpage/searchedBooks/SearchedBooks';
+import SearchedMovies from '../../searchpage/searchedMovies/SearchedMovies';
+import { useNavigate } from 'react-router';
+import { UserContext } from '../../../utils/UserContext';
 
 let theme = createTheme();
 theme = responsiveFontSizes(theme);
@@ -41,16 +41,16 @@ const WatchListContent = () => {
     axios
       .get(
         `${process.env.REACT_APP_BASE_URL}` +
-          "/getWatchlist/" +
-          localStorage.getItem("id"),
+          '/getWatchlist/' +
+          JSON.parse(localStorage.getItem('user'))._id,
         {
           headers: {
-            "Content-Type": "application/json",
-            "Access-Control-Allow-Origin": "*",
-            Accept: "application/json",
-            Authorization: `Bearer ${localStorage.getItem("token")}`,
+            'Content-Type': 'application/json',
+            'Access-Control-Allow-Origin': '*',
+            Accept: 'application/json',
+            Authorization: `Bearer ${localStorage.getItem('token')}`,
           },
-        }
+        },
       )
       .then((res) => {
         setMovieResults(res.data.result.movies);
@@ -58,9 +58,9 @@ const WatchListContent = () => {
         handleClose();
       })
       .catch((error) => {
-        setSnackbarSeverity("error");
+        setSnackbarSeverity('error');
         setSnackbarMessage(
-          "Something went wrong! Please refresh to try again..."
+          'Something went wrong! Please refresh to try again...',
         );
         setOpenSnackbar(true);
         handleClose();
@@ -70,28 +70,28 @@ const WatchListContent = () => {
   const navigate = useNavigate();
 
   const handleOnClickWatchlist = useCallback(
-    () => navigate("/Watchlist", { replace: true }),
-    [navigate]
+    () => navigate('/Watchlist', { replace: true }),
+    [navigate],
   );
 
   const handleOnClickWatched = useCallback(
-    () => navigate("/Watched", { replace: true }),
-    [navigate]
+    () => navigate('/Watched', { replace: true }),
+    [navigate],
   );
 
   return (
     <div>
-      <div className="togglebutton">
+      <div className='togglebutton'>
         <Button
-          variant="contained"
-          style={{ top: "10px", marginLeft: "10px", fontWeight: "bold" }}
+          variant='contained'
+          style={{ top: '10px', marginLeft: '10px', fontWeight: 'bold' }}
           onClick={handleOnClickWatchlist}
         >
           My WatchList
         </Button>
         <Button
-          variant="contained"
-          style={{ top: "10px", marginLeft: "10px", fontWeight: "bold" }}
+          variant='contained'
+          style={{ top: '10px', marginLeft: '10px', fontWeight: 'bold' }}
           onClick={handleOnClickWatched}
         >
           Watched
@@ -100,12 +100,12 @@ const WatchListContent = () => {
 
       <ThemeProvider theme={theme}>
         <Typography
-          variant="h4"
-          style={{ fontWeight: "600", marginRight: "100px" }}
+          variant='h4'
+          style={{ fontWeight: '600', marginRight: '100px' }}
           mt={2}
           ml={10}
           mb={2}
-          align="center"
+          align='center'
         >
           WatchList
         </Typography>
@@ -121,10 +121,10 @@ const WatchListContent = () => {
           setButtonClick={setButtonClick}
         ></SearchedBooks>
         <Backdrop
-          sx={{ color: "#fff", zIndex: (theme) => theme.zIndex.drawer + 1 }}
+          sx={{ color: '#fff', zIndex: (theme) => theme.zIndex.drawer + 1 }}
           open={open}
         >
-          <CircularProgress color="inherit" />
+          <CircularProgress color='inherit' />
         </Backdrop>
       </ThemeProvider>
     </div>

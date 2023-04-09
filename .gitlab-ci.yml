@@ -6,6 +6,7 @@ stages:
 deploy_prod:
   stage: deploy
   script:
+    - echo "REACT_APP_BASE_URL=https://culturenet-apis.netlify.app/.netlify/functions/api" >> ".env"
     - npm install --legacy-peer-deps
     - npm install netlify-cli -g
     - npm run build
@@ -16,6 +17,7 @@ deploy_prod:
 deploy_develop:
   stage: deploy
   script:
+    - echo "REACT_APP_BASE_URL=https://culturenet-apis-develop.netlify.app/.netlify/functions/api" >> ".env"
     - npm install --legacy-peer-deps
     - npm install netlify-cli -g
     - npm run build
@@ -26,6 +28,7 @@ deploy_develop:
 deploy_monil:
   stage: deploy
   script:
+    - echo "REACT_APP_BASE_URL=https://culturenet-apis-monil.netlify.app/.netlify/functions/api" >> ".env"
     - npm install --legacy-peer-deps
     - npm install netlify-cli -g
     - npm run build
@@ -36,6 +39,7 @@ deploy_monil:
 deploy_rishi:
   stage: deploy
   script:
+    - echo "REACT_APP_BASE_URL=https://culturenet-apis-develop.netlify.app/.netlify/functions/api" >> ".env"
     - npm install --legacy-peer-deps
     - npm install netlify-cli -g
     - npm run build

@@ -104,7 +104,7 @@ const ForgotPassword = () => {
   const verifyCode = async () => {
     try {
       const response = await axios
-        .post(`${process.env.REACT_APP_BASE_URL}` + `/resetpassword`, {
+        .post(`${process.env.REACT_APP_BASE_URL}` + `/verifycode`, {
           email: form.email,
           code: form.code
         }, {
@@ -117,8 +117,6 @@ const ForgotPassword = () => {
       if (response.status == 200) {
         setIsPending(false);
         localStorage.setItem("token", response.data.token);
-        localStorage.setItem("email", response.data.email);
-        localStorage.setItem("id", response.data.id);
         setOpenDialog(true);
       }
     } catch (error) {
@@ -134,7 +132,6 @@ const ForgotPassword = () => {
     try {
       const response = await axios
         .put(`${process.env.REACT_APP_BASE_URL}` + `/changepassword`, {
-          email: form.email,
           password: form.password,
           confirmPassword: form.confirmPassword
         }, {
@@ -268,7 +265,7 @@ const ForgotPassword = () => {
                   type="password"
                   error={error.password}
                   onChange={validate}
-                  helperText={error.password ? "Invalid password." : ""}
+                  helperText={error.password ? "Password must at least contain: 8 characters, 1 special character, 1 uppercase alphabet, 1 lowercase alphabet." : ""}
                   value={form.password}
                   fullWidth
                 />
