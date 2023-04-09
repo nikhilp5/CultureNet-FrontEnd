@@ -8,10 +8,10 @@ import {
   Box,
   Rating,
 } from "@mui/material";
-import { ArrowBackIosNewRounded } from "@mui/icons-material";
 import axios from "axios";
 import { UserContext } from "../../utils/UserContext";
 import { useNavigate, useParams } from "react-router-dom";
+import ContentControl from '../watchlist/contentControl/contentControl';
 
 
 export default function MusicDetailsPage() {
@@ -25,6 +25,7 @@ export default function MusicDetailsPage() {
 
   const [music, setMusic] = useState({ ...musicDetails });
   const { setOpenSnackbar, setSnackbarMessage, setSnackbarSeverity } = useContext(UserContext);
+  const [buttonClick, setButtonClick] = useState(false);
 
   const navigate = useNavigate();
   const params = useParams();
@@ -62,11 +63,11 @@ export default function MusicDetailsPage() {
       navigate("/Login");
     }
     fetchMusicDetails(params.id);
-  }, []);
+  }, [buttonClick]);
 
   return (
     <Grid container direction="column">
-      <Grid item>
+      {/* <Grid item>
         <Box
           display="flex"
           alignItems="left"
@@ -79,9 +80,9 @@ export default function MusicDetailsPage() {
             }}
           />
         </Box>
-      </Grid>
+      </Grid> */}
       <Grid item>
-        <Card sx={{ marginLeft: 35, marginRight: 35 }}>
+        <Card sx={{ marginLeft: 35, marginRight: 35, marginTop: 5 }}>
           <Grid container>
             <Grid item xs={12} sm={4}>
               <CardMedia
@@ -140,6 +141,13 @@ export default function MusicDetailsPage() {
                             4.5
                           </Typography>
                         </Box>
+
+                      </Grid>
+                      <Grid item>
+                        <ContentControl
+                          type="music" content={music} buttonClick={buttonClick}
+                          setButtonClick={setButtonClick}
+                        />
                       </Grid>
                     </Grid>
                   </Grid>
