@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useEffect, useContext, useState } from "react";
 import {
   Container,
   Grid,
@@ -11,82 +11,52 @@ import {
 } from "@mui/material";
 
 import { useNavigate } from "react-router-dom";
+import axios from "axios";
+import { UserContext } from "../../utils/UserContext";
 
 const MusicLandingPage = () => {
-  const temp = [
-    {
-      "title": "Song 1",
-      "artists": ["Artist 1"],
-      "album": "Album 1",
-      "dateReleased": "2021-01-01T00:00:00.000Z",
-      "image": "https://images.unsplash.com/photo-1517494680532-a0bab3e73738?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwcm9maWxlLXBhZ2V8OXx8fGVufDB8fHx8&auto=format&fit=crop&w=800&q=60"
-    },
-    {
-      "title": "Song 2",
-      "artists": ["Artist 2"],
-      "album": "Album 2",
-      "dateReleased": "2021-02-02T00:00:00.000Z",
-      "image": "https://images.unsplash.com/photo-1517494680532-a0bab3e73738?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwcm9maWxlLXBhZ2V8OXx8fGVufDB8fHx8&auto=format&fit=crop&w=800&q=60"
-    },
-    {
-      "title": "Song 3",
-      "artists": ["Artist 3"],
-      "album": "Album 3",
-      "dateReleased": "2021-03-03T00:00:00.000Z",
-      "image": "https://images.unsplash.com/photo-1517494680532-a0bab3e73738?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwcm9maWxlLXBhZ2V8OXx8fGVufDB8fHx8&auto=format&fit=crop&w=800&q=60"
-    },
-    {
-      "title": "Song 4",
-      "artists": ["Artist 4"],
-      "album": "Album 4",
-      "dateReleased": "2021-04-04T00:00:00.000Z",
-      "image": "https://images.unsplash.com/photo-1517494680532-a0bab3e73738?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwcm9maWxlLXBhZ2V8OXx8fGVufDB8fHx8&auto=format&fit=crop&w=800&q=60"
-    },
-    {
-      "title": "Song 5",
-      "artists": ["Artist 5"],
-      "album": "Album 5",
-      "dateReleased": "2021-05-05T00:00:00.000Z",
-      "image": "https://images.unsplash.com/photo-1517494680532-a0bab3e73738?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwcm9maWxlLXBhZ2V8OXx8fGVufDB8fHx8&auto=format&fit=crop&w=800&q=60"
-    },
-    {
-      "title": "Song 6",
-      "artists": ["Artist 6"],
-      "album": "Album 6",
-      "dateReleased": "2021-06-06T00:00:00.000Z",
-      "image": "https://images.unsplash.com/photo-1517494680532-a0bab3e73738?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwcm9maWxlLXBhZ2V8OXx8fGVufDB8fHx8&auto=format&fit=crop&w=800&q=60"
-    },
-    {
-      "title": "Song 7",
-      "artists": ["Artist 7"],
-      "album": "Album 7",
-      "dateReleased": "2021-07-07T00:00:00.000Z",
-      "image": "https://images.unsplash.com/photo-1517494680532-a0bab3e73738?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwcm9maWxlLXBhZ2V8OXx8fGVufDB8fHx8&auto=format&fit=crop&w=800&q=60"
-    },
-    {
-      "title": "Song 8",
-      "artists": ["Artist 8"],
-      "album": "Album 8",
-      "dateReleased": "2021-08-08T00:00:00.000Z",
-      "image": "https://images.unsplash.com/photo-1517494680532-a0bab3e73738?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwcm9maWxlLXBhZ2V8OXx8fGVufDB8fHx8&auto=format&fit=crop&w=800&q=60"
-    },
-    {
-      "title": "Song 9",
-      "artists": ["Artist 9"],
-      "album": "Album 9",
-      "dateReleased": "2021-09-09T00:00:00.000Z",
-      "image": "https://images.unsplash.com/photo-1517494680532-a0bab3e73738?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwcm9maWxlLXBhZ2V8OXx8fGVufDB8fHx8&auto=format&fit=crop&w=800&q=60"
-    }
-  ];
 
   const [musicList, setMusicList] = useState([]);
   const [musicRatings, setMovieRatings] = useState({});
   const [loading, setLoading] = useState(true);
-  const navigate = useNavigate();
+  const navigate = useNavigate(); const { setOpenSnackbar, setSnackbarMessage, setSnackbarSeverity } = useContext(UserContext);
+
+  const fetchMusic = async () => {
+
+    const response = await axios
+      .get(`${process.env.REACT_APP_BASE_URL}` + `/music`, {
+        headers: {
+          "Content-Type": "application/json",
+          "Access-Control-Allow-Origin": "*",
+          "Accept": "application/json",
+          "Authorization": `Bearer ${localStorage.getItem("token")}`
+        }
+      })
+      .catch((err) => {
+        console.error(err);
+      });
+
+    try {
+      if (response.status == 200) {
+        console.log(response.data);
+        setMusicList(response.data.music);
+      }
+    } catch (error) {
+      if (error.response.status == 401) {
+        navigate("/SessionTimeOut");
+      }
+      setSnackbarSeverity("error");
+      setSnackbarMessage('Something went wrong! Please refresh to try again...');
+      setOpenSnackbar(true);
+    }
+  };
 
   useEffect(() => {
+    if (!localStorage.getItem('token')) {
+      navigate("/Login");
+    }
     setLoading(false);
-    setMusicList(temp);
+    fetchMusic();
   }, []);
 
   const navigateToDetailsPage = (music_id) => {
@@ -103,7 +73,7 @@ const MusicLandingPage = () => {
             {musicList.map((music, index) => (
               <Grid item xs={12} sm={6} md={3} key={index}>
                 <Card
-                  onClick={() => navigateToDetailsPage(123)}
+                  onClick={() => navigateToDetailsPage(music._id)}
                   sx={{ cursor: "pointer" }}
                 >
                   <CardMedia
@@ -122,7 +92,7 @@ const MusicLandingPage = () => {
                       {music.title}
                     </Typography>
                     <Typography>
-                      Release Date: {music.dateReleased.split("T")[0]}
+                      Release Date: {new Date(music.dateReleased).getFullYear()}
                     </Typography>
                     <Rating
                       name={`rating-${music._id}`}
