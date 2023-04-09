@@ -118,6 +118,7 @@ const AddMovie = () => {
                   label="Title"
                   variant="outlined"
                   fullWidth
+                  required
                   value={title}
                   onChange={(event) => setTitle(event.target.value)}
                 />
@@ -128,6 +129,7 @@ const AddMovie = () => {
                   label="Director"
                   variant="outlined"
                   fullWidth
+                  required
                   value={director}
                   onChange={(event) => setDirector(event.target.value)}
                 />
@@ -138,6 +140,7 @@ const AddMovie = () => {
                   label="Description"
                   variant="outlined"
                   multiline
+                  required
                   rows={4}
                   fullWidth
                   value={description}
@@ -150,6 +153,7 @@ const AddMovie = () => {
                 <Input
                   type="date"
                   fullWidth
+                  required
                   value={dateReleased}
                   onChange={(event) => setDateReleased(event.target.value)}
                   inputProps={{ placeholder: "" }}
