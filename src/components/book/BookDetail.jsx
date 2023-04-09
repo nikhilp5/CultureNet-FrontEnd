@@ -10,6 +10,7 @@ import StarIcon from '@mui/icons-material/Star';
 import Button from '@mui/material/Button';
 import { Box } from '@mui/system';
 import { useLocation, useNavigate } from 'react-router-dom';
+import ContentControl from '../watchlist/contentControl/contentControl';
 
 const Img = styled('img')({
   margin: 'auto',
@@ -28,10 +29,11 @@ export default function BookDetails() {
     const id = location?.state?.id;
     const email = localStorage.getItem("email");
     console.log(email);
+    const [buttonClick, setButtonClick] = useState(false);
 
     useEffect(() => {
     
-        if(!localStorage.getItem("email")) {navigate("/")}
+        if(!localStorage.getItem("token")) {navigate("/")}
          fetch(
             `${process.env.REACT_APP_BASE_URL}`+`/books/${id}`,
               { headers: {
@@ -42,7 +44,7 @@ export default function BookDetails() {
                 setBook(data);
             })
         .catch((error) => console.log(error));
-    }, [id]);
+    }, [id,buttonClick]);
 
     if (!book) {
         return <div>Loading...</div>;
@@ -82,7 +84,12 @@ export default function BookDetails() {
                 <Typography gutterBottom variant="h4" component="div">
                     {title}
                 </Typography>
-
+                <div style={{position:'relative',float:'right',bottom:'50px',right:"20px"}}>
+                <ContentControl 
+                    type="books" content={book} buttonClick={buttonClick}
+                    setButtonClick={setButtonClick}
+                />
+                </div>
                 <Rating
                     name="text-feedback"
                     value={3.5}

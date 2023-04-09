@@ -5,17 +5,17 @@ import {
   DownloadDone,
   Visibility,
   VisibilityOff,
-} from "@mui/icons-material";
+} from '@mui/icons-material';
 import {
   Backdrop,
   Button,
   Stack,
   Tooltip,
   CircularProgress,
-} from "@mui/material";
-import axios from "axios";
-import { useContext, useState } from "react";
-import { UserContext } from "../../../utils/UserContext";
+} from '@mui/material';
+import axios from 'axios';
+import { useContext, useState } from 'react';
+import { UserContext } from '../../../utils/UserContext';
 
 const ContentControl = ({ type, content, buttonClick, setButtonClick }) => {
   const { setOpenSnackbar, setSnackbarMessage, setSnackbarSeverity } =
@@ -32,30 +32,34 @@ const ContentControl = ({ type, content, buttonClick, setButtonClick }) => {
     handleOpen();
     axios
       .post(
-        `${process.env.REACT_APP_BASE_URL}` + "/addToWatchlist/",
+        `${process.env.REACT_APP_BASE_URL}` + '/addToWatchlist/',
         {
           type: type,
           content: content,
-          userid: localStorage.getItem("id"),
+          userid: JSON.parse(localStorage.getItem('user'))._id,
         },
         {
           headers: {
-            "Content-Type": "application/json",
-            "Access-Control-Allow-Origin": "*",
-            Accept: "application/json",
-            Authorization: `Bearer ${localStorage.getItem("token")}`,
+            'Content-Type': 'application/json',
+            'Access-Control-Allow-Origin': '*',
+            Accept: 'application/json',
+            Authorization: `Bearer ${localStorage.getItem('token')}`,
           },
-        }
+        },
       )
       .then((res) => {
-        setSnackbarSeverity("success");
-        setSnackbarMessage("Added to Watchlist");
+        setSnackbarSeverity('success');
+        setSnackbarMessage('Added to Watchlist');
         setOpenSnackbar(true);
         setButtonClick(!buttonClick);
         handleClose();
       })
       .catch((error) => {
-        alert("Error message - " + error);
+        setSnackbarSeverity('error');
+        setSnackbarMessage(
+          'Something went wrong! Please refresh to try again...',
+        );
+        setOpenSnackbar(true);
         handleClose();
       });
   };
@@ -63,30 +67,34 @@ const ContentControl = ({ type, content, buttonClick, setButtonClick }) => {
     handleOpen();
     axios
       .post(
-        `${process.env.REACT_APP_BASE_URL}` + "/removeFromWatchlist/",
+        `${process.env.REACT_APP_BASE_URL}` + '/removeFromWatchlist/',
         {
           type: type,
           content: content,
-          userid: localStorage.getItem("id"),
+          userid: JSON.parse(localStorage.getItem('user'))._id,
         },
         {
           headers: {
-            "Content-Type": "application/json",
-            "Access-Control-Allow-Origin": "*",
-            Accept: "application/json",
-            Authorization: `Bearer ${localStorage.getItem("token")}`,
+            'Content-Type': 'application/json',
+            'Access-Control-Allow-Origin': '*',
+            Accept: 'application/json',
+            Authorization: `Bearer ${localStorage.getItem('token')}`,
           },
-        }
+        },
       )
       .then((res) => {
-        setSnackbarSeverity("success");
-        setSnackbarMessage("Removed from Watchlist");
+        setSnackbarSeverity('success');
+        setSnackbarMessage('Removed from Watchlist');
         setOpenSnackbar(true);
         setButtonClick(!buttonClick);
         handleClose();
       })
       .catch((error) => {
-        alert("Error message - " + error);
+        setSnackbarSeverity('error');
+        setSnackbarMessage(
+          'Something went wrong! Please refresh to try again...',
+        );
+        setOpenSnackbar(true);
         handleClose();
       });
   };
@@ -95,30 +103,34 @@ const ContentControl = ({ type, content, buttonClick, setButtonClick }) => {
     handleOpen();
     axios
       .post(
-        `${process.env.REACT_APP_BASE_URL}` + "/addToWatched/",
+        `${process.env.REACT_APP_BASE_URL}` + '/addToWatched/',
         {
           type: type,
           content: content,
-          userid: localStorage.getItem("id"),
+          userid: JSON.parse(localStorage.getItem('user'))._id,
         },
         {
           headers: {
-            "Content-Type": "application/json",
-            "Access-Control-Allow-Origin": "*",
-            Accept: "application/json",
-            Authorization: `Bearer ${localStorage.getItem("token")}`,
+            'Content-Type': 'application/json',
+            'Access-Control-Allow-Origin': '*',
+            Accept: 'application/json',
+            Authorization: `Bearer ${localStorage.getItem('token')}`,
           },
-        }
+        },
       )
       .then((res) => {
-        setSnackbarSeverity("success");
-        setSnackbarMessage("Added to Watched");
+        setSnackbarSeverity('success');
+        setSnackbarMessage('Added to Watched');
         setOpenSnackbar(true);
         setButtonClick(!buttonClick);
         handleClose();
       })
       .catch((error) => {
-        alert("Error message - " + error);
+        setSnackbarSeverity('error');
+        setSnackbarMessage(
+          'Something went wrong! Please refresh to try again...',
+        );
+        setOpenSnackbar(true);
         handleClose();
       });
   };
@@ -127,50 +139,54 @@ const ContentControl = ({ type, content, buttonClick, setButtonClick }) => {
     handleOpen();
     axios
       .post(
-        `${process.env.REACT_APP_BASE_URL}` + "/removeFromWatched/",
+        `${process.env.REACT_APP_BASE_URL}` + '/removeFromWatched/',
         {
           type: type,
           content: content,
-          userid: localStorage.getItem("id"),
+          userid: JSON.parse(localStorage.getItem('user'))._id,
         },
         {
           headers: {
-            "Content-Type": "application/json",
-            "Access-Control-Allow-Origin": "*",
-            Accept: "application/json",
-            Authorization: `Bearer ${localStorage.getItem("token")}`,
+            'Content-Type': 'application/json',
+            'Access-Control-Allow-Origin': '*',
+            Accept: 'application/json',
+            Authorization: `Bearer ${localStorage.getItem('token')}`,
           },
-        }
+        },
       )
       .then((res) => {
-        setSnackbarSeverity("success");
-        setSnackbarMessage("Removed from Watched");
+        setSnackbarSeverity('success');
+        setSnackbarMessage('Removed from Watched');
         setOpenSnackbar(true);
         setButtonClick(!buttonClick);
         handleClose();
       })
       .catch((error) => {
-        alert("Error message - " + error);
+        setSnackbarSeverity('error');
+        setSnackbarMessage(
+          'Something went wrong! Please refresh to try again...',
+        );
+        setOpenSnackbar(true);
         handleClose();
       });
   };
 
   return (
-    <div className="notdisplayed">
+    <div className='notdisplayed'>
       <Backdrop
-        sx={{ color: "#fff", zIndex: (theme) => theme.zIndex.drawer + 1 }}
+        sx={{ color: '#fff', zIndex: (theme) => theme.zIndex.drawer + 1 }}
         open={open}
       >
-        <CircularProgress color="inherit" />
+        <CircularProgress color='inherit' />
       </Backdrop>
       {content.watchlist === undefined && content.watched === undefined && (
-        <Stack direction="row">
-          <Tooltip title="Add To Watchlist" placement="top">
+        <Stack direction='row'>
+          <Tooltip title='Add To Watchlist' placement='top'>
             <Button onClick={addContentToWatchlist}>
               <Visibility />
             </Button>
           </Tooltip>
-          <Tooltip title="Add To Watched" placement="top">
+          <Tooltip title='Add To Watched' placement='top'>
             <Button onClick={addContentToWatched}>
               <DownloadDone />
             </Button>
@@ -179,8 +195,8 @@ const ContentControl = ({ type, content, buttonClick, setButtonClick }) => {
       )}
 
       {content.watchlist === true && (
-        <Stack direction="row">
-          <Tooltip title="Remove from Watchlist" placement="top">
+        <Stack direction='row'>
+          <Tooltip title='Remove from Watchlist' placement='top'>
             <Button onClick={removeContentFromWatchlist}>
               <VisibilityOff />
             </Button>
@@ -189,8 +205,8 @@ const ContentControl = ({ type, content, buttonClick, setButtonClick }) => {
       )}
 
       {content.watched === true && (
-        <Stack direction="row">
-          <Tooltip title="Remove from Watched" placement="top">
+        <Stack direction='row'>
+          <Tooltip title='Remove from Watched' placement='top'>
             <Button onClick={removeContentFromWatched}>
               <Clear />
             </Button>

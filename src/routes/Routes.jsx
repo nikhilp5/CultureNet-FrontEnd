@@ -21,6 +21,8 @@ import UserMusic from "../components/user/userContent/UserMusic";
 import BookCard from "../components/book/BooksGrid";
 import BookDetails from "../components/book/BookDetail";
 import WatchedContent from "../components/watchlist/watchedContent/WatchedContent";
+import MusicDetailsPage from "../components/music/MusicDetailsPage";
+import MusicLandingPage from "../components/music/MusicLandingPage";
 import ConfigureMovies from "../components/admin/movies/ConfigureMovies";
 import AddMovie from "../components/admin/movies/AddMovie";
 import { UpdateMovie } from "../components/admin/movies/UpdateMovie";
@@ -48,6 +50,8 @@ const AppRoutes = () => {
             <Route path="/ForgotPassword" element={<ForgotPassword />}></Route>
             <Route path="/Profile" element={<UserProfile />}></Route>
             <Route path="/Movies" element={<ListOfMovies />}></Route>
+            <Route path="/Music" element={<MusicLandingPage />}></Route>
+            <Route path="/MusicDetails/:id" element={<MusicDetailsPage />}></Route>
             <Route path="/MovieDetail" element={<MovieDetails />}></Route>
             <Route path="/MyMovies" element={<UserMovies />}></Route>
             <Route path="/MyMusic" element={<UserMusic />}></Route>
