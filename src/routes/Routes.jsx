@@ -13,7 +13,6 @@ import SessionTimeOut from "../components/user/SessionTimeOut";
 import Registration from "../components/user/Registration";
 import ForgotPassword from "../components/user/ForgotPassword";
 import UserProfile from "../components/user/UserProfile";
-import Movie from "../components/Movies/ListOfMovies";
 import ListOfMovies from "../components/Movies/ListOfMovies";
 import MovieDetails from "../components/Movies/MovieDetails";
 import UserMovies from "../components/user/userContent/UserMovies";
@@ -27,11 +26,9 @@ import MusicLandingPage from "../components/music/MusicLandingPage";
 import ConfigureMovies from "../components/admin/movies/ConfigureMovies";
 import AddMovie from "../components/admin/movies/AddMovie";
 import { UpdateMovie } from "../components/admin/movies/UpdateMovie";
-import DeleteMovie from "../components/admin/movies/DeleteMovie";
 import ConfigureBooks from "../components/admin/books/ConfigureBooks";
 import AddBook from "../components/admin/books/AddBook";
-import UpdateBook from "../components/admin/books/UpdateBook";
-import DeleteBook from "../components/admin/books/DeleteBook";
+import { UpdateBook } from "../components/admin/books/UpdateBook";
 import ConfigureMusic from "../components/admin/music/ConfigureMusic";
 import AddMusic from "../components/admin/music/AddMusic";
 import UpdateMusic from "../components/admin/music/UpdateMusic";
@@ -66,11 +63,11 @@ const AppRoutes = () => {
             <Route path="/ConfigureMovies" element={<ConfigureMovies />} />
             <Route path="/AddMovie" element={<AddMovie />} />
             <Route path="/UpdateMovie" element={<UpdateMovie />} />
-            <Route path="/DeleteMovie" element={<DeleteMovie />} />
+            
             <Route path="/ConfigureBooks" element={<ConfigureBooks />} />
             <Route path="/AddBook" element={<AddBook />} />
             <Route path="/UpdateBook" element={<UpdateBook />} />
-            <Route path="/DeleteBook" element={<DeleteBook />} />
+            
             <Route path="/ConfigureMusic" element={<ConfigureMusic />} />
             <Route path="/AddMusic" element={<AddMusic />} />
             <Route path="/UpdateMusic" element={<UpdateMusic />} />

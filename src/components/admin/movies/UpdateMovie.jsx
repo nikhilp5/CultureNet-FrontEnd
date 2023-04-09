@@ -1,24 +1,27 @@
 //Author - Rishi Vasa (B00902815)
 
 import React, { useEffect, useState } from 'react';
-import { TextField, Button, Grid, Card, InputLabel, Input, Typography, List, ListItem, IconButton, ListItemText, ListItemSecondaryAction, Dialog, DialogTitle, DialogContent } from '@mui/material';
+import { TextField, Button, Grid, Card, InputLabel, Typography, List, ListItem, IconButton, ListItemText, ListItemSecondaryAction, Dialog, DialogTitle, DialogContent, FormControlLabel, Checkbox } from '@mui/material';
 import DeleteIcon from '@mui/icons-material/Delete';
 import EditIcon from '@mui/icons-material/Edit';
 import { Buffer } from "buffer";
 import axios from 'axios';
+import DeleteMovie from './DeleteMovie';
 
 const UpdateMovie = () => {
 
   const [movies, setMovies] = useState([]);
   const [searchTerm, setSearchTerm] = useState('');
-  const [editingMovie, setEditingMovie] = useState(null);
-  const [openForm, setOpenForm] = useState(false);
+  const [openEditForm, setOpenEditForm] = useState(false);
+  const [openDeleteModal, setOpenDeleteModal] = useState(false);
+  const [deletingMovieId, setDeletingMovieId] = useState(null);
+  const [genres, setGenres] = useState([]);
+
   const [formData, setFormData] = useState({
     title: '',
     director: '',
     description: '',
-    releaseDate: '',
-    image: '',
+    dateReleased: '',
     genres: []
   });
 
@@ -42,6 +45,28 @@ const UpdateMovie = () => {
     fetchMovies();
   }, []);
 
+  useEffect(() => {
+    axios
+      .get(
+        `${process.env.REACT_APP_BASE_URL}` +
+        "/movie_genre",
+        {
+          headers: {
+            "Content-Type": "application/json",
+            "Access-Control-Allow-Origin": "*",
+            Accept: "application/json",
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
+          },
+        }
+      )
+      .then((res) => {
+        setGenres(res.data);
+      })
+      .catch((error) => {
+        alert("Error in fetching Genres: " + error);
+      });
+  }, []);
+
   const handleEditClick = (id) => {
     // Find the selected movie from the movies array
     const selectedMovie = movies.find(movie => movie._id === id);
@@ -52,35 +77,22 @@ const UpdateMovie = () => {
       title: selectedMovie.title,
       director: selectedMovie.director,
       description: selectedMovie.description,
-      releaseDate: new Date(selectedMovie.dateReleased).toISOString().substr(0, 10),
+      dateReleased: new Date(selectedMovie.dateReleased).toISOString().substr(0, 10),
       image: selectedMovie.image,
-      genres: selectedMovie.genres
+      genres: selectedMovie.genre
     };
-
-    // Set the editingMovie state to the selected movie's ID and open the edit movie form dialog
-    setEditingMovie(id);
     setFormData(initialFormData);
-    setOpenForm(true);
+    setOpenEditForm(true);
   };
 
   const handleDeleteClick = (id) => {
-    axios
-    .delete(
-      `${process.env.REACT_APP_BASE_URL}/deleteMovie/`+id,
-      {
-        headers: {
-          "Content-Type": "multipart/form-data",
-          "Access-Control-Allow-Origin": "*",
-          Authorization: `Bearer ${localStorage.getItem("token")}`,
-        },
-      }
-    )
-    .then((res) => {
-      alert("Movie Deleted!");
-    })
-    .catch((error) => {
-      alert("Error in deleting Movie: " + error);
-    });
+    setDeletingMovieId(id);
+    setOpenDeleteModal(true);
+  };
+
+  const handleDeleteModalClose = () => {
+    setDeletingMovieId(null);
+    setOpenDeleteModal(false);
   };
 
   const handleSearchChange = (event) => {
@@ -88,16 +100,14 @@ const UpdateMovie = () => {
   }
 
   const handleFormClose = () => {
-    setOpenForm(false);
+    setOpenEditForm(false);
     setFormData({
       title: '',
       director: '',
       description: '',
-      releaseDate: '',
-      image: '',
+      dateReleased: '',
       genres: []
     });
-    setEditingMovie(null);
   };
 
   return (
@@ -125,11 +135,13 @@ const UpdateMovie = () => {
             <Grid item>
               <ConfigurableListOfMovies movies={movies} searchTerm={searchTerm} onEditClick={handleEditClick} onDeleteClick={handleDeleteClick} />
             </Grid>
-
           </Grid>
         </Card>
       </Grid>
-      <EditMovieForm open={openForm} onClose={handleFormClose} formData={formData} setFormData={setFormData} />
+      {openDeleteModal && (
+        <DeleteMovie movieID={deletingMovieId} open={openDeleteModal} onClose={handleDeleteModalClose} />
+      )}
+      <EditMovieForm open={openEditForm} onClose={handleFormClose} formData={formData} setFormData={setFormData} genres={genres} />
     </Grid>
   );
 };
@@ -149,7 +161,11 @@ const ConfigurableListOfMovies = ({ movies, searchTerm, onEditClick, onDeleteCli
             <IconButton onClick={() => onEditClick(movie._id)} edge="end" aria-label="edit">
               <EditIcon />
             </IconButton>
-            <IconButton onClick={() => onDeleteClick(movie._id)} edge="end" aria-label="delete">
+            <IconButton
+              onClick={() => onDeleteClick(movie._id)}
+              edge="end"
+              aria-label="delete"
+            >
               <DeleteIcon />
             </IconButton>
           </ListItemSecondaryAction>
@@ -159,20 +175,18 @@ const ConfigurableListOfMovies = ({ movies, searchTerm, onEditClick, onDeleteCli
   );
 };
 
-const EditMovieForm = ({ open, onClose, formData, setFormData }) => {
+const EditMovieForm = ({ open, onClose, formData, setFormData, genres }) => {
 
-  const [previewImage, setPreviewImage] = useState('');
+  const [previewImage, setPreviewImage] = useState(null);
 
   useEffect(() => {
-    let imageSrc = '';
+    let imageSrc = null;
     if (formData.image) {
       if (formData.image.type === "Buffer") {
         imageSrc = `data:image/jpeg;base64,${Buffer.from(formData.image).toString('base64')}`;
       } else {
         imageSrc = formData.image;
       }
-    } else {
-      formData = '';
     }
     setPreviewImage(imageSrc);
   }, [formData.image]);
@@ -182,10 +196,25 @@ const EditMovieForm = ({ open, onClose, formData, setFormData }) => {
     setFormData((prevFormData) => ({ ...prevFormData, [name]: value }));
   };
 
+  const handleSelectedGenresChange = (event) => {
+    const genreId = event.target.value;
+    const isChecked = event.target.checked;
+    let updatedGenres = formData.genres || [];
+
+    if (isChecked) {
+      // Add genre id to formData
+      updatedGenres.push(genreId);
+    } else {
+      // Remove genre id from formData
+      updatedGenres = updatedGenres.filter((id) => id !== genreId);
+    }
+
+    setFormData((prevFormData) => ({ ...prevFormData, genres: updatedGenres }));
+  };
   const handleImageChange = (event) => {
     const file = event.target.files[0];
     setFormData((prevFormData) => ({ ...prevFormData, image: file }));
-    setPreviewImage(URL.createObjectURL(event.target.files[0]));
+    setPreviewImage(URL.createObjectURL(file));
   };
 
   const handleImageRemove = () => {
@@ -203,7 +232,7 @@ const EditMovieForm = ({ open, onClose, formData, setFormData }) => {
 
     axios
       .put(
-        `${process.env.REACT_APP_BASE_URL}/updateMovie/`+formData._id,
+        `${process.env.REACT_APP_BASE_URL}/updateMovie/` + formData._id,
         formData,
         {
           headers: {
@@ -215,6 +244,7 @@ const EditMovieForm = ({ open, onClose, formData, setFormData }) => {
       )
       .then((res) => {
         alert("Movie Updated!");
+        window.location.reload();
       })
       .catch((error) => {
         alert("Error in updating Movie: " + error);
@@ -260,12 +290,13 @@ const EditMovieForm = ({ open, onClose, formData, setFormData }) => {
               />
             </Grid>
             <Grid item xs={12}>
-              <InputLabel>Release Date</InputLabel>
-              <Input
+              <TextField
+                label="Release Date"
                 type="date"
+                required
+                value={formData.dateReleased}
+                onChange={(e) => setFormData({ ...formData, dateReleased: e.target.value })}
                 fullWidth
-                value={formData.releaseDate}
-                onChange={handleInputChange}
               />
             </Grid>
             <Grid item sx={{ marginTop: 2 }}>
@@ -284,6 +315,19 @@ const EditMovieForm = ({ open, onClose, formData, setFormData }) => {
                 <Button onClick={handleImageRemove}>Remove Image</Button>
               </Grid>
             )}
+
+
+            <Grid item sx={{ marginTop: 2 }}>
+              <InputLabel id="genre-label">Select applicable Genres</InputLabel>
+              {genres.map((genre, index) => (
+                <FormControlLabel
+                  key={index}
+                  control={<Checkbox checked={formData.genres && formData.genres.includes(genre._id)} value={genre._id} onChange={handleSelectedGenresChange} />}
+                  label={genre.name}
+                />
+              ))}
+            </Grid>
+
             <Grid item xs={12}>
               <Button type="submit" variant="contained" sx={{ marginTop: 2 }}>Update</Button>
             </Grid>
