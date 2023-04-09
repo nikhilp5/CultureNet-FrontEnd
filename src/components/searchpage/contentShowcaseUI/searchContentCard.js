@@ -3,6 +3,7 @@
 import { Card, CardMedia } from "@mui/material";
 import ContentControl from "../../watchlist/contentControl/contentControl";
 import { useNavigate } from "react-router";
+import { Buffer } from "buffer";
 
 const SearchContentCard = ({ content, type, buttonClick, setButtonClick }) => {
   const navigate = useNavigate();
@@ -27,7 +28,7 @@ const SearchContentCard = ({ content, type, buttonClick, setButtonClick }) => {
             <CardMedia
               component="img"
               sx={{ width: 150, height: 200 }}
-              image={content.image}
+              image={content.image && content.image.type === "Buffer"?`data:image/jpeg;base64,${Buffer.from(content.image).toString('base64')}`:content.image}
               alt={content.title}
               onClick={handleMovieClick}
               style={{ cursor: "pointer" }}
@@ -45,7 +46,7 @@ const SearchContentCard = ({ content, type, buttonClick, setButtonClick }) => {
             <CardMedia
               component="img"
               sx={{ width: 150 }}
-              image={content.image_url}
+              image={content.image && content.image.type === "Buffer"?`data:image/jpeg;base64,${Buffer.from(content.image).toString('base64')}`:content.image}
               alt={content.title}
               onClick={handleBookClick}
               style={{ cursor: "pointer" }}
@@ -73,7 +74,7 @@ const SearchContentCard = ({ content, type, buttonClick, setButtonClick }) => {
             <CardMedia
               component="img"
               sx={{ width: 150 }}
-              image={content.image}
+              image={content.image && content.image.type === "Buffer"?`data:image/jpeg;base64,${Buffer.from(content.image).toString('base64')}`:content.image}
               alt={content.title}
               onClick={handleMusicClick}
               style={{ cursor: "pointer" }}
