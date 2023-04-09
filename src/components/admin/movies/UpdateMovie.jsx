@@ -1,12 +1,13 @@
 //Author - Rishi Vasa (B00902815)
 
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useContext } from 'react';
 import { TextField, Button, Grid, Card, InputLabel, Typography, List, ListItem, IconButton, ListItemText, ListItemSecondaryAction, Dialog, DialogTitle, DialogContent, FormControlLabel, Checkbox } from '@mui/material';
 import DeleteIcon from '@mui/icons-material/Delete';
 import EditIcon from '@mui/icons-material/Edit';
 import { Buffer } from "buffer";
 import axios from 'axios';
 import DeleteMovie from './DeleteMovie';
+import { UserContext } from "../../../utils/UserContext";
 
 const UpdateMovie = () => {
 
@@ -16,6 +17,9 @@ const UpdateMovie = () => {
   const [openDeleteModal, setOpenDeleteModal] = useState(false);
   const [deletingMovieId, setDeletingMovieId] = useState(null);
   const [genres, setGenres] = useState([]);
+
+  const { setOpenSnackbar, setSnackbarMessage, setSnackbarSeverity } =
+  useContext(UserContext);
 
   const [formData, setFormData] = useState({
     title: '',
@@ -38,12 +42,15 @@ const UpdateMovie = () => {
         const data = await response.json();
         setMovies(data);
       } catch (error) {
-        console.log("Error in Fetching Movies: " + error);
-        alert("Error in Fetching Movies: " + error);
+        setSnackbarSeverity('error');
+        setSnackbarMessage(
+          "Error in fetching Movies: " + error,
+        );
+        setOpenSnackbar(true);
       }
     };
     fetchMovies();
-  }, []);
+  },[movies] );
 
   useEffect(() => {
     axios
@@ -63,7 +70,11 @@ const UpdateMovie = () => {
         setGenres(res.data);
       })
       .catch((error) => {
-        alert("Error in fetching Genres: " + error);
+        setSnackbarSeverity('error');
+        setSnackbarMessage(
+          "Error in fetching Genres: " + error,
+        );
+        setOpenSnackbar(true);
       });
   }, []);
 
@@ -179,6 +190,9 @@ const EditMovieForm = ({ open, onClose, formData, setFormData, genres }) => {
 
   const [previewImage, setPreviewImage] = useState(null);
 
+  const { setOpenSnackbar, setSnackbarMessage, setSnackbarSeverity } =
+  useContext(UserContext);
+
   useEffect(() => {
     let imageSrc = null;
     if (formData.image) {
@@ -243,11 +257,18 @@ const EditMovieForm = ({ open, onClose, formData, setFormData, genres }) => {
         }
       )
       .then((res) => {
-        alert("Movie Updated!");
-        window.location.reload();
+        setSnackbarSeverity('success');
+        setSnackbarMessage(
+          'Movie Updated!',
+        );
+        setOpenSnackbar(true);
       })
       .catch((error) => {
-        alert("Error in updating Movie: " + error);
+        setSnackbarSeverity('error');
+        setSnackbarMessage(
+          "Error in Updating Movie: " + error,
+        );
+        setOpenSnackbar(true);
       });
   };
 
