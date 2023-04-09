@@ -39,7 +39,7 @@ const Login = () => {
   const loginUser = async () => {
     try {
       const response = await axios
-        .post(`${process.env.REACT_APP_BASE_URL}` + `/login`, {
+        .post(`${process.env.REACT_APP_BASE_URL_DEVELOP}` + `/login`, {
           email: form.email.toLowerCase(),
           password: form.password,
         }, {

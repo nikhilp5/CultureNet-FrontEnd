@@ -23,7 +23,7 @@ export default function BookCards() {
             if(!localStorage.getItem("token")) {navigate("/")};
 
             const response = await fetch(
-              `${process.env.REACT_APP_BASE_URL}`+"/books"
+              `${process.env.REACT_APP_BASE_URL_DEVELOP}`+"/books"
             ,  {
               headers: {
                 "Authorization": `Bearer ${localStorage.getItem("token")}`
@@ -43,7 +43,7 @@ export default function BookCards() {
 
     const handleBookClick = (id) => {
       navigate("/bookdetail", { state: { id } });
-      console.log(id)
+      console.log(id);
     };
 
     return (
