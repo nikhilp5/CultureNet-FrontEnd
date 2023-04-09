@@ -33,11 +33,10 @@ export default function BookDetails() {
 
     useEffect(() => {
     
-        if(!localStorage.getItem("email")) {navigate("/")}
+        if(!localStorage.getItem("token")) {navigate("/")}
          fetch(
             `${process.env.REACT_APP_BASE_URL}`+`/books/${id}`,
               { headers: {
-                "userid":localStorage.getItem("id"),
                 "Authorization": `Bearer ${localStorage.getItem("token")}`
                 }
             }).then((response) => response.json())

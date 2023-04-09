@@ -20,7 +20,7 @@ export default function BookCards() {
         setLoading(true);
         const fetchBooks = async () => {
           try {
-            if(!localStorage.getItem("email")) {navigate("/")};
+            if(!localStorage.getItem("token")) {navigate("/")};
 
             const response = await fetch(
               `${process.env.REACT_APP_BASE_URL}`+"/books"
