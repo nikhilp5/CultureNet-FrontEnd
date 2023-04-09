@@ -5,9 +5,8 @@ import { Grid, Card, Typography, CardContent, ThemeProvider, CssBaseline, Contai
 import { appTheme } from '../../../themes/theme';
 import { useNavigate } from 'react-router';
 import AddToPhotosOutlinedIcon from '@mui/icons-material/AddToPhotosOutlined';
-import ImageSearchOutlinedIcon from '@mui/icons-material/ImageSearchOutlined';
+import AutoStoriesIcon from '@mui/icons-material/AutoStories';
 import SettingsSuggestOutlinedIcon from '@mui/icons-material/SettingsSuggestOutlined';
-import DeleteForeverOutlinedIcon from '@mui/icons-material/DeleteForeverOutlined';
 
 const ConfigureBooks = () => {
 
@@ -45,7 +44,7 @@ const ConfigureBooks = () => {
                                     alignItems: 'center',
                                     justifyContent: 'center',
                                     pt: 8}}>
-                                <AddToPhotosOutlinedIcon sx={{ fontSize: '10rem' }} />
+                                <AutoStoriesIcon sx={{ fontSize: '10rem' }} />
                             </CardMedia>
                             <CardContent>
                                 <Typography variant="h5" component="h2">
@@ -66,7 +65,7 @@ const ConfigureBooks = () => {
                                     alignItems: 'center',
                                     justifyContent: 'center',
                                     pt: 8}}>
-                                <ImageSearchOutlinedIcon sx={{ fontSize: '10rem' }} />
+                                <AddToPhotosOutlinedIcon sx={{ fontSize: '10rem' }} />
                                 </CardMedia>
                             <CardContent>
                                 <Typography variant="h5" component="h2">
@@ -91,31 +90,10 @@ const ConfigureBooks = () => {
                                 </CardMedia>
                             <CardContent>
                                 <Typography variant="h5" component="h2">
-                                    Update Book Details
+                                    Edit / Delete Book
                                 </Typography>
                                 <Typography color="textSecondary">
-                                    Update details of an existing Book
-                                </Typography>
-                            </CardContent>
-                        </Card>
-                    </Grid>
-                    <Grid item xs={12} sm={6} md={4}>
-                        <Card sx={{ height: '100%', cursor: 'pointer' }}
-                            onClick={() => handleCardClick('/DeleteBook')}>
-                            <CardMedia
-                                sx={{
-                                    display: 'flex',
-                                    alignItems: 'center',
-                                    justifyContent: 'center',
-                                    pt: 8}}>
-                                <DeleteForeverOutlinedIcon sx={{ fontSize: '10rem' }} />
-                                </CardMedia>
-                            <CardContent>
-                                <Typography variant="h5" component="h2">
-                                    Delete a Book
-                                </Typography>
-                                <Typography color="textSecondary">
-                                    Delete a Book from CultureNet's Book Collection
+                                    Update or Delete an existing Book
                                 </Typography>
                             </CardContent>
                         </Card>

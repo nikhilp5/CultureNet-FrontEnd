@@ -26,7 +26,7 @@ const AdminDashboard = () => {
           </Grid>
           <Grid item xs={12}>
             <Typography variant="body1" color="primary">
-              You can configure all type's of content present on CultureNet from here.
+              You can configure all types of content present on CultureNet from here.
             </Typography>
           </Grid>
         </Grid>
