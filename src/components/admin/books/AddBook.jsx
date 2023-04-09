@@ -1,8 +1,9 @@
 //Author - Rishi Vasa (B00902815)
 
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useContext } from 'react';
 import { TextField, Button, Grid, Card, InputLabel, Input, Typography } from '@mui/material';
 import axios from "axios";
+import { UserContext } from "../../../utils/UserContext";
 
 const AddBook = () => {
   const [title, setTitle] = useState('');
@@ -16,6 +17,10 @@ const AddBook = () => {
   const [genres, setGenres] = useState([]);
   const [selectedGenre, setSelectedGenre] = useState('');
   const [previewImage, setPreviewImage] = useState('');
+
+  const { setOpenSnackbar, setSnackbarMessage, setSnackbarSeverity } =
+  useContext(UserContext);
+
 
   useEffect(() => {
     axios
@@ -35,7 +40,11 @@ const AddBook = () => {
         setGenres(res.data);
       })
       .catch((error) => {
-        alert("Error in fetching Genres: " + error);
+        setSnackbarSeverity('error');
+        setSnackbarMessage(
+          "Error in fetching Genres: " + error,
+        );
+        setOpenSnackbar(true);
       });
   }, []);
 
@@ -64,7 +73,11 @@ const AddBook = () => {
         }
       )
       .then((res) => {
-        alert("Book Added!");
+        setSnackbarSeverity('success');
+        setSnackbarMessage(
+          'Book Added!',
+        );
+        setOpenSnackbar(true);
         setTitle('');
         setDescription('');
         setAuthors([]);
@@ -77,7 +90,11 @@ const AddBook = () => {
         setPreviewImage('');
       })
       .catch((error) => {
-        alert("Error in adding Book: " + error);
+        setSnackbarSeverity('error');
+        setSnackbarMessage(
+          "Error in adding Book: " + error,
+        );
+        setOpenSnackbar(true);
       });
   };
 

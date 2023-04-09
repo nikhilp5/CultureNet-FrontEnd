@@ -1,10 +1,14 @@
 //Author - Rishi Vasa (B00902815)
 
-import React from 'react';
+import React, { useContext } from 'react';
 import { Button, Typography, Dialog, DialogTitle, DialogContent, DialogActions } from '@mui/material';
 import axios from 'axios';
+import { UserContext } from "../../../utils/UserContext";
 
 const DeleteMovie = ({ movieID, open, onClose }) => {
+  
+  const { setOpenSnackbar, setSnackbarMessage, setSnackbarSeverity } =
+  useContext(UserContext);
 
   const handleDelete = () => {
     axios
@@ -19,12 +23,19 @@ const DeleteMovie = ({ movieID, open, onClose }) => {
         }
       )
       .then((res) => {
-        alert("Movie Deleted!");
+        setSnackbarSeverity('success');
+        setSnackbarMessage(
+          'Movie Deleted!',
+        );
+        setOpenSnackbar(true);
         onClose();
-        window.location.reload();
       })
       .catch((error) => {
-        alert("Error in deleting Movie: " + error);
+        setSnackbarSeverity('error');
+        setSnackbarMessage(
+          "Error in Deleting Movie: " + error,
+        );
+        setOpenSnackbar(true);
       });
   };
 

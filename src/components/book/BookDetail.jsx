@@ -11,6 +11,7 @@ import Button from '@mui/material/Button';
 import { Box } from '@mui/system';
 import { useLocation, useNavigate } from 'react-router-dom';
 import ContentControl from '../watchlist/contentControl/contentControl';
+import { Buffer } from 'buffer';
 
 const Img = styled('img')({
   margin: 'auto',
@@ -50,7 +51,18 @@ export default function BookDetails() {
         return <div>Loading...</div>;
     }
 
-    const { image_url, title, authors, publisher, isbn, summary, genre, dateReleased } = book;
+    const { image, title, authors, publisher, isbn, summary, genre, dateReleased } = book;
+
+    let imageSrc = '';
+    if (image) {
+      if (image.type === "Buffer") {
+        imageSrc = `data:image/jpeg;base64,${Buffer.from(image).toString('base64')}`;
+      } else {
+        imageSrc = image;
+      }
+    } else{
+      imageSrc = '';
+    }
 
     const releaseDate = new Date(dateReleased);
     const formattedDate = releaseDate.toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' });
@@ -74,7 +86,7 @@ export default function BookDetails() {
             <ButtonBase sx={{ width: 'auto', height: 600 }}>
                 <Img
                 alt="complex"
-                src={image_url}
+                src={imageSrc}
                 />
             </ButtonBase>
         </Grid>

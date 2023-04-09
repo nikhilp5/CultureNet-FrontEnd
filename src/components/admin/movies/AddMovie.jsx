@@ -1,8 +1,10 @@
 //Author - Rishi Vasa (B00902815)
 
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useContext } from 'react';
 import { TextField, Button, Grid, Card, InputLabel, Input, Typography} from '@mui/material';
 import axios from "axios";
+import { UserContext } from "../../../utils/UserContext";
+
 
 const AddMovie = () => {
   const [title, setTitle] = useState('');
@@ -14,6 +16,9 @@ const AddMovie = () => {
   const [selectedGenres, setSelectedGenres] = useState([]);
   const [previewImage, setPreviewImage] = useState('');
 
+  const { setOpenSnackbar, setSnackbarMessage, setSnackbarSeverity } =
+  useContext(UserContext);
+  
   useEffect(() => {
     axios
       .get(
@@ -58,7 +63,11 @@ const AddMovie = () => {
         }
       )
       .then((res) => {
-        alert("Movie Added!");
+        setSnackbarSeverity('success');
+        setSnackbarMessage(
+          'Movie Added!',
+        );
+        setOpenSnackbar(true);
         setTitle('');
         setDescription('');
         setDateReleased('');
@@ -68,7 +77,11 @@ const AddMovie = () => {
         setPreviewImage('');
       })
       .catch((error) => {
-        alert("Error in adding Movie: " + error);
+        setSnackbarSeverity('error');
+        setSnackbarMessage(
+          "Error in adding Movie: " + error,
+        );
+        setOpenSnackbar(true);
       });
   };
 
