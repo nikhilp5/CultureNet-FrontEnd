@@ -37,7 +37,11 @@ const AddMovie = () => {
         setGenres(res.data);
       })
       .catch((error) => {
-        alert("Error in fetching Genres: " + error);
+        setSnackbarSeverity('error');
+        setSnackbarMessage(
+          "Error in adding Movie: " + error,
+        );
+        setOpenSnackbar(true);
       });
   }, []);
 
