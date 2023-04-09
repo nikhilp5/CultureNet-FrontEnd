@@ -13,7 +13,10 @@ const SearchContentCard = ({ content, type, buttonClick, setButtonClick }) => {
 
   const handleBookClick = () => {
     navigate("/bookdetail", { state: { id } });
-    console.log(id);
+  };
+
+  const handleMusicClick = () => {
+    navigate("/MusicDetails/"+id);
   };
 
   return (
@@ -62,6 +65,24 @@ const SearchContentCard = ({ content, type, buttonClick, setButtonClick }) => {
               sx={{ width: 150 }}
               image={`https://cdn.pixabay.com/photo/2016/11/03/14/18/stamp-1794352_960_720.png`}
               alt={content.firstName}
+            />
+          </div>
+        )}
+        {type === "music" && (
+          <div>
+            <CardMedia
+              component="img"
+              sx={{ width: 150 }}
+              image={content.image}
+              alt={content.title}
+              onClick={handleMusicClick}
+              style={{ cursor: "pointer" }}
+            />
+            <ContentControl
+              type="music"
+              content={content}
+              buttonClick={buttonClick}
+              setButtonClick={setButtonClick}
             />
           </div>
         )}
