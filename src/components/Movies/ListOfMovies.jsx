@@ -36,7 +36,7 @@ const ListOfMovies = () => {
             }
           });
         const data = await response.json();
-        console.log(data);
+        
         setMovies(data);
         setLoading(false);
       } catch (error) {
@@ -53,7 +53,7 @@ const ListOfMovies = () => {
       const movieRatings = {};
       for (const id of movieIds) {
         const response = await fetch(`${process.env.REACT_APP_BASE_URL}` + `/movie_ratings/${id}/ratings`);
-        console.log(id);
+        
         const data = await response.json();
         movieRatings[id] = data.rating;
       }
@@ -61,7 +61,7 @@ const ListOfMovies = () => {
     };
     fetchMovieRatings();
   }, [movies]);
-  console.log(movieRatings);
+  
 
 
 

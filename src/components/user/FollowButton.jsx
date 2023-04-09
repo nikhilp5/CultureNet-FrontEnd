@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react';
 
-const FollowButton = ({ displayedUserid }) => {
+const FollowButton = ({ displayedUserId }) => {
   const [isFollowing, setIsFollowing] = useState(false);
-  const displayedUserId='6430ace4b5ab7f21384a68cf'
+  
   
   useEffect(() => {
     const fetchFollowStatus = async () => {
