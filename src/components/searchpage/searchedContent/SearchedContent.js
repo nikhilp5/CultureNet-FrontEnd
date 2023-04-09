@@ -46,9 +46,7 @@ const SearchedContent = () => {
       .get(
         `${process.env.REACT_APP_BASE_URL}` +
           '/search/' +
-          searchTerm +
-          '/' +
-          JSON.parse(localStorage.getItem('user'))._id,
+          searchTerm ,
         {
           headers: {
             'Content-Type': 'application/json',

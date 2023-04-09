@@ -41,8 +41,7 @@ const WatchedContent = () => {
     axios
       .get(
         `${process.env.REACT_APP_BASE_URL}` +
-          '/getWatched/' +
-          JSON.parse(localStorage.getItem('user'))._id,
+          '/getWatched/',
         {
           headers: {
             'Content-Type': 'application/json',

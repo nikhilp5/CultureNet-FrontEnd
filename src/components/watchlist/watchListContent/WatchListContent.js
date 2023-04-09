@@ -41,8 +41,7 @@ const WatchListContent = () => {
     axios
       .get(
         `${process.env.REACT_APP_BASE_URL}` +
-          '/getWatchlist/' +
-          JSON.parse(localStorage.getItem('user'))._id,
+          '/getWatchlist/',
         {
           headers: {
             'Content-Type': 'application/json',
