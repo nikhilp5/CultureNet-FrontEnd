@@ -1,14 +1,12 @@
 //Author - Rishi Vasa (B00902815)
 
-import React, { useState } from 'react';
-import { TextField, Button, Grid, Card, InputLabel, Input, Typography, CardContent, ThemeProvider, CssBaseline, Container, CardMedia } from '@mui/material';
+import React from 'react';
+import { TextField, Button, Grid, Card, Typography, CardContent, ThemeProvider, CssBaseline, Container, CardMedia } from '@mui/material';
 import { appTheme } from '../../../themes/theme';
 import { useNavigate } from 'react-router';
 import AddToPhotosOutlinedIcon from '@mui/icons-material/AddToPhotosOutlined';
-import ImageSearchOutlinedIcon from '@mui/icons-material/ImageSearchOutlined';
+import MusicNoteIcon from '@mui/icons-material/MusicNote';
 import SettingsSuggestOutlinedIcon from '@mui/icons-material/SettingsSuggestOutlined';
-import DeleteForeverOutlinedIcon from '@mui/icons-material/DeleteForeverOutlined';
-
 const ConfigureMusic = () => {
 
     const navigate = useNavigate();
@@ -45,7 +43,7 @@ const ConfigureMusic = () => {
                                     alignItems: 'center',
                                     justifyContent: 'center',
                                     pt: 8}}>
-                                <AddToPhotosOutlinedIcon sx={{ fontSize: '10rem' }} />
+                                <MusicNoteIcon sx={{ fontSize: '10rem' }} />
                             </CardMedia>
                             <CardContent>
                                 <Typography variant="h5" component="h2">
@@ -66,7 +64,7 @@ const ConfigureMusic = () => {
                                     alignItems: 'center',
                                     justifyContent: 'center',
                                     pt: 8}}>
-                                <ImageSearchOutlinedIcon sx={{ fontSize: '10rem' }} />
+                                <AddToPhotosOutlinedIcon sx={{ fontSize: '10rem' }} />
                                 </CardMedia>
                             <CardContent>
                                 <Typography variant="h5" component="h2">
@@ -91,31 +89,10 @@ const ConfigureMusic = () => {
                                 </CardMedia>
                             <CardContent>
                                 <Typography variant="h5" component="h2">
-                                    Update Music Details
+                                    Edit / Delete Music
                                 </Typography>
                                 <Typography color="textSecondary">
-                                    Update details of existing Music
-                                </Typography>
-                            </CardContent>
-                        </Card>
-                    </Grid>
-                    <Grid item xs={12} sm={6} md={4}>
-                        <Card sx={{ height: '100%', cursor: 'pointer' }}
-                            onClick={() => handleCardClick('/DeleteMusic')}>
-                            <CardMedia
-                                sx={{
-                                    display: 'flex',
-                                    alignItems: 'center',
-                                    justifyContent: 'center',
-                                    pt: 8}}>
-                                <DeleteForeverOutlinedIcon sx={{ fontSize: '10rem' }} />
-                                </CardMedia>
-                            <CardContent>
-                                <Typography variant="h5" component="h2">
-                                    Delete Music
-                                </Typography>
-                                <Typography color="textSecondary">
-                                    Delete Music from CultureNet's Music Collection
+                                    Update or Delete some existing Music
                                 </Typography>
                             </CardContent>
                         </Card>
