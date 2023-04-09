@@ -1,7 +1,9 @@
 import React, { useEffect, useState } from 'react';
-import { useLocation, useNavigate} from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import { Typography, Card, CardMedia, CardContent, CardHeader, Avatar, Chip, Button, Box, Rating } from '@mui/material';
 import { makeStyles } from '@mui/styles';
+import ContentControl from '../watchlist/contentControl/contentControl';
+import { Buffer } from "buffer";
 
 const useStyles = makeStyles({
   root: {
@@ -20,59 +22,67 @@ function MovieDetails() {
   const location = useLocation();
   const navigate = useNavigate();
   const [userRating, setUserRating] = useState(0);
-  const userId =localStorage.getItem("id");
-  console.log(userId)
+  const userId = JSON.parse(localStorage.getItem('user'))._id;
+  console.log(userId);
   const [genres, setGenres] = useState([]);
   const id = location?.state?.id;
-  const email= localStorage.getItem("email");
+  const email = JSON.parse(localStorage.getItem('user')).email;
   console.log(email);
   // const [email, setEmail]=useState("");
+  const [buttonClick, setButtonClick] = useState(false);
   useEffect(() => {
-    
-    if(!localStorage.getItem("email")) {navigate("/")}
-     fetch(`${process.env.REACT_APP_BASE_URL}`+`/movies/${id}`,  { headers: {
-      "Authorization": `Bearer ${localStorage.getItem("token")}`
-    }
-  })
 
-     
-     
+    if (!localStorage.getItem("token")) { navigate("/"); }
+    fetch(`${process.env.REACT_APP_BASE_URL}` + `/movies/${id}`, {
+      headers: {
+        "Authorization": `Bearer ${localStorage.getItem("token")}`
+      }
+    });
+
+    if (!localStorage.getItem("token")) { navigate("/"); }
+    fetch(`${process.env.REACT_APP_BASE_URL}` + `/movies/${id}`, {
+      headers: {
+        "Authorization": `Bearer ${localStorage.getItem("token")}`
+      }
+    })
+
+
+
       .then((response) => response.json())
       .then((data) => {
         setMovie(data);
-        
 
-      if (data.genre) {
-        fetch(`${process.env.REACT_APP_BASE_URL}`+`/movie_genres/${data.genre.join(',')}`)
-          .then(response => response.json())
-          .then(data => setGenres(data))
-          .catch(error => console.log(error));
-      }
-    })
-    .catch((error) => console.log(error));
-      
-  }, [id]);
+        if (data.genre) {
+          fetch(`${process.env.REACT_APP_BASE_URL}` + `/movie_genres/${data.genre.join(',')}`)
+            .then(response => response.json())
+            .then(data => setGenres(data))
+            .catch(error => console.log(error));
+        }
+      })
+      .catch((error) => console.log(error));
 
-  
+  }, [id, buttonClick]);
+
+
 
 
 
   useEffect(() => {
     if (userId) {
-      console.log(userId)
-      fetch(`${process.env.REACT_APP_BASE_URL}`+`/movie_ratings/${userId}/${id}`)
+      console.log(userId);
+      fetch(`${process.env.REACT_APP_BASE_URL}` + `/movie_ratings/${userId}/${id}`)
         .then((response) => response.json())
         .then((data) => setUserRating(data.rating));
-      
+
     }
   }, [userId, id]);
-  
- 
+
+
   const handleRatingChange = (event, value, movieId) => {
     // const userId = sessionStorage.getItem("userId");
-    console.log(userId)
+    console.log(userId);
     if (userId) {
-      fetch(`${process.env.REACT_APP_BASE_URL}`+`/movie_ratings`, {
+      fetch(`${process.env.REACT_APP_BASE_URL}` + `/movie_ratings`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'
@@ -80,7 +90,7 @@ function MovieDetails() {
         body: JSON.stringify({ userId, movieId, rating: value })
       })
         .then((response) => response.json())
-        .then((data) => {setUserRating(data.rating)});
+        .then((data) => { setUserRating(data.rating); });
     } else {
       console.log('User is not logged in');
     }
@@ -89,9 +99,21 @@ function MovieDetails() {
   if (!movie) {
     return <div>Loading...</div>;
   }
-  const { description,title, image, dateReleased, rating, genre, director} = movie;
+  const { description, title, dateReleased, rating, genre, director } = movie;
+
+  let imageSrc = '';
+  if (movie.image) {
+    if (movie.image.type === "Buffer") {
+      imageSrc = `data:image/jpeg;base64,${Buffer.from(movie.image).toString('base64')}`;
+    } else {
+      imageSrc = movie.image;
+    }
+  } else {
+    imageSrc = '';
+  }
+
   const releaseDate = new Date(dateReleased);
-const formattedDate = releaseDate.toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' });
+  const formattedDate = releaseDate.toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' });
   return (
     <Card className={classes.root}>
       <CardHeader
@@ -102,13 +124,13 @@ const formattedDate = releaseDate.toLocaleDateString('en-US', { year: 'numeric',
         }
         title={title}
         subheader={`Release Date: ${formattedDate}`}
-      
+
       />
-      <CardMedia className={classes.media} image={image} title={title} style={{ width: '100%', objectFit: 'cover' }} />
+      <CardMedia className={classes.media} image={imageSrc} title={title} style={{ width: '100%', objectFit: 'cover' }} />
       <CardContent>
 
         <Typography variant="body2" color="textSecondary" component="p">
-        Genres: {genres.map(genre => genre.name).join(', ')}
+          Genres: {genres.map(genre => genre.name).join(', ')}
         </Typography>
         <Typography variant="body2" color="textSecondary" component="p">
           <b>Director:</b> {director}
@@ -117,15 +139,21 @@ const formattedDate = releaseDate.toLocaleDateString('en-US', { year: 'numeric',
           <b>Overview:</b> {description}
         </Typography>
         <Box sx={{ marginTop: "auto" }}>
-                      <Rating
-                        name={`rating-${movie._id}`}
-                        value={userRating}
-                        precision={0.5}
-                        max={5}
-                        onChange={(event, value) => handleRatingChange(event, value, movie._id)}
-                      />
-                    </Box>
+          <Rating
+            name={`rating-${movie._id}`}
+            value={userRating}
+            precision={0.5}
+            max={5}
+            onChange={(event, value) => handleRatingChange(event, value, movie._id)}
+          />
+        </Box>
       </CardContent>
+      <div style={{ position: 'relative', float: 'right', bottom: '20px', right: "20px" }}>
+        <ContentControl
+          type="movies" content={movie} buttonClick={buttonClick}
+          setButtonClick={setButtonClick}
+        />
+      </div>
     </Card>
   );
 }
