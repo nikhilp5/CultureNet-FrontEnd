@@ -1,5 +1,4 @@
-import * as React from "react";
-import Stack from "@mui/material/Stack";
+import { useEffect, useContext, useState } from "react";
 import Grid from "@mui/material/Grid";
 import {
   Card,
@@ -9,21 +8,66 @@ import {
   Box,
   Rating,
 } from "@mui/material";
-import { ArrowBackIosNewRounded } from "@mui/icons-material";
-
+import axios from "axios";
+import { UserContext } from "../../utils/UserContext";
 import { useNavigate, useParams } from "react-router-dom";
+import ContentControl from '../watchlist/contentControl/contentControl';
+
 
 export default function MusicDetailsPage() {
+  const musicDetails = {
+    title: '',
+    artists: '',
+    album: '',
+    dateReleased: '',
+    image: '',
+  };
+
+  const [music, setMusic] = useState({ ...musicDetails });
+  const { setOpenSnackbar, setSnackbarMessage, setSnackbarSeverity } = useContext(UserContext);
+  const [buttonClick, setButtonClick] = useState(false);
+
   const navigate = useNavigate();
   const params = useParams();
 
-  React.useEffect(()=>{
-    console.log(params)
-  })
+  const fetchMusicDetails = async (id) => {
+    const response = await axios
+      .get(`${process.env.REACT_APP_BASE_URL}` + `/music/${id}`, {
+        headers: {
+          "Content-Type": "application/json",
+          "Access-Control-Allow-Origin": "*",
+          "Accept": "application/json",
+          "Authorization": `Bearer ${localStorage.getItem("token")}`
+        }
+      })
+      .catch((err) => {
+        console.error(err);
+      });
+
+    try {
+      if (response.status == 200) {
+        setMusic(response.data);
+      }
+    } catch (error) {
+      if (error.response.status == 401) {
+        navigate("/SessionTimeOut");
+      }
+      setSnackbarSeverity("error");
+      setSnackbarMessage('Something went wrong! Please refresh to try again...');
+      setOpenSnackbar(true);
+    }
+  };
+
+  useEffect(() => {
+    if (!localStorage.getItem('token')) {
+      navigate("/Login");
+    }
+    fetchMusicDetails(params.id);
+  }, [buttonClick]);
 
   return (
     <Grid container direction="column">
-      <Grid item>
+      {/* <Grid item>
         <Box
           display="flex"
           alignItems="left"
@@ -36,17 +80,17 @@ export default function MusicDetailsPage() {
             }}
           />
         </Box>
-      </Grid>
+      </Grid> */}
       <Grid item>
-        <Card sx={{ marginLeft: 35, marginRight: 35 }}>
+        <Card sx={{ marginLeft: 35, marginRight: 35, marginTop: 5 }}>
           <Grid container>
             <Grid item xs={12} sm={4}>
               <CardMedia
                 component="img"
                 height="100%"
-                image="https://images.unsplash.com/photo-1517494680532-a0bab3e73738?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwcm9maWxlLXBhZ2V8OXx8fGVufDB8fHx8&auto=format&fit=crop&w=800&q=60"
+                image={music.image}
                 alt="Card Image"
-                sx={{objectFit:"cover"}}
+                sx={{ objectFit: "cover" }}
               />
             </Grid>
             <Grid item xs={12} sm={8}>
@@ -57,20 +101,17 @@ export default function MusicDetailsPage() {
                     <Grid container direction="column" align="left">
                       <Grid item>
                         <Typography variant="h3" component="h3">
-                          Song
-                        </Typography>
-                        <Typography variant="h3" component="h3">
-                          Song
+                          {music.title}
                         </Typography>
                       </Grid>
                       <Grid item>
                         <Typography variant="h5" component="h5">
-                          Album
+                          {music.album}
                         </Typography>
                       </Grid>
                       <Grid item>
                         <Typography variant="h6" component="h6">
-                          Artist 1, Artist 2
+                          {music.artists}
                         </Typography>
                       </Grid>
                       <Grid item>
@@ -79,7 +120,7 @@ export default function MusicDetailsPage() {
                           component="p"
                           marginTop={2.5}
                         >
-                          Released: {2013}
+                          Released: {new Date(music.dateReleased).getFullYear()}
                         </Typography>
                       </Grid>
                       <Grid item>
@@ -100,6 +141,13 @@ export default function MusicDetailsPage() {
                             4.5
                           </Typography>
                         </Box>
+
+                      </Grid>
+                      <Grid item>
+                        <ContentControl
+                          type="music" content={music} buttonClick={buttonClick}
+                          setButtonClick={setButtonClick}
+                        />
                       </Grid>
                     </Grid>
                   </Grid>
