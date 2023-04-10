@@ -1,12 +1,13 @@
 //Author - Rishi Vasa (B00902815)
 
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useContext } from 'react';
 import { TextField, Button, Grid, Card, InputLabel, Typography, List, ListItem, IconButton, ListItemText, ListItemSecondaryAction, Dialog, DialogTitle, DialogContent } from '@mui/material';
 import DeleteIcon from '@mui/icons-material/Delete';
 import EditIcon from '@mui/icons-material/Edit';
 import { Buffer } from "buffer";
 import axios from 'axios';
 import DeleteBook from './DeleteBook';
+import { UserContext } from "../../../utils/UserContext";
 
 const UpdateBook = () => {
 
@@ -16,6 +17,9 @@ const UpdateBook = () => {
   const [openDeleteModal, setOpenDeleteModal] = useState(false);
   const [deletingBookId, setDeletingBookId] = useState(null);
   const [genres, setGenres] = useState([]);
+
+  const { setOpenSnackbar, setSnackbarMessage, setSnackbarSeverity } =
+  useContext(UserContext);
 
   const [formData, setFormData] = useState({
     title: '',
@@ -42,12 +46,15 @@ const UpdateBook = () => {
         const data = await response.json();
         setBooks(data);
       } catch (error) {
-        console.log("Error in Fetching Books: " + error);
-        alert("Error in Fetching Books: " + error);
+        setSnackbarSeverity('error');
+        setSnackbarMessage(
+          "Error in Fetching Book: " + error,
+        );
+        setOpenSnackbar(true);
       }
     };
     fetchBooks();
-  }, []);
+  }, [books]);
 
   useEffect(() => {
     axios
@@ -67,7 +74,11 @@ const UpdateBook = () => {
         setGenres(res.data);
       })
       .catch((error) => {
-        alert("Error in fetching Genres: " + error);
+        setSnackbarSeverity('error');
+        setSnackbarMessage(
+          "Error in Fetching Genres: " + error,
+        );
+        setOpenSnackbar(true);
       });
   }, []);
 
@@ -190,6 +201,10 @@ const EditBookForm = ({ open, onClose, formData, setFormData, genres }) => {
 
   const [previewImage, setPreviewImage] = useState(null);
 
+  const { setOpenSnackbar, setSnackbarMessage, setSnackbarSeverity } =
+  useContext(UserContext);
+
+
   useEffect(() => {
     let imageSrc = null;
     if (formData.image) {
@@ -246,11 +261,18 @@ const EditBookForm = ({ open, onClose, formData, setFormData, genres }) => {
         }
       )
       .then((res) => {
-        alert("Book Updated!");
-        window.location.reload();
+        setSnackbarSeverity('success');
+        setSnackbarMessage(
+          'Book Updated!',
+        );
+        setOpenSnackbar(true);
       })
       .catch((error) => {
-        alert("Error in updating Book: " + error);
+        setSnackbarSeverity('error');
+        setSnackbarMessage(
+          "Error in Updating Book: " + error,
+        );
+        setOpenSnackbar(true);
       });
   };
 

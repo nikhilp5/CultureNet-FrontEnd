@@ -1,7 +1,8 @@
 import { AppBar, Button, Container, CssBaseline, Grid, ThemeProvider, Toolbar, Typography } from '@mui/material';
 import { appTheme } from '../../themes/theme';
 import { useNavigate } from "react-router-dom";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
+import axios from "axios";
 
 export default function UserDashboard(props) {
   const navigate = useNavigate();
@@ -10,10 +11,50 @@ export default function UserDashboard(props) {
     navigate("/" + page);
   };
 
+  const defaultProfileForm = {
+    firstName: '',
+    lastName: '',
+    bio: '',
+    email: '',
+    nsfw: false,
+  };
+  
+  const [profileForm, setProfileForm] = useState({ ...defaultProfileForm });
+
+  const fetchProfile = async () => {
+    const response = await axios
+      .get(`${process.env.REACT_APP_BASE_URL}` + `/profile`, {
+        headers: {
+          "Content-Type": "application/json",
+          "Access-Control-Allow-Origin": "*",
+          "Accept": "application/json",
+          "Authorization": `Bearer ${localStorage.getItem("token")}`
+        }
+      })
+      .catch((err) => {
+        console.error(err);
+      });
+
+    try {
+      if (response.status == 200) {
+        setProfileForm(response.data.user);
+      }
+    } catch (error) {
+      if (error.response.status == 401) {
+        navigate("/SessionTimeOut");
+      }
+    }
+  };
+
   useEffect(() => {
     if (!localStorage.getItem('token')) {
       navigate("/Login");
     }
+    fetchProfile();
+  }, []);
+
+  useEffect(() => {
+    
   }, []);
 
   return (
@@ -24,14 +65,12 @@ export default function UserDashboard(props) {
         <Grid container direction="column" justifyContent="center" alignItems="center" spacing={2} sx={{ my: '1rem' }}>
           <Grid item xs={12}>
             <Typography variant="h2" color="primary">
-              Welcome, User
+              {profileForm.firstName + " " + profileForm.lastName}
             </Typography>
           </Grid>
           <Grid item xs={12}>
             <Typography variant="body1" color="primary">
-              This text is your profile Bio that other user's can read and connect with you over.
-              Lorem ipsum dolor sit amet, consecr adipiscing elit. Maecenas tincidunt suscipit velit sed scelerisque.
-              Lorem ipsum dolor sit amet, consectetur adipiscing elit. Maecenas tincidunt suscipit velit sed scelerisque.
+              {profileForm.bio}
             </Typography>
           </Grid>
         </Grid>

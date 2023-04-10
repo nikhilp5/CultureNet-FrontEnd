@@ -13,6 +13,7 @@ import { Box } from '@mui/system';
 import { useLocation, useNavigate } from 'react-router-dom';
 import ContentControl from '../watchlist/contentControl/contentControl';
 import UserReview from './BookRating';
+import { Buffer } from 'buffer';
 
 const Img = styled('img')({
   margin: 'auto',
@@ -41,7 +42,7 @@ export default function BookDetails() {
 
         if(!localStorage.getItem("token")) { navigate("/") }
             fetch(
-                `${process.env.REACT_APP_BASE_URL_DEVELOP}/reviews/${reviewId}`,
+                `${process.env.REACT_APP_BASE_URL}/reviews/${reviewId}`,
                 {
                   method: "PUT", 
                   headers: {
@@ -67,7 +68,7 @@ export default function BookDetails() {
         if(!localStorage.getItem("token")) {
             navigate("/")}
          fetch(
-            `${process.env.REACT_APP_BASE_URL_DEVELOP}`+`/books/${id}`,
+            `${process.env.REACT_APP_BASE_URL}`+`/books/${id}`,
               { headers: {
                 "Authorization": `Bearer ${localStorage.getItem("token")}`
                 }
@@ -93,11 +94,11 @@ export default function BookDetails() {
             "totalRating": 5,
             "comment": reviewText,
             "category": "books",
-            "userName": (userObj.firstName && userObj.lastName) ? (userObj.firstName + userObj.lastName): " "
+            "userName": (userObj.firstName && userObj.lastName) ? (userObj.firstName + userObj.lastName): "User X"
         })
 
         fetch(
-            `${process.env.REACT_APP_BASE_URL_DEVELOP}/reviews`,
+            `${process.env.REACT_APP_BASE_URL}/reviews`,
             {
               method: "POST", 
               headers: {
@@ -127,7 +128,7 @@ export default function BookDetails() {
     
         if(!localStorage.getItem("token")) {navigate("/")}
          fetch(
-            `${process.env.REACT_APP_BASE_URL_DEVELOP}`+`/reviews?contentId=${contentId}`,
+            `${process.env.REACT_APP_BASE_URL}`+`/reviews?contentId=${contentId}`,
               { headers: {
                 "Authorization": `Bearer ${localStorage.getItem("token")}`
                 }
@@ -165,6 +166,19 @@ export default function BookDetails() {
     if (!reviews) {
         return <div>Loading User Reviews..</div>
     }
+    
+    const { image, title, authors, publisher, isbn, summary, genre, dateReleased } = book;
+
+    let imageSrc = '';
+    if (image) {
+      if (image.type === "Buffer") {
+        imageSrc = `data:image/jpeg;base64,${Buffer.from(image).toString('base64')}`;
+      } else {
+        imageSrc = image;
+      }
+    } else{
+      imageSrc = '';
+    }
 
     const releaseDate = new Date(book.dateReleased);
     const formattedDate = releaseDate.toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' });
@@ -184,15 +198,23 @@ export default function BookDetails() {
         >
             <Grid container spacing={2}>
 
-                <Grid item sx={{ width: 'auto' }}>
+                {/* <Grid item sx={{ width: 'auto' }}>
                     <ButtonBase sx={{ width: 'auto', height: 600 }}>
                         <Img
                         alt="complex"
                         src={book.image_url}
                         />
                     </ButtonBase>
-                </Grid>
+                </Grid> */}
 
+        <Grid item sx={{ width: 'auto' }}>
+            <ButtonBase sx={{ width: 'auto', height: 600 }}>
+                <Img
+                alt="complex"
+                src={imageSrc}
+                />
+            </ButtonBase>
+        </Grid>
 
         <Grid item xs sx={{ display: 'flex', flexDirection: 'column' }}>
             <Box sx={{ flexGrow: 1 }}>
@@ -217,7 +239,7 @@ export default function BookDetails() {
                             By {book.authors}
                         </Typography>
                         <Typography variant="body2" color="text.secondary" gutterBottom>
-                            {formattedDate}
+                            Published On {formattedDate}
                         </Typography>
 
                         <Typography variant="h6" color="text.secondary" sx={{ color: 'black'}}gutterBottom>
