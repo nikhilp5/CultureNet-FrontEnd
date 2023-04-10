@@ -1,23 +1,68 @@
 //Author - Rishi Vasa (B00902815)
 
-import React, { useState } from 'react';
+import React, { useEffect, useState, useContext } from 'react';
 import { TextField, Button, Grid, Card, InputLabel, Input, Typography } from '@mui/material';
+import axios from "axios";
+import { UserContext } from "../../../utils/UserContext";
 
 const AddMusic = () => {
   const [title, setTitle] = useState('');
-  const [description, setDescription] = useState('');
+  const [artists, setArtists] = useState([]);
   const [dateReleased, setDateReleased] = useState('');
-  const [image, setImage] = useState('');
-  const [director, setDirector] = useState('');
+  const [album, setAlbum] = useState('');
+  
+  const { setOpenSnackbar, setSnackbarMessage, setSnackbarSeverity } =
+  useContext(UserContext);
+
+  const saveMusic = () => {
+    const formData = new FormData();
+    formData.append("title", title);
+    formData.append("album", album);
+    artists.forEach((artist) => formData.append("artists[]", artist.name));
+    formData.append("dateReleased", dateReleased);
+
+    axios
+      .post(
+        `${process.env.REACT_APP_BASE_URL}/addMusic`,
+        formData,
+        {
+          headers: {
+            "Content-Type": "application/json",
+            "Access-Control-Allow-Origin": "*",
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
+          },
+        }
+      )
+      .then((res) => {
+        setSnackbarSeverity('success');
+        setSnackbarMessage(
+          'Music Added!',
+        );
+        setOpenSnackbar(true);
+        setTitle('');
+        setArtists([]);
+        setDateReleased('');
+        setAlbum('');
+      })
+      .catch((error) => {
+        setSnackbarSeverity('error');
+        setSnackbarMessage(
+          "Error in adding Music: " + error,
+        );
+        setOpenSnackbar(true);
+      });
+  };
 
   const handleSubmit = (event) => {
     event.preventDefault();
-    //onSubmit({ title, description, dateReleased, image, director });
+    saveMusic();
   };
 
-  const handleImageChange = (event) => {
-    const file = event.target.files[0];
-    setImage(URL.createObjectURL(file));
+  const handleArtistChange = (event) => {
+    const newArtists = event.target.value.split(",").map((artist) => ({
+      name: artist,
+    }));
+    setArtists(newArtists);
   };
 
   return (
@@ -26,60 +71,66 @@ const AddMusic = () => {
       <Grid item xs={10} md={4}>
         <Card sx={{ padding: 2 }}>
           <Grid container direction="column" spacing={2}>
-          <Grid item>
+
+            <Grid item>
               <Typography variant="h3" align="center" gutterBottom>
-                Add A Movie
+                Add A Song
               </Typography>
             </Grid>
+
             <form onSubmit={handleSubmit}>
+
               <Grid item sx={{ margin: 2 }}>
                 <TextField
                   label="Title"
                   variant="outlined"
                   fullWidth
+                  required
                   value={title}
                   onChange={(event) => setTitle(event.target.value)}
                 />
               </Grid>
+              
               <Grid item sx={{ margin: 2 }}>
                 <TextField
-                  label="Director"
+                  label="Artists"
                   variant="outlined"
                   fullWidth
-                  value={director}
-                  onChange={(event) => setDirector(event.target.value)}
+                  required
+                  value={artists.map((artist) => artist.name)}
+                  onChange={handleArtistChange}
+                  inputProps={{ style: { textTransform: 'capitalize' } }}
                 />
               </Grid>
+
               <Grid item sx={{ margin: 2 }}>
-                <TextField
-                  label="Description"
-                  variant="outlined"
-                  multiline
-                  rows={4}
-                  fullWidth
-                  value={description}
-                  onChange={(event) => setDescription(event.target.value)}
-                />
-              </Grid>
-              <Grid item sx={{ margin: 2 }}>
-                <InputLabel>Date Released</InputLabel>
+                <InputLabel>Release Date</InputLabel>
                 <Input
                   type="date"
                   fullWidth
+                  required
                   value={dateReleased}
                   onChange={(event) => setDateReleased(event.target.value)}
                   inputProps={{ placeholder: "" }}
                 />
               </Grid>
+
               <Grid item sx={{ margin: 2 }}>
-                <InputLabel sx={{ marginTop: 2 }}>Upload Movie Image</InputLabel>
-                <input type="file" accept="image/*" onChange={handleImageChange} />
+                <TextField
+                  label="Album"
+                  variant="outlined"
+                  fullWidth
+                  value={album}
+                  onChange={(event) => setAlbum(event.target.value)}
+                />
               </Grid>
+
               <Grid item sx={{ margin: 2 }}>
                 <Button variant="contained" color="primary" type="submit" fullWidth>
-                  Add Movie
+                  Add Song
                 </Button>
               </Grid>
+
             </form>
           </Grid>
         </Card>
