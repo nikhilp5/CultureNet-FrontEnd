@@ -45,7 +45,7 @@ const BooksCard = ({ book, onBookClick }) => {
             </CardContent>
 
             <CardActions style={{ display: 'flex', justifyContent: 'flex-start' }}>
-                <Rating name="read-only" value={3} max={5} precision={0.5} readOnly />
+                <Rating name="read-only" value={book.totalRatings/book.reviewers} max={5} precision={0.5} readOnly />
             </CardActions>
 
 
