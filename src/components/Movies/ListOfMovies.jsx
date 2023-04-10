@@ -5,7 +5,7 @@ import {
   Pagination,
   CircularProgress,
   useMediaQuery
-  
+
 } from "@mui/material";
 
 import { useNavigate } from 'react-router-dom';
@@ -22,21 +22,21 @@ const ListOfMovies = () => {
   const totalPages = Math.ceil(movies.length / moviesPerPage);
   const navigate = useNavigate();
   const isSmallScreen = useMediaQuery((theme) => theme.breakpoints.down('sm'));
-  console.log(isSmallScreen)
+  console.log(isSmallScreen);
   useEffect(() => {
     setLoading(true);
     const fetchMovies = async () => {
       try {
-        if(!localStorage.getItem("email")) {navigate("/")}
+        if (!localStorage.getItem("token")) { navigate("/"); }
         const response = await fetch(
-          `${process.env.REACT_APP_BASE_URL}`+"/movies"
-        ,  {
-          headers: {
-            "Authorization": `Bearer ${localStorage.getItem("token")}`
-          }
-        });
+          `${process.env.REACT_APP_BASE_URL}` + "/movies"
+          , {
+            headers: {
+              "Authorization": `Bearer ${localStorage.getItem("token")}`
+            }
+          });
         const data = await response.json();
-        console.log(data)
+        
         setMovies(data);
         setLoading(false);
       } catch (error) {
@@ -52,8 +52,8 @@ const ListOfMovies = () => {
       const movieIds = movies.map((movie) => movie._id);
       const movieRatings = {};
       for (const id of movieIds) {
-        const response = await fetch(`${process.env.REACT_APP_BASE_URL}`+`/movie_ratings/${id}/ratings`);
-        console.log(id)
+        const response = await fetch(`${process.env.REACT_APP_BASE_URL}` + `/movie_ratings/${id}/ratings`);
+        
         const data = await response.json();
         movieRatings[id] = data.rating;
       }
@@ -61,13 +61,13 @@ const ListOfMovies = () => {
     };
     fetchMovieRatings();
   }, [movies]);
-  console.log(movieRatings)
+  
 
 
 
   const handleMovieClick = (id) => {
     navigate("/moviedetail", { state: { id } });
-    console.log(id)
+    console.log(id);
   };
   useEffect(() => {
     if (isSmallScreen) {
@@ -76,28 +76,28 @@ const ListOfMovies = () => {
       setMoviesPerPage(9);
     }
   }, [isSmallScreen]);
- 
+
 
 
 
   return (
     <Container maxWidth="md" sx={{ paddingTop: 4 }}>
-      
+
       {loading ? (
         <CircularProgress />
       ) : (
         <React.Fragment>
-        <Grid container spacing={4}>
-          {movies.slice(startIndex, endIndex).map((movie) => (
-            <MovieCard
-              key={movie._id}
-              movie={movie}
-              onMovieClick={handleMovieClick}
-              movieRatings={movieRatings}
-            />
-          ))}
-        </Grid>
-        {!isSmallScreen && (
+          <Grid container spacing={4}>
+            {movies.slice(startIndex, endIndex).map((movie) => (
+              <MovieCard
+                key={movie._id}
+                movie={movie}
+                onMovieClick={handleMovieClick}
+                movieRatings={movieRatings}
+              />
+            ))}
+          </Grid>
+          {!isSmallScreen && (
             <Pagination
               count={totalPages}
               page={currentPage}
@@ -112,9 +112,9 @@ const ListOfMovies = () => {
                 page={currentPage}
                 onChange={(event, value) => setCurrentPage(value)}
               />
-              </Grid>
+            </Grid>
           )}
-      </React.Fragment>
+        </React.Fragment>
       )}
     </Container>
   );

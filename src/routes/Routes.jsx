@@ -13,7 +13,6 @@ import SessionTimeOut from "../components/user/SessionTimeOut";
 import Registration from "../components/user/Registration";
 import ForgotPassword from "../components/user/ForgotPassword";
 import UserProfile from "../components/user/UserProfile";
-import Movie from "../components/Movies/ListOfMovies";
 import ListOfMovies from "../components/Movies/ListOfMovies";
 import MovieDetails from "../components/Movies/MovieDetails";
 import UserMovies from "../components/user/userContent/UserMovies";
@@ -22,18 +21,20 @@ import UserMusic from "../components/user/userContent/UserMusic";
 import BookCard from "../components/book/BooksGrid";
 import BookDetails from "../components/book/BookDetail";
 import WatchedContent from "../components/watchlist/watchedContent/WatchedContent";
+import MusicDetailsPage from "../components/music/MusicDetailsPage";
+import MusicLandingPage from "../components/music/MusicLandingPage";
 import ConfigureMovies from "../components/admin/movies/ConfigureMovies";
 import AddMovie from "../components/admin/movies/AddMovie";
 import { UpdateMovie } from "../components/admin/movies/UpdateMovie";
-import DeleteMovie from "../components/admin/movies/DeleteMovie";
 import ConfigureBooks from "../components/admin/books/ConfigureBooks";
 import AddBook from "../components/admin/books/AddBook";
-import UpdateBook from "../components/admin/books/UpdateBook";
-import DeleteBook from "../components/admin/books/DeleteBook";
+import { UpdateBook } from "../components/admin/books/UpdateBook";
 import ConfigureMusic from "../components/admin/music/ConfigureMusic";
 import AddMusic from "../components/admin/music/AddMusic";
-import UpdateMusic from "../components/admin/music/UpdateMusic";
-import DeleteMusic from "../components/admin/music/DeleteMusic";
+import { UpdateMusic } from "../components/admin/music/UpdateMusic";
+import User from "../components/user/User";
+import UserNetwork from "../components/user/UserNetwork";
+import UserReviews from "../components/user/UserReviews";
 
 const AppRoutes = () => {
     return (
@@ -51,6 +52,8 @@ const AppRoutes = () => {
             <Route path="/ForgotPassword" element={<ForgotPassword />}></Route>
             <Route path="/Profile" element={<UserProfile />}></Route>
             <Route path="/Movies" element={<ListOfMovies />}></Route>
+            <Route path="/Music" element={<MusicLandingPage />}></Route>
+            <Route path="/MusicDetails/:id" element={<MusicDetailsPage />}></Route>
             <Route path="/MovieDetail" element={<MovieDetails />}></Route>
             <Route path="/MyMovies" element={<UserMovies />}></Route>
             <Route path="/MyMusic" element={<UserMusic />}></Route>
@@ -62,15 +65,16 @@ const AppRoutes = () => {
             <Route path="/ConfigureMovies" element={<ConfigureMovies />} />
             <Route path="/AddMovie" element={<AddMovie />} />
             <Route path="/UpdateMovie" element={<UpdateMovie />} />
-            <Route path="/DeleteMovie" element={<DeleteMovie />} />
             <Route path="/ConfigureBooks" element={<ConfigureBooks />} />
             <Route path="/AddBook" element={<AddBook />} />
             <Route path="/UpdateBook" element={<UpdateBook />} />
-            <Route path="/DeleteBook" element={<DeleteBook />} />
             <Route path="/ConfigureMusic" element={<ConfigureMusic />} />
             <Route path="/AddMusic" element={<AddMusic />} />
             <Route path="/UpdateMusic" element={<UpdateMusic />} />
-            <Route path="/DeleteMusic" element={<DeleteMusic />} />
+            <Route path="/User" element={<User />} />
+            <Route path="/Network" element={<UserNetwork />} />
+            <Route path="/Reviews" element={<UserReviews />} />
+             
         </Routes>
     );
 };
