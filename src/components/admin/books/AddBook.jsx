@@ -46,7 +46,7 @@ const AddBook = () => {
         );
         setOpenSnackbar(true);
       });
-  });
+  }, []);
 
   const saveBook = () => {
     const formData = new FormData();
