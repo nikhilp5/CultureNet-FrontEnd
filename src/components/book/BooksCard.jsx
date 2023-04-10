@@ -30,7 +30,7 @@ const BooksCard = ({ book, onBookClick }) => {
 
             <CardContent>
 
-                <Typography variant="h6" component="h2">
+                <Typography variant="h6" component="h2" noWrap>
                     {book.title}
                 </Typography>
                 
