@@ -1,7 +1,7 @@
 //Author - Rishi Vasa (B00902815)
 
-import React, { useState } from 'react';
-import { TextField, Button, Grid, Card, InputLabel, Input, Typography, CardContent, ThemeProvider, CssBaseline, Container, CardMedia } from '@mui/material';
+import React from 'react';
+import { Grid, Card, Typography, CardContent, ThemeProvider, CssBaseline, Container, CardMedia } from '@mui/material';
 import { appTheme } from '../../themes/theme';
 import { useNavigate } from 'react-router';
 

@@ -2,15 +2,20 @@
 
 import { AppBar, Button, Container, CssBaseline, Grid, ThemeProvider, Toolbar, Typography } from '@mui/material';
 import { appTheme } from '../../themes/theme';
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 import axios from "axios";
+import FollowButton from './FollowButton';
 
-export default function UserDashboard(props) {
+export default function User(props) {
+
+  const location = useLocation();
+  const id = location?.state?.id;
+
   const navigate = useNavigate();
 
-  const navigator = (page) => {
-    navigate("/" + page);
+  const navigator = (page, id) => {
+    navigate("/" + page, id);
   };
 
   const defaultProfileForm = {
@@ -20,14 +25,14 @@ export default function UserDashboard(props) {
     email: '',
     nsfw: false,
   };
-  
+
   const [profileForm, setProfileForm] = useState({ ...defaultProfileForm });
   const [followingCount, setFollowingCount] = useState('');
   const [followerCount, setFollowerCount] = useState('');
-  
+
   const fetchProfile = async () => {
     const response = await axios
-      .get(`${process.env.REACT_APP_BASE_URL}` + `/profile`, {
+      .get(`${process.env.REACT_APP_BASE_URL}` + `/profile/` + id, {
         headers: {
           "Content-Type": "application/json",
           "Access-Control-Allow-Origin": "*",
@@ -49,10 +54,10 @@ export default function UserDashboard(props) {
       }
     }
   };
-  
+
   const fetchNetwork = async () => {
     const response = await axios
-      .get(`${process.env.REACT_APP_BASE_URL}` + `/follow-count`, {
+      .get(`${process.env.REACT_APP_BASE_URL}` + `/follow-count/` + id, {
         headers: {
           "Content-Type": "application/json",
           "Access-Control-Allow-Origin": "*",
@@ -117,15 +122,20 @@ export default function UserDashboard(props) {
           </Grid>
         </Grid>
 
+
+        <Grid container direction="row" justifyContent="center" alignItems="center" spacing={1} sx={{ my: '1rem' }}>
+          <Grid item xs={6} textAlign="center">
+            <FollowButton displayedUserId={id} />
+          </Grid>
+        </Grid>
+
         {/* SECONDARY NAV BAR */}
         <AppBar style={{ display: 'flex' }} position="static" color="default" elevation={0} sx={{ mb: '2rem' }}>
           <Toolbar style={{ justifyContent: 'space-around', display: 'flex' }} disableGutters >
 
-            {props.id === "reviews" ? <Button id="reviews" variant={props.variant} onClick={() => navigator("Reviews")} >REVIEWS</Button> : <Button id="reviews" variant="text" onClick={() => navigator("Reviews")} >REVIEWS</Button>}
+            {props.id === "reviews" ? <Button id="reviews" variant={props.variant} onClick={() => navigator("Reviews", { state: { id } })} >REVIEWS</Button> : <Button id="reviews" variant="text" onClick={() => navigator("Reviews", { state: { id } })} >REVIEWS</Button>}
 
             {props.id === "network" ? <Button id="network" variant={props.variant} onClick={() => navigator("Network")} >NETWORK</Button> : <Button id="network" variant="text" onClick={() => navigator("Network")} >NETWORK</Button>}
-
-            {props.id === "watchlist" ? <Button id="watchlist" variant={props.variant} onClick={() => navigator("Watchlist")} >WATCHLIST</Button> : <Button id="watchlist" variant="text" onClick={() => navigator("Watchlist")}>WATCHLIST</Button>}
 
           </Toolbar>
         </AppBar>

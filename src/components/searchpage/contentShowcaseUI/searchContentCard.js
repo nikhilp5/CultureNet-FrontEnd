@@ -20,6 +20,11 @@ const SearchContentCard = ({ content, type, buttonClick, setButtonClick }) => {
     navigate("/MusicDetails/"+id);
   };
 
+  const handleUserClick = () => {
+    navigate("/User/", { state: { id } });
+  };
+
+
   return (
     <div className="content-card">
       <Card sx={{ display: "flex", m: 1, width: 150, height: 200 }}>
@@ -66,6 +71,7 @@ const SearchContentCard = ({ content, type, buttonClick, setButtonClick }) => {
               sx={{ width: 150 }}
               image={`https://cdn.pixabay.com/photo/2016/11/03/14/18/stamp-1794352_960_720.png`}
               alt={content.firstName}
+              onClick={handleUserClick}
             />
           </div>
         )}
