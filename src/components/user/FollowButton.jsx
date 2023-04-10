@@ -1,19 +1,24 @@
+import { Button } from '@mui/material';
 import React, { useState, useEffect } from 'react';
 
 const FollowButton = ({ displayedUserId }) => {
   const [isFollowing, setIsFollowing] = useState(false);
+  const [isFollowedBy, setIsFollowedBy] = useState(false);
   
   
   useEffect(() => {
     const fetchFollowStatus = async () => {
       try {
-        const response = await fetch(`${process.env.REACT_APP_BASE_URL}`+`/user/${displayedUserId}/follow`,{
+        const response = await fetch(`${process.env.REACT_APP_BASE_URL}`+`/user/${displayedUserId}/fetchFollowStatus`,{
+          method: 'GET',
           headers: {
+                        
             'Authorization': `Bearer ${localStorage.getItem('token')}`
           }
         });
         const data = await response.json();
         setIsFollowing(data.isFollowing);
+        setIsFollowedBy(data.isFollowedBy);
       } catch (error) {
         console.log(error);
       }
@@ -34,6 +39,7 @@ const FollowButton = ({ displayedUserId }) => {
       });
       const data = await response.json();
       setIsFollowing(true);
+      window.location.reload();
     } catch (error) {
       console.log(error);
     }
@@ -51,15 +57,16 @@ const FollowButton = ({ displayedUserId }) => {
       });
       const data = await response.json();
       setIsFollowing(false);
+      window.location.reload();
     } catch (error) {
       console.log(error);
     }
   };
 
   return (
-    <button onClick={isFollowing ? handleUnfollow : handleFollow}>
+    <Button variant="contained" color="primary" type="submit" onClick={isFollowing ? handleUnfollow : handleFollow}>
       {isFollowing ? 'Unfollow' : 'Follow'}
-    </button>
+    </Button>
   );
 };
 
