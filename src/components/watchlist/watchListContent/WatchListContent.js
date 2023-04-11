@@ -9,12 +9,14 @@ import {
   responsiveFontSizes,
   ThemeProvider,
   Typography,
-} from "@mui/material";
-import axios from "axios";
-import { useCallback, useEffect, useState } from "react";
-import SearchedBooks from "../../searchpage/searchedBooks/SearchedBooks";
-import SearchedMovies from "../../searchpage/searchedMovies/SearchedMovies";
-import { useNavigate } from "react-router";
+} from '@mui/material';
+import axios from 'axios';
+import { useCallback, useContext, useEffect, useState } from 'react';
+import SearchedBooks from '../../searchpage/searchedBooks/SearchedBooks';
+import SearchedMovies from '../../searchpage/searchedMovies/SearchedMovies';
+import { useNavigate } from 'react-router';
+import { UserContext } from '../../../utils/UserContext';
+import SearchedMusic from '../../searchpage/SearchedMusic/SearchedMusic';
 
 let theme = createTheme();
 theme = responsiveFontSizes(theme);
@@ -22,7 +24,11 @@ theme = responsiveFontSizes(theme);
 const WatchListContent = () => {
   const [movieResults, setMovieResults] = useState([]);
   const [bookResults, setBookResults] = useState([]);
+  const [musicResults, setMusicResults] = useState([]);
   const [buttonClick, setButtonClick] = useState(false);
+
+  const { setOpenSnackbar, setSnackbarMessage, setSnackbarSeverity } =
+    useContext(UserContext);
 
   const [open, setOpen] = useState(false);
   const handleClose = () => {
@@ -37,24 +43,28 @@ const WatchListContent = () => {
     axios
       .get(
         `${process.env.REACT_APP_BASE_URL}` +
-          "/getWatchlist/" +
-          localStorage.getItem("id"),
+          '/getWatchlist/',
         {
           headers: {
-            "Content-Type": "application/json",
-            "Access-Control-Allow-Origin": "*",
-            Accept: "application/json",
-            Authorization: `Bearer ${localStorage.getItem("token")}`,
+            'Content-Type': 'application/json',
+            'Access-Control-Allow-Origin': '*',
+            Accept: 'application/json',
+            Authorization: `Bearer ${localStorage.getItem('token')}`,
           },
-        }
+        },
       )
       .then((res) => {
         setMovieResults(res.data.result.movies);
         setBookResults(res.data.result.books);
+        setMusicResults(res.data.result.music);
         handleClose();
       })
       .catch((error) => {
-        alert("Error- " + error);
+        setSnackbarSeverity('error');
+        setSnackbarMessage(
+          'Something went wrong! Please refresh to try again...',
+        );
+        setOpenSnackbar(true);
         handleClose();
       });
   }, [buttonClick]);
@@ -62,28 +72,28 @@ const WatchListContent = () => {
   const navigate = useNavigate();
 
   const handleOnClickWatchlist = useCallback(
-    () => navigate("/Watchlist", { replace: true }),
-    [navigate]
+    () => navigate('/Watchlist', { replace: true }),
+    [navigate],
   );
 
   const handleOnClickWatched = useCallback(
-    () => navigate("/Watched", { replace: true }),
-    [navigate]
+    () => navigate('/Watched', { replace: true }),
+    [navigate],
   );
 
   return (
     <div>
-      <div className="togglebutton">
+      <div className='togglebutton'>
         <Button
-          variant="contained"
-          style={{ top: "10px", marginLeft: "10px", fontWeight: "bold" }}
+          variant='contained'
+          style={{ top: '10px', marginLeft: '10px', fontWeight: 'bold' }}
           onClick={handleOnClickWatchlist}
         >
           My WatchList
         </Button>
         <Button
-          variant="contained"
-          style={{ top: "10px", marginLeft: "10px", fontWeight: "bold" }}
+          variant='contained'
+          style={{ top: '10px', marginLeft: '10px', fontWeight: 'bold' }}
           onClick={handleOnClickWatched}
         >
           Watched
@@ -92,12 +102,12 @@ const WatchListContent = () => {
 
       <ThemeProvider theme={theme}>
         <Typography
-          variant="h4"
-          style={{ fontWeight: "600" ,marginRight:"100px"}}
+          variant='h4'
+          style={{ fontWeight: '600', marginRight: '100px' }}
           mt={2}
           ml={10}
           mb={2}
-          align="center"
+          align='center'
         >
           WatchList
         </Typography>
@@ -112,11 +122,16 @@ const WatchListContent = () => {
           buttonClick={buttonClick}
           setButtonClick={setButtonClick}
         ></SearchedBooks>
+        <SearchedMusic
+          musicResults={musicResults}
+          buttonClick={buttonClick}
+          setButtonClick={setButtonClick}
+        ></SearchedMusic>
         <Backdrop
-          sx={{ color: "#fff", zIndex: (theme) => theme.zIndex.drawer + 1 }}
+          sx={{ color: '#fff', zIndex: (theme) => theme.zIndex.drawer + 1 }}
           open={open}
         >
-          <CircularProgress color="inherit" />
+          <CircularProgress color='inherit' />
         </Backdrop>
       </ThemeProvider>
     </div>
