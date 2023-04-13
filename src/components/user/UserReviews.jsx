@@ -1,3 +1,5 @@
+//Author - Rishi Vasa (B00902815)
+
 import { Card, CardContent, Container, CssBaseline, Grid, Rating, TextField, ThemeProvider, Typography } from '@mui/material';
 import { appTheme } from '../../themes/theme';
 import UserDashboard from './UserDashboard';
