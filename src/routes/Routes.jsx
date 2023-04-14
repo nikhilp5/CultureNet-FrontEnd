@@ -31,8 +31,10 @@ import AddBook from "../components/admin/books/AddBook";
 import { UpdateBook } from "../components/admin/books/UpdateBook";
 import ConfigureMusic from "../components/admin/music/ConfigureMusic";
 import AddMusic from "../components/admin/music/AddMusic";
-import UpdateMusic from "../components/admin/music/UpdateMusic";
-import DeleteMusic from "../components/admin/music/DeleteMusic";
+import { UpdateMusic } from "../components/admin/music/UpdateMusic";
+import User from "../components/user/User";
+import UserNetwork from "../components/user/UserNetwork";
+import UserReviews from "../components/user/UserReviews";
 
 const AppRoutes = () => {
     return (
@@ -63,15 +65,16 @@ const AppRoutes = () => {
             <Route path="/ConfigureMovies" element={<ConfigureMovies />} />
             <Route path="/AddMovie" element={<AddMovie />} />
             <Route path="/UpdateMovie" element={<UpdateMovie />} />
-            
             <Route path="/ConfigureBooks" element={<ConfigureBooks />} />
             <Route path="/AddBook" element={<AddBook />} />
             <Route path="/UpdateBook" element={<UpdateBook />} />
-            
             <Route path="/ConfigureMusic" element={<ConfigureMusic />} />
             <Route path="/AddMusic" element={<AddMusic />} />
             <Route path="/UpdateMusic" element={<UpdateMusic />} />
-            <Route path="/DeleteMusic" element={<DeleteMusic />} />
+            <Route path="/User" element={<User />} />
+            <Route path="/Network" element={<UserNetwork />} />
+            <Route path="/Reviews" element={<UserReviews />} />
+             
         </Routes>
     );
 };
