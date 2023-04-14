@@ -1,3 +1,4 @@
+//Author - Pranay Raycha (B00932030)
 import { Card, CardContent, CardMedia, Grid, Typography, Box } from "@mui/material";
 import Rating from "@mui/material/Rating";
 import { Buffer } from "buffer";
