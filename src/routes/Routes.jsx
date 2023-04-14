@@ -1,3 +1,5 @@
+// Author: Monil Hitesh Andharia (B00884813)
+
 import React from "react";
 import { Route, Routes } from 'react-router-dom';
 import LandingPage from '../components/common/LandingPage';
@@ -74,7 +76,7 @@ const AppRoutes = () => {
             <Route path="/User" element={<User />} />
             <Route path="/Network" element={<UserNetwork />} />
             <Route path="/Reviews" element={<UserReviews />} />
-             
+
         </Routes>
     );
 };

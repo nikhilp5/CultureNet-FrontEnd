@@ -1,3 +1,5 @@
+// Author: Monil Hitesh Andharia (B00884813)
+
 import { createTheme } from '@mui/material/styles';
 
 export const appTheme = createTheme({
